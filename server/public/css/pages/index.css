@@ -1,0 +1,98 @@
+﻿body {
+}
+
+
+/* Search options stylz */
+.bootstrap-tagsinput {
+    width: 100%;
+}
+
+.tt-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+    cursor: pointer;
+}
+
+.tt-suggestion {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333333;
+    white-space: nowrap;
+}
+
+.tt-input {
+    width: 100%;
+}
+
+.dropdown-menu {
+    min-width: 50px;
+}
+
+/* Landscape visualization stylz */
+
+#wait-content {
+    width:  100px;
+    height: 700px;
+    display: none;
+    position: relative;
+    margin-top:    40px;
+    margin-bottom: 40px;
+}
+
+.center-block {
+    align-content:center;
+}
+
+#landscape-content {
+    width:  95%;
+    height: 700px;
+    display: none;
+    position: relative;
+    border-radius: 5px;
+    margin:        auto;
+    margin-top:    20px;
+    margin-bottom: 20px;
+}
+
+#land-container {
+    border-radius:    5px;
+    background-color: #F4F4F4;
+}
+
+#landscape-tooltip {
+    position: absolute;
+    display: block;
+    color: white;
+    height: auto;
+    width: auto;
+    padding: 3px 5px;
+    border-radius: 5px;
+    max-width: 500px;
+    background-color: rgba(60,16,202, 0.8);
+}
+
+/* Universal mini stylz */
+
+.notvisible {
+    display:    none;
+    visibility: hidden;
+}

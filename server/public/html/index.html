@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Erik Novak (erik.novak@ijs.si)">
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" type="text/css" href="css/jquery/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-tagsinput.css">
+
+    <!-- page style -->
+    <link rel="stylesheet" type="text/css" href="css/pages/index.css" />
+
+    <title>VL Landscape</title>
+</head>
+<body>
+    <!-- header container -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- header title -->
+            <div class="col-md-10">
+                <h1> Videolectures </h1>
+            </div>
+            <!-- other title -->
+            <div class="col-md-2">
+                <h1> Landscape </h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search container -->
+    <div class="container-fluid">
+
+        <!-- default search bar -->
+        <div class="row">
+            <div class="col-xs-8 col-ms-9 col-md-10 col-lg-11">
+                <input type="text" class="form-control" id="basic_search" />
+            </div>
+            <div class="col-xs-4 col-ms-3 col-md-2 col-lg-1">
+                <!-- search button -->
+                <button class="btn" type="button" onclick="search(SLandscape);">Search</button>
+                <!-- additional options button -->
+                <button class="btn" type="button" onclick="toggleOptions();">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- advance search bars -->
+        <div class="form-horizontal" id="advance-options" style="display:none">
+            <div class="row">
+                <!-- empty space -->
+                <div class="col-xs-1 col-sm-1 col-lg-1" style="text-align:right;">Advance Options</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-lg-12">
+                    <!-- category search -->
+                    <div class="form-group">
+                        <label class="col-xs-5 col-sm-3 col-lg-1 control-label">Category:</label>
+                        <div class="col-xs-7 col-sm-8 col-lg-10">
+                            <input type="text" class="form-control" id="category_search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-xs-12 col-lg-2">
+                    <!-- language search -->
+                    <label class="col-xs-5 col-sm-8 col-lg-6 control-label">Language:</label>
+                    <div class="dropdown col-xs-7 col-sm-4 col-lg-6">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="language_search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ANY
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="language_search">
+                            <li><a href="#">ANY</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-lg-4">
+                    <!-- author search -->
+                    <div class="form-group">
+                        <label class="col-xs-5 col-sm-6 col-lg-2 control-label">Author:</label>
+                        <div class="col-xs-7 col-sm-6 col-lg-10">
+                            <input type="text" class="form-control" id="author_search" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-lg-5">
+                    <!-- organization search -->
+                    <div class="form-group">
+                        <label class="col-xs-5 col-sm-4 col-lg-3 control-label">Oganization:</label>
+                        <div class="col-xs-7 col-sm-8 col-lg-9">
+                            <input type="text" class="form-control" id="organization_search" />
+                        </div>
+                    </div>
+                </div>
+
+                
+
+            </div>
+
+            <div class="row">
+               
+            </div>
+
+        </div>
+    </div>
+
+    <!-- landscape container -->
+    <div class="container-fluid">
+
+        <!-- Wait container -->
+        <div class="container-fluid">
+            <div id="wait-content" class="center-block"></div>
+        </div>
+
+        <!-- left banner -->
+        <div class="col-md-1">
+        </div>
+        <!-- landscape content -->
+        <div class="col-md-10">
+            <div class="row">
+                <div id="landscape-content">
+                    <!-- landscape tooltip container -->
+                    <div id="landscape-tooltip" class="notvisible"></div>
+                </div>
+            </div>
+            <div class="row">
+                Graph options.
+            </div>
+        </div>
+        <!-- right banner -->
+        <div class="col-md-1">
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary hidden" id="error_trigger" data-toggle="modal" data-target="#error_modal"></button>
+
+    <!-- Popup Modal -->
+    <div class="modal fade" id="error_modal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Data warning</h4>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script type="text/javascript" src="js/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap-tagsinput.js"></script>
+
+
+    <!-- Visualization with D3 -->
+    <script type="text/javascript" src="js/d3/d3.min.js"></script>
+    <script type="text/javascript" src="js/d3/d3.hexbin.min.js"></script>
+    <!-- graph scripts -->
+    <script type="text/javascript" src="js/graphs/wait.js"></script>
+    <script type="text/javascript" src="js/graphs/landscapeGraph.js"></script>
+
+    <!-- Scripts for the page -->
+    <script type="text/javascript" src="js/pages/index.js"></script>
+    <script type="text/javascript" src="js/pages/search_utility.js"></script>
+</body>
+</html>

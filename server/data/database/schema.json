@@ -1,0 +1,98 @@
+﻿[
+    {
+        "name": "Lectures",
+        "fields": [
+            {
+                "name": "index",
+                "type": "string",
+                "primary": true
+            },
+            {
+                "name": "title",
+                "type": "string"
+            },
+            {
+                "name": "author",
+                "type": "string"
+            },
+            {
+                "name": "gender",
+                "type": "string"
+            },
+            {
+                "name": "organization",
+                "type": "string",
+                "null": true
+            },
+            {
+                "name": "language",
+                "type": "string",
+                "null": true
+            },
+            {
+                "name": "published",
+                "type": "datetime",
+                "null": true
+            },
+            {
+                "name": "duration",
+                "type": "int",
+                "null": true
+            },
+            {
+                "name": "views",
+                "type": "int",
+                "null": true
+            },
+            {
+                "name": "categories",
+                "type": "string_v",
+                "null": true
+            },
+            {
+                "name": "keywords",
+                "type": "string",
+                "null": true
+            },
+            {
+                "name": "description",
+                "type": "string",
+                "null": true
+            }
+        ],
+        "keys": [
+            {
+                "field": "author",
+                "type": "value"
+            },
+            {
+                "field": "organization",
+                "type": "value"
+            },
+            {
+                "field": "language",
+                "type": "value"
+            },
+            {
+                "field": "categories",
+                "type": "value"
+            },
+            {
+                "field": "views",
+                "type": "linear"
+            },
+            {
+                "field": "gender",
+                "type": "value"
+            },
+            {
+                "field": "duration",
+                "type": "linear"
+            },
+            {
+                "field": "published",
+                "type": "value"
+            }
+        ]
+    }
+]
