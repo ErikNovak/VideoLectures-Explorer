@@ -71,8 +71,12 @@ var SLandscape = function (value) {
                 wait.stopAnimation();
             } else {
                 points = pack;
+                // shows the points on the screen
                 var graph = new landscapeGraph({ containerName: "#landscape-content" });
                 graph.setData(pack); graph.displayLandscapeGraph();
+                // shows/hides the landmarks
+                landmarkShow();
+                // stops the wait icon
                 wait.stopAnimation();
             }
         }

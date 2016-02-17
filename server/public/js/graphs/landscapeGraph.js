@@ -133,7 +133,7 @@ function landscapeGraph(_options) {
         // the x coordinate scale
         xScale = d3.scale.linear()
             .domain([0, 1])
-            .range([(width - height) / 2  + padding.left, (width + height) / 2 - padding.right]);
+            .range([(width - height) / 2 + padding.left, (width + height) / 2 - padding.right]);
         
         // the y coordinate scale
         yScale = d3.scale.linear()
@@ -146,11 +146,13 @@ function landscapeGraph(_options) {
             .range([options.color.shadeDark, options.color.shadeLight])
             .interpolate(d3.interpolateLab);
         
+        // maximum number of views
+        var maxView = Math.max.apply(null, $.map(points, function (rec) { return rec.views }));
         // the point size scale based on the number of views
         pScale = d3.scale.linear()
-            .domain([0, 6000])
-            .range([1.5, 10]);
-
+            .domain([0, maxView])
+            .range([1.2, 10]);
+        
         // zoom configurations
         zoom.x(xScale)
             .y(yScale)
@@ -190,7 +192,7 @@ function landscapeGraph(_options) {
                 })
                 .attr("y", function (d) { return yScale(d.y); });
             landmarkTags.classed("hidden", false);
-            tagsVisibility(landmarkTags[0]);
+            landmarkShow(landmarkTags[0]);
             
         }
         zoom.on("zoom", onZoom);
@@ -232,35 +234,6 @@ function landscapeGraph(_options) {
                 .delay(1000)
                 .attr("r", function (d) { return pScale(d.views) });
         
-        /*
-         * Sets the visibility of the landmark tags. If two are covering
-         * each other, the younger one is hidden.    
-         * @param {object} _tags - The landmark tags. 
-         */ 
-        var tagsVisibility = function (_tags) {
-            // create additional cluster border control
-            var additionalBorder = 10;
-            // saves the visible clusters
-            var visibleClusters = [];
-            // get the DOMs and go through them
-            var DOMs = _tags;
-            for (var ClusN = 0; ClusN < DOMs.length; ClusN++) {
-                var currentClust = DOMs[ClusN];
-                var currentBox = currentClust.getBBox();
-                for (var i = 0; i < visibleClusters.length; i++) {
-                    var visibleBox = visibleClusters[i].getBBox();
-                    // if the bounding boxes cover each other
-                    if (Math.abs(currentBox.x - visibleBox.x) - additionalBorder <= Math.max(currentBox.width, visibleBox.width) && 
-                        Math.abs(currentBox.y - visibleBox.y) - additionalBorder <= Math.max(currentBox.height, visibleBox.height)) {
-                        $(currentClust).attr("class", $(currentClust).attr("class") + " hidden");
-                        break;
-                    }
-                }
-                // otherwise the cluster is visible
-                visibleClusters.push(currentClust);
-            }
-        }
-        
         // create the categories tags
         landmarkTags = chartBody.selectAll(".landmark")
             .data(landmarks);
@@ -299,7 +272,7 @@ function landscapeGraph(_options) {
             .attr("fill", options.color.text)
             .each(function (d) { d.width = this.getBBox().width; })
             .attr("x", function (d) {
-                return xScale(d.x) - d.width/2;
+                return xScale(d.x) - d.width / 2;
             })
             .attr("y", function (d) {
                 return yScale(d.y);
@@ -308,7 +281,7 @@ function landscapeGraph(_options) {
             .transition()
             .delay(1200).duration(1000)
             .attr('fill-opacity', 1);
-        tagsVisibility(landmarkTags[0]);
+        landmarkShow(landmarkTags[0]);
 
         /**
          * Additional functionality
