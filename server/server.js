@@ -46,7 +46,6 @@ var ftr = new qm.FeatureSpace(base, [
     { type: "text", source: "Lectures", field: "description", tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: "Lectures", field: "categories", tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: "Lectures", field: "keywords", tokenizer: { type: "unicode", stopwords: "en" } },
-    //{ type: "categorical", source: "Lectures", field: "language", values: ["en", "sl"] }
 ]);
 
 /**
@@ -145,7 +144,6 @@ app.post('/vl/landscape-points', function (req, res) {
         res.send({ error: "No data found!" });
         return;
     }
-    debugger
     // reset and update the feature space
     console.time("Feature Space");
     ftr.clear(); ftr.updateRecords(search);

@@ -145,7 +145,12 @@ function landscapeGraph(_options) {
             .domain([1, 100])
             .range([options.color.shadeDark, options.color.shadeLight])
             .interpolate(d3.interpolateLab);
-   
+        
+        // the point size scale based on the number of views
+        pScale = d3.scale.linear()
+            .domain([0, 6000])
+            .range([1.5, 10]);
+
         // zoom configurations
         zoom.x(xScale)
             .y(yScale)
@@ -169,25 +174,23 @@ function landscapeGraph(_options) {
         // what to do when zoomed
         var onZoom = function () {
             
-            d3.select("#hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            //d3.select("#hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
             
             // change the points position and size
             chartBody.selectAll(".points")
                  .attr("cx", function (d) { return xScale(d.x); })
                  .attr("cy", function (d) { return yScale(d.y); })
-                 .attr("r", function (d) { return options.radius.point * d3.event.scale });
+                 .attr("r", function (d) { return pScale(d.views) * d3.event.scale });
 
             // change the landmark position and the visibility
-            var landmarkTags = chartBody.selectAll(".landmark")
+            landmarkTags = chartBody.selectAll(".landmark")
                 .attr("x", function (d) {
-                    var xChange = this.getBBox().width != 0 ? this.getBBox().width / 2 : 0;
-                    return xScale(d.x) - xChange;
+                    //var xChange = this.getBBox().width / 2;
+                    return xScale(d.x) - d.width/2;
                 })
-                .attr("y", function (d) {
-                    var yChange = this.getBBox().height != 0 ? this.getBBox().height / 2 : 0;
-                    return yScale(d.y) + yChange;
-                })
-            tagsVisibility(landmarkTags);
+                .attr("y", function (d) { return yScale(d.y); });
+            landmarkTags.classed("hidden", false);
+            tagsVisibility(landmarkTags[0]);
             
         }
         zoom.on("zoom", onZoom);
@@ -197,44 +200,50 @@ function landscapeGraph(_options) {
          * they are not. Append hexbins to "g" tag in SVD. On zoom, get the "g" tag
          * and transform it. It will zoom/pan the hexagons.
          */
-        var hexagons = chartBody.append("g")
-                          .attr("id", "hexagons");
-        // create the hexagon shade 
-        var hexbin = d3.hexbin()
-            .radius(options.radius.hexagon);
+        //var hexagons = chartBody.append("g")
+        //                  .attr("id", "hexagons");
+        //// create the hexagon shade 
+        //var hexbin = d3.hexbin()
+        //    .radius(options.radius.hexagon);
         
-        var hexagon = hexagons.selectAll(".Hexagon")
-            .data(hexbin(points.map(function (d) { return [xScale(d.x), yScale(d.y)]; })));
+        //var hexagon = hexagons.selectAll(".Hexagon")
+        //    .data(hexbin(points.map(function (d) { return [xScale(d.x), yScale(d.y)]; })));
         
-        hexagon.enter().append("path")
-            .attr("class", "Hexagon")
-            .attr("d", hexbin.hexagon())
-            .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
-            .style("fill", function (d) { return cScale(d.length); });
+        //hexagon.enter().append("path")
+        //    .attr("class", "Hexagon")
+        //    .attr("d", hexbin.hexagon())
+        //    .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
+        //    .style("fill", function (d) { return cScale(d.length); });
         
         // add the points
         var LPoints = chartBody.selectAll(".points")
                 .data(points);
-        LPoints.exit().remove();
+        LPoints.exit()
+               .transition()
+               .attr("r", 0)
+               .remove();
         LPoints.enter().append("circle")
                 .attr("class", "points")
                 .attr("cx", function (d) { return xScale(d.x); })
                 .attr("cy", function (d) { return yScale(d.y); })
-                .attr("r", options.radius.point)
-                .attr("fill", options.color.shadeLight);
+                .attr("fill", options.color.shadeLight)
+                .attr("r", 0)
+                .transition()
+                .delay(1000)
+                .attr("r", function (d) { return pScale(d.views) });
         
         /*
-         * Sets the visibility of the keywords tags. If two are covering
+         * Sets the visibility of the landmark tags. If two are covering
          * each other, the younger one is hidden.    
-         * @param {object} _tags - The keyword tags. 
+         * @param {object} _tags - The landmark tags. 
          */ 
         var tagsVisibility = function (_tags) {
             // create additional cluster border control
-            var additionalBorder = 5;
+            var additionalBorder = 10;
             // saves the visible clusters
             var visibleClusters = [];
             // get the DOMs and go through them
-            var DOMs = _tags[0];
+            var DOMs = _tags;
             for (var ClusN = 0; ClusN < DOMs.length; ClusN++) {
                 var currentClust = DOMs[ClusN];
                 var currentBox = currentClust.getBBox();
@@ -253,18 +262,19 @@ function landscapeGraph(_options) {
         }
         
         // create the categories tags
-        var landmarkTags = chartBody.selectAll(".landmark")
+        landmarkTags = chartBody.selectAll(".landmark")
             .data(landmarks);
         landmarkTags.exit().remove();
         landmarkTags.enter().append("text")
             .attr("class", "landmark")
-            .text(function (d) {
+            .attr("id", function (d, i) { return "Text" + i; })
+            .text(function (d, i) {
                 // get the points, that are close to the landmark position 
                 closestPoints = $.grep(points, function (point) {
-                return Math.sqrt(Math.pow((xScale(d.x) - xScale(point.x)), 2) + 
-                                Math.pow((yScale(d.y) - yScale(point.y)), 2)) < 36;
+                    return Math.sqrt(Math.pow((xScale(d.x) - xScale(point.x)), 2) + 
+                                        Math.pow((yScale(d.y) - yScale(point.y)), 2)) < 25;
                 });
-                if (closestPoints.length == 0) { return; }
+                if (closestPoints.length == 0) { $("#Text" + i).remove(); return; }
                 // get the frequency of the categories
                 var landmarkFrequency = {};
                 for (var MatN = 0; MatN < closestPoints.length; MatN++) {
@@ -283,19 +293,22 @@ function landscapeGraph(_options) {
                 }
                 return LHelperFunctions.getTag(landmarkFrequency);
             })
-            .attr("x", function (d) {
-                var xChange = this.getBBox().width != 0 ? this.getBBox().width / 2 : 0;
-                return xScale(d.x) - xChange;
-            })
-            .attr("y", function (d) {
-                var yChange = this.getBBox().height != 0 ? this.getBBox().height / 2 :0;
-                return yScale(d.y) + yChange;
-            })
             .attr("font-size", "12px")
             .attr("font-weight", "bold")
             .attr("font-family", "sans-serif")
-            .attr("fill", options.color.text);
-        tagsVisibility(landmarkTags);
+            .attr("fill", options.color.text)
+            .each(function (d) { d.width = this.getBBox().width; })
+            .attr("x", function (d) {
+                return xScale(d.x) - d.width/2;
+            })
+            .attr("y", function (d) {
+                return yScale(d.y);
+            })
+            .attr('fill-opacity', 0)    // for more smooth visualization
+            .transition()
+            .delay(1200).duration(1000)
+            .attr('fill-opacity', 1);
+        tagsVisibility(landmarkTags[0]);
 
         /**
          * Additional functionality
