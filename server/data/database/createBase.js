@@ -8,7 +8,7 @@ var qm = require('qminer');
 var fs = qm.fs;
 
 // csv file 
-var lectures = new fs.FIn('videolectures-20150410.csv');
+var lectures = new fs.FIn('videolectures-20160216.csv');
 
 // the base
 var base = new qm.Base({

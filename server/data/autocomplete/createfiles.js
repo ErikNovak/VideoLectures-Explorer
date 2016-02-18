@@ -7,7 +7,7 @@
 var qm = require('qminer');
 
 // prepare the files
-var data = qm.fs.openRead('../database/videolectures-20150410.csv');
+var data = qm.fs.openRead('../database/videolectures-20160216.csv');
 var authors = qm.fs.openWrite('./authors.txt');
 var organizations = qm.fs.openWrite('./organizations.txt');
 var categories = qm.fs.openWrite('./categories.txt');
