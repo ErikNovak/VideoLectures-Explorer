@@ -58,14 +58,26 @@ var query = function (data) {
         var search_data = data[dataN];
         if (search_data.data.length != 0) {
             if (search_data.type == "author") {
+                // author
                 quer.author = search_data.data;
             } else if (search_data.type == "organization") {
+                // organization
                 quer.organization = search_data.data;
             } else if (search_data.type == "category") {
+                // categories
                 quer.categories = search_data.data;
             } else if (search_data.type == "language") {
+                // language
                 quer.language = search_data.data;
-            } else {
+            } else if (search_data.type == "views_min") {
+                // minimum number of views
+                quer.views = [{ $gt: parseInt(search_data.data) }];
+            } else if (search_data.type == "views_max") {
+                // maximum number of views
+                if (quer['views']) { quer['views'] = quer['views'].concat([{ $lt: parseInt(search_data.data) }]); } 
+                else { quer.views = { $lt: parseInt(search_data.data) }; }
+            }
+            else {
                 throw "Error: Not recognizable data type " + search_data.type;
             }
         }

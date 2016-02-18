@@ -38,9 +38,6 @@ function landscapeGraph(_options) {
      * Landmark coordinates, where the signs are set.
      */ 
     var landmarks = [];
-    for (var landN = 0; landN < options.landmarkNumber; landN++) {
-        landmarks.push({ x: Math.random(), y: Math.random() });
-    }
 
     /*
      * Gets the landscape data.
@@ -131,14 +128,26 @@ function landscapeGraph(_options) {
         var padding = { left: 30, right: 30, top: 30, bottom: 30 };
         
         // the x coordinate scale
+        var minX, maxX, minY, maxY;
+        if (points.length < 10) {
+            minX = (3 * width - height) / 6 + padding.left;
+            maxX = (3 * width + height) / 6 - padding.right
+            minY = 2 / 3 * height - padding.bottom
+            maxY = 1 / 3 * height + padding.top;
+        } else {
+            minX = (width - height) / 2 + padding.left;
+            maxX = (width + height) / 2 - padding.right;
+            minY = height - padding.bottom
+            maxY = 0 + padding.top;
+        }
         xScale = d3.scale.linear()
             .domain([0, 1])
-            .range([(width - height) / 2 + padding.left, (width + height) / 2 - padding.right]);
+            .range([minX, maxX]);
         
         // the y coordinate scale
         yScale = d3.scale.linear()
             .domain([0, 1])
-            .range([height - padding.bottom, 0 + padding.top]);
+            .range([minY, maxY]);
         
         // the color scale for the shade / hexagons
         cScale = d3.scale.log()
@@ -234,6 +243,15 @@ function landscapeGraph(_options) {
                 .delay(1000)
                 .attr("r", function (d) { return pScale(d.views) });
         
+        // set the landmark coordinates
+        if (points.length < 50) {
+            landmarks = $.map(points, function (pnt) { return { x: pnt.x, y: pnt.y } });
+        } else {
+            for (var landN = 0; landN < options.landmarkNumber; landN++) {
+                landmarks.push({ x: Math.random(), y: Math.random() });
+            }
+        }
+
         // create the categories tags
         landmarkTags = chartBody.selectAll(".landmark")
             .data(landmarks);
@@ -320,7 +338,7 @@ LHelperFunctions = {
     /**
      * Additional data, the date of the latest/used database.
      */ 
-    databaseDate : "11.04.2015",
+    databaseDate : "02.16.2016",
 
     /**
      * Creates a string of the data info.
@@ -339,7 +357,7 @@ LHelperFunctions = {
         }
         
         // lecture language
-        text += "The lecture is in " + (data.language == 'sl' ? 'slovene. ' : 'english. ');
+        text += "The lecture is in " + data.language + ". ";
         // category
         if (data.categories) {
             var num = data.categories.indexOf(',') == -1;

@@ -29,7 +29,9 @@ var search = function (callFunction) {
     organization = organization.concat($.map($('#organization_search').tagsinput('items'), 
         function (el) { return el.name; }));
     var language = $('#language_search').text().replace(/[\s]+/g, '').toLowerCase();
-
+    
+    var views_min = $("#views_min_search").val();
+    var views_max = $("#views_max_search").val();
     // fill the search query
     var search = [];
     if (author.length != 0) {
@@ -44,6 +46,13 @@ var search = function (callFunction) {
     if (language != 'any') {
         search.push({ type: "language", data: language });
     }
+    if (views_min != '') {
+        search.push({ type: "views_min", data: views_min });
+    }
+    if (views_max != '') {
+        search.push({ type: "views_max", data: views_max });
+    }
+    // call the search function
     if (search.length == 0) { return; }
     else {
         $('#landscape-content').hide();

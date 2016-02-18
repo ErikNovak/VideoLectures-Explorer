@@ -113,8 +113,7 @@ exports.MDS = function (_options) {
                 }
             }
             // get the singular matrix of the rank k - 1
-            var sId = (k == 0 || k == 1) ? 0 : 1;
-            V = svd.V.getColSubmatrix(qm.la.rangeVec(sId, k)).transpose();
+            V = svd.V.getColSubmatrix(qm.la.rangeVec(0, k - 1)).transpose();
         } else {
             // if the matrix has alot of documents
             console.time("KMeans");

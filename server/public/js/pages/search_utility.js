@@ -20,7 +20,6 @@ var toggleOptions = function () {
  * 
  */ 
 window.onload = function () {
-    console.time("Start");
     // get the autocomplete data
     $.ajax({
         type: 'GET',
@@ -123,7 +122,6 @@ window.onload = function () {
                     $('#language_search').html($(this).text() + ' <span class="caret"></span>');
                 });
             });
-            console.timeEnd("Start");
         }
     });
 }
