@@ -1,6 +1,34 @@
-﻿body {
+﻿/* Body stylz */
+body {
+    background-color: #F2F6F8;
 }
 
+h1 {
+    color: white;
+    font-size: 20px;
+    float: left;
+    padding-right: 3px;
+}
+.main {
+    font-weight: 600;
+}
+.secondary {
+    font-weight: 500;
+}
+
+.navbar-primary {
+    background-color: #4086AB;
+}
+
+.navbar-secondary {
+    background-color: #408EB8;
+}
+
+.btn {
+    background-color: #5BAEDB;
+    color: white;
+    font-weight: 500;
+}
 
 /* Search options stylz */
 .bootstrap-tagsinput {
@@ -67,15 +95,16 @@
     height: 700px;
     display: none;
     position: relative;
-    border-radius: 5px;
     margin:        auto;
     margin-top:    20px;
     margin-bottom: 20px;
 }
 
 #land-container {
-    border-radius:    5px;
-    background-color: #F4F4F4;
+    border-radius: 25px;
+    border: 2px solid;
+    border-color: #4086AB;
+    background-color: white;
 }
 
 #landscape-tooltip {
@@ -87,9 +116,8 @@
     padding: 3px 5px;
     border-radius: 5px;
     max-width: 500px;
-    background-color: rgba(60,16,202, 0.8);
+    background-color: rgba(40, 12, 145, 0.8);
 }
-
 
 /* Universal mini stylz */
 

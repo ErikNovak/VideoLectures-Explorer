@@ -14,12 +14,14 @@ var http = require('http'),
 var app = express();
 var server = http.Server(app);
 
-app.use(express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
-var htmlPath = __dirname + '/public/html/';
-app.get('/', function (req, res) {
-    res.sendFile(path.join(htmlPath, 'index.html'));
+app.get('/vl', function (req, res) {
+    var options = {
+        root: __dirname + '/public/html/'
+    };
+    res.sendFile('index.html', options);
 });
 
 server.listen('5055', function () {
@@ -45,7 +47,7 @@ var ftr = new qm.FeatureSpace(base, [
     { type: "text", source: "Lectures", field: "title", tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: "Lectures", field: "description", tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: "Lectures", field: "categories", tokenizer: { type: "unicode", stopwords: "en" } },
-    { type: "text", source: "Lectures", field: "keywords", tokenizer: { type: "unicode", stopwords: "en" } },
+    { type: "text", source: "Lectures", field: "keywords", tokenizer: { type: "unicode", stopwords: "en" } }
 ]);
 
 /**
@@ -87,7 +89,7 @@ var query = function (data) {
 }
 
 /**
- * Responces to the html request.  
+ * Responses to the html request.  
  */
 
 /**
@@ -195,5 +197,6 @@ app.post('/vl/landscape-points', function (req, res) {
             description: search[pointN].description
         });
     }
+    console.log("Number of points: " + points.length);
     res.send({ "points": points });
 })

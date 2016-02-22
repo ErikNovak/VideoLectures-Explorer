@@ -8,13 +8,10 @@ function landscapeGraph(_options) {
     var options = $.extend({
         containerName: undefined,                                       // the dom that contains the svg element
         tooltipTextCallback: LHelperFunctions.tooltipTextCallback,      // the callback that generates the text info on the chart (defined at the end of the file)
-        radius: { point: 2.5, hexagon: 8 },
         landmarkNumber: 400,
         margin: { top: 20, left: 20, bottom: 20, right: 20 },               
         color: {
-            shadeLight: "#A28DE6", shadeDark: "#4724B9",  
-            addShadeLight: "#FFEF6B", addShadeDark: "#FFE510",
-            background: "#260788", text: "#FFFFFF"
+            points: "#240C7E", background: "#FFFFFF", text: "#4828BE"
         }
     }, _options);
     
@@ -149,18 +146,12 @@ function landscapeGraph(_options) {
             .domain([0, 1])
             .range([minY, maxY]);
         
-        // the color scale for the shade / hexagons
-        cScale = d3.scale.log()
-            .domain([1, 100])
-            .range([options.color.shadeDark, options.color.shadeLight])
-            .interpolate(d3.interpolateLab);
-        
         // maximum number of views
         var maxView = Math.max.apply(null, $.map(points, function (rec) { return rec.views }));
         // the point size scale based on the number of views
         pScale = d3.scale.linear()
             .domain([0, maxView])
-            .range([1.2, 10]);
+            .range([2, 12]);
         
         // zoom configurations
         zoom.x(xScale)
@@ -185,46 +176,19 @@ function landscapeGraph(_options) {
         // what to do when zoomed
         var onZoom = function () {
             
-            //d3.select("#hexagons").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-            
             // change the points position and size
             chartBody.selectAll(".points")
-                 .attr("cx", function (d) { return xScale(d.x); })
-                 .attr("cy", function (d) { return yScale(d.y); })
-                 .attr("r", function (d) { return pScale(d.views) * d3.event.scale });
+                .attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 
             // change the landmark position and the visibility
             landmarkTags = chartBody.selectAll(".landmark")
-                .attr("x", function (d) {
-                    //var xChange = this.getBBox().width / 2;
-                    return xScale(d.x) - d.width/2;
-                })
+                .attr("x", function (d) { return xScale(d.x) - d.width/2; })
                 .attr("y", function (d) { return yScale(d.y); });
             landmarkTags.classed("hidden", false);
             landmarkShow(landmarkTags[0]);
             
         }
         zoom.on("zoom", onZoom);
-        
-        /**
-         * Hexbins are GREAT for static visualization, BUT for panning and zooming
-         * they are not. Append hexbins to "g" tag in SVD. On zoom, get the "g" tag
-         * and transform it. It will zoom/pan the hexagons.
-         */
-        //var hexagons = chartBody.append("g")
-        //                  .attr("id", "hexagons");
-        //// create the hexagon shade 
-        //var hexbin = d3.hexbin()
-        //    .radius(options.radius.hexagon);
-        
-        //var hexagon = hexagons.selectAll(".Hexagon")
-        //    .data(hexbin(points.map(function (d) { return [xScale(d.x), yScale(d.y)]; })));
-        
-        //hexagon.enter().append("path")
-        //    .attr("class", "Hexagon")
-        //    .attr("d", hexbin.hexagon())
-        //    .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
-        //    .style("fill", function (d) { return cScale(d.length); });
         
         // add the points
         var LPoints = chartBody.selectAll(".points")
@@ -235,13 +199,12 @@ function landscapeGraph(_options) {
                .remove();
         LPoints.enter().append("circle")
                 .attr("class", "points")
-                .attr("cx", function (d) { return xScale(d.x); })
-                .attr("cy", function (d) { return yScale(d.y); })
-                .attr("fill", options.color.shadeLight)
+                .attr("cx", function (d) { return xScale(d.x) })
+                .attr("cy", function (d) { return yScale(d.y) })
+                .attr("fill", options.color.points)
                 .attr("r", 0)
-                .transition()
-                .delay(1000)
-                .attr("r", function (d) { return pScale(d.views) });
+                .transition().delay(500).duration(1000)
+                .attr("r", function (d) { return pScale(d.views) });;
         
         // set the landmark coordinates
         if (points.length < 50) {
@@ -308,14 +271,16 @@ function landscapeGraph(_options) {
          */ 
         chartBody.selectAll(".points")
             .on("mouseover", function (d, idx) {
-                var coords = d3.mouse(this);
+                coords = [xScale(d.x), yScale(d.y)];
+                $(this).css("fill", d3.rgb(options.color.points).brighter(3));
                 // create the tooltip with the point's information
                 if (options.tooltipTextCallback) {
                     var tooltipDiv = $("#landscape-tooltip");
                     tooltipDiv.html(options.tooltipTextCallback(d));
                     var x = coords[0] + options.margin.left;
                     var y = coords[1] + options.margin.top;
-                    var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - 5) : 5;
+                    var scale = $(this).attr("transform") ? $(this).attr("transform").match(/[0-9.]+/g)[2] : 1;
+                    var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - pScale(d.views)*scale) : pScale(d.views)*scale;
                     var yOffset = (coords[1] > ($(options.containerName).height() / 2)) ? (-tooltipDiv.outerHeight() + 60) : -60;
                     tooltipDiv.css({ left: (x + xOffset) + "px", top: (y + yOffset) + "px" })
                         .removeClass("notvisible");
@@ -323,6 +288,7 @@ function landscapeGraph(_options) {
             })
             .on("mouseout", function (d, idx) {
                 // hide the tooltip
+                $(this).css("fill", d3.rgb(options.color.points));
                 $("#landscape-tooltip").addClass("notvisible");
             });
     }

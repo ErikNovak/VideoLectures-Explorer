@@ -186,6 +186,7 @@ exports.MDS = function (_options) {
             }
             points.setRow(ColN, x);
         }
+        //points.print();
         console.log("Number of points: " + points.rows);
         return points;
     }

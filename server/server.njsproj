@@ -39,6 +39,7 @@
     <Compile Include="public\js\graphs\wait.js" />
     <Compile Include="public\js\jquery\jquery-2.1.4.min.js" />
     <Compile Include="public\js\jquery\jquery-ui.min.js" />
+    <Compile Include="public\js\pages\graph_utility.js" />
     <Compile Include="public\js\pages\index.js" />
     <Compile Include="public\js\pages\search_utility.js" />
     <Compile Include="server.js" />

@@ -79,8 +79,8 @@ var SLandscape = function (value) {
                 $("#error_trigger").trigger("click");
                 wait.stopAnimation();
             } else {
-                points = pack;
                 // shows the points on the screen
+                points = pack;
                 var graph = new landscapeGraph({ containerName: "#landscape-content" });
                 graph.setData(pack); graph.displayLandscapeGraph();
                 // shows/hides the landmarks
