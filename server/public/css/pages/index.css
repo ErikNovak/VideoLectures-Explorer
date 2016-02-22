@@ -1,13 +1,16 @@
 ﻿/* Body stylz */
 body {
     background-color: #F2F6F8;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 }
 
 h1 {
     color: white;
     font-size: 20px;
     float: left;
-    padding-right: 3px;
+    padding-right: 4px;
 }
 .main {
     font-weight: 600;
@@ -28,6 +31,16 @@ h1 {
     background-color: #5BAEDB;
     color: white;
     font-weight: 500;
+}
+
+.edsa-description {
+    background-color: #1C2F3A;
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+
+.dashboard-body {
+    padding-top: 20px;
 }
 
 /* Search options stylz */
