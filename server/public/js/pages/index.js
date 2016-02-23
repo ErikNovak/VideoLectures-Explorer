@@ -91,3 +91,9 @@ var SLandscape = function (value) {
         }
     })
 }
+
+/**
+ * Set the function for when the width of the screen is < 990px, 
+ * remove the "About" section.
+ */ 
+

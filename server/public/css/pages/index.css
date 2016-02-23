@@ -1,50 +1,128 @@
 ﻿/* Body stylz */
-body {
+html, body {
     background-color: #F2F6F8;
-    overflow: hidden;
-    position: relative;
     width: 100%;
+    height: 100%;
 }
 
-h1 {
+.navbar-header a.navbar-brand,
+.navbar-default .navbar-nav li a {
     color: white;
     font-size: 20px;
     float: left;
-    padding-right: 4px;
+    padding-right: 35px;
+    padding-left: 35px;
 }
-.main {
+
+.navbar-header a > .main {
     font-weight: 600;
 }
-.secondary {
+
+.navbar-header a > .secondary {
     font-weight: 500;
 }
 
-.navbar-primary {
+.navbar {
+    margin-bottom: 0px;
+}
+
+.navbar-header a,
+.navbar-header a.navbar-brand:hover {
     background-color: #4086AB;
 }
 
-.navbar-secondary {
+    .navbar-header a.navbar-brand:hover,
+    .navbar-default .navbar-nav li a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+.navbar.navbar-default {
     background-color: #408EB8;
 }
 
-.btn {
-    background-color: #5BAEDB;
-    color: white;
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #F2F6F8;
+}
+
+.btn, btn:hover,
+button.navbar-toggle.collapsed,
+button.navbar-toggle {
+    background-color: #5BAEDB !important;
+    color: white !important;
     font-weight: 500;
 }
 
-.edsa-description {
-    background-color: #1C2F3A;
-    margin-bottom: -99999px;
-    padding-bottom: 99999px;
+.dashboard-body {
+    margin-top: 20px;
 }
 
-.dashboard-body {
-    padding-top: 20px;
+@media screen and (min-width:992px) {
+    .project-info-container {
+        min-height:100%;
+        width: 231px;
+        overflow-y: hidden;
+        height: auto !important;
+        height: 100%;
+        padding: 10px;
+        background-color: #1C2F3A;
+        float:left;
+    }
+
+    .project-info {
+        color: white;
+        text-align: justify;
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 1px solid;
+        border-color: grey;
+        border-radius: 5px;
+    }
+
+        .project-info h4 {
+            padding-bottom: 20px;
+        }
+
+        .project-info p {
+            color: lightgrey;
+        }
+
+    .dashboard-body {
+        margin-left: 231px;
+    }
 }
+
+@media screen and (max-width: 992px) {
+    .project-info-container {
+        display: none !important;
+    }
+    .dashboard-body {
+        margin-left: 20px;
+    }
+}
+
 
 /* Search options stylz */
+
+.row {
+    margin-left:0px;
+    margin-right:0px;
+    width:100%;
+}
+
+.pull-right {
+    margin-left:10px;
+}
+
+#span-basic-search {
+    display: block;
+    overflow:hidden;
+    padding: 0;
+}
+
+#basic_search,
 .bootstrap-tagsinput {
+    float:left;
     width: 100%;
 }
 
@@ -91,25 +169,25 @@ h1 {
 /* Landscape visualization stylz */
 
 #wait-content {
-    width:  100px;
+    width: 100px;
     height: 700px;
     display: none;
     position: relative;
-    margin-top:    40px;
+    margin-top: 40px;
     margin-bottom: 40px;
 }
 
 .center-block {
-    align-content:center;
+    align-content: center;
 }
 
 #landscape-content {
-    width:  95%;
+    width: 95%;
     height: 700px;
     display: none;
     position: relative;
-    margin:        auto;
-    margin-top:    20px;
+    margin: auto;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -135,6 +213,6 @@ h1 {
 /* Universal mini stylz */
 
 .notvisible {
-    display:    none;
+    display: none;
     visibility: hidden;
 }

@@ -18,8 +18,8 @@ var toggleOptions = function () {
  * Typeahead: http://twitter.github.io/typeahead.js/
  * Bootstrap Tags Input: http://bootstrap-tagsinput.github.io/bootstrap-tagsinput/examples/
  * 
- */ 
-window.onload = function () {
+ */
+$(document).ready(function () {
     // get the autocomplete data
     $.ajax({
         type: 'GET',
@@ -124,4 +124,4 @@ window.onload = function () {
             });
         }
     });
-}
+});
