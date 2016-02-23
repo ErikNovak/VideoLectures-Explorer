@@ -71,6 +71,7 @@ $(document).ready(function () {
             }); organizations.initialize();
             
             $("#organization_search").tagsinput({
+                maxTags: 1,
                 splitOn: null,
                 itemValue: function (item) {
                     return item.name

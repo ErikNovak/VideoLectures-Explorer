@@ -115,14 +115,13 @@ button.navbar-toggle {
 }
 
 #span-basic-search {
-    display: block;
+    display:block;
     overflow:hidden;
     padding: 0;
 }
 
 #basic_search,
 .bootstrap-tagsinput {
-    float:left;
     width: 100%;
 }
 
