@@ -33,7 +33,7 @@ server/data/database/*.csv
 
 # visual studio node checker
 solution/.ntvs_analysis.dat
-solution/vl-landscape.v12.suo
+solution/videolectures.v12.suo
 
 # Optional npm cache directory
 .npm
