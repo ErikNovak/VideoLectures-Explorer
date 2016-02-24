@@ -15,6 +15,7 @@
     <title>Videolectures Learning Analytics | Landscape</title>
 </head>
 <body>
+    <!-- navbar -->
     <nav class="navbar navbar-default">
         <!-- header navbar -->
         <div class="navbar-header">
@@ -67,29 +68,38 @@
 
         <!-- Body container -->
         <div class="dashboard-body">
-            <!-- default search bar -->
+            <!-- Title -->
             <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="main-title">
+                        <h3>VIDEOLECTURES LA DASHBOARD Version 0.1 | Landscape</h3>
+                    </div>
+                </div>
+
+
+
+                <!-- default search bar -->
+
                 <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
-                    <!-- additional options button -->
-                    <button class="btn btn-additional pull-right" type="button" onclick="toggleOptions();">
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </button>
-                    <!-- search button -->
-                    <button class="btn btn-default pull-right" type="button" onclick="search(SLandscape);">Search</button>
-
                     <span id="span-basic-search"><input type="text" class="form-control" id="basic_search" /></span>
-
-                    
-
-
+                    <span id="span-basic-search-buttons">
+                        <!-- search button -->
+                        <button class="btn btn-default pull-right" type="button" onclick="search(SLandscape);">Search</button>
+                    </span>
+                    <!-- additional options button -->
+                    <span id="span-basic-search-buttons">
+                        <button class="btn btn-additional pull-right" type="button" onclick="toggleOptions();">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        </button>
+                    </span>
                 </div>
 
                 <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
                     <!-- advance search bars -->
                     <div class="form-horizontal" id="advance-options" style="display:none">
 
-                        <!-- empty space -->
+                        <!-- Advance options title -->
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-lg-12">
                                 <h4>Advance Options</h4>
@@ -231,7 +241,6 @@
     <script type="text/javascript" src="public/js/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="public/js/bootstrap/typeahead.bundle.js"></script>
     <script type="text/javascript" src="public/js/bootstrap/bootstrap-tagsinput.js"></script>
-
 
     <!-- Visualization with D3 -->
     <script type="text/javascript" src="public/js/d3/d3.min.js"></script>

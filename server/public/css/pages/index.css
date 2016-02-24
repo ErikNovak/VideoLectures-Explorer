@@ -101,6 +101,12 @@ button.navbar-toggle {
     }
 }
 
+.main-title {
+    color:      grey;
+    text-align: center;
+    margin: 50px 10px 30px 10px;
+}
+
 
 /* Search options stylz */
 
@@ -111,13 +117,17 @@ button.navbar-toggle {
 }
 
 .pull-right {
-    margin-left:10px;
+    margin-left: 10px;
+}
+#span-basic-search-buttons {
+    display: table-cell;
 }
 
 #span-basic-search {
-    display:block;
-    overflow:hidden;
-    padding: 0;
+    display:table-cell;
+    position: relative;
+    top: -12px;
+    width: 100%;
 }
 
 #basic_search,

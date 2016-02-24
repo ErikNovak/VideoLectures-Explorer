@@ -35,7 +35,7 @@ function landscapeGraph(_options) {
      * Landmark coordinates, where the signs are set.
      */ 
     var landmarks = [];
-
+    
     /*
      * Gets the landscape data.
      * @returns {object} A JSON object containing the points.
@@ -179,10 +179,10 @@ function landscapeGraph(_options) {
             // change the points position and size
             chartBody.selectAll(".points")
                 .attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-
+            
             // change the landmark position and the visibility
             landmarkTags = chartBody.selectAll(".landmark")
-                .attr("x", function (d) { return xScale(d.x) - d.width/2; })
+                .attr("x", function (d) { return xScale(d.x) - d.width / 2; })
                 .attr("y", function (d) { return yScale(d.y); });
             landmarkTags.classed("hidden", false);
             landmarkShow(landmarkTags[0]);
@@ -214,7 +214,7 @@ function landscapeGraph(_options) {
                 landmarks.push({ x: Math.random(), y: Math.random() });
             }
         }
-
+        
         // create the categories tags
         landmarkTags = chartBody.selectAll(".landmark")
             .data(landmarks);
@@ -223,47 +223,47 @@ function landscapeGraph(_options) {
             .attr("class", "landmark")
             .attr("id", function (d, i) { return "Text" + i; })
             .text(function (d, i) {
-                // get the points, that are close to the landmark position 
-                closestPoints = $.grep(points, function (point) {
-                    return Math.sqrt(Math.pow((xScale(d.x) - xScale(point.x)), 2) + 
+            // get the points, that are close to the landmark position 
+            closestPoints = $.grep(points, function (point) {
+                return Math.sqrt(Math.pow((xScale(d.x) - xScale(point.x)), 2) + 
                                         Math.pow((yScale(d.y) - yScale(point.y)), 2)) < 25;
-                });
-                if (closestPoints.length == 0) { $("#Text" + i).remove(); return; }
-                // get the frequency of the categories
-                var landmarkFrequency = {};
-                for (var MatN = 0; MatN < closestPoints.length; MatN++) {
-                    if (!closestPoints[MatN].categories) { continue; }
-                    var categories = closestPoints[MatN].categories.split(/,[ ]*/g);
-                    for (var KeyN = 0; KeyN < categories.length; KeyN++) {
-                        if (landmarkFrequency[categories[KeyN]] != null) {
-                            landmarkFrequency[categories[KeyN]] += 1;
-                        } else {
-                            landmarkFrequency[categories[KeyN]] = 1;
-                        }
+            });
+            if (closestPoints.length == 0) { $("#Text" + i).remove(); return; }
+            // get the frequency of the categories
+            var landmarkFrequency = {};
+            for (var MatN = 0; MatN < closestPoints.length; MatN++) {
+                if (!closestPoints[MatN].categories) { continue; }
+                var categories = closestPoints[MatN].categories.split(/,[ ]*/g);
+                for (var KeyN = 0; KeyN < categories.length; KeyN++) {
+                    if (landmarkFrequency[categories[KeyN]] != null) {
+                        landmarkFrequency[categories[KeyN]] += 1;
+                    } else {
+                        landmarkFrequency[categories[KeyN]] = 1;
                     }
                 }
-                if (Object.keys(landmarkFrequency).length == 0) {
-                    return;
-                }
-                return LHelperFunctions.getTag(landmarkFrequency);
-            })
+            }
+            if (Object.keys(landmarkFrequency).length == 0) {
+                return;
+            }
+            return LHelperFunctions.getTag(landmarkFrequency);
+        })
             .attr("font-size", "12px")
             .attr("font-weight", "bold")
             .attr("font-family", "sans-serif")
             .attr("fill", options.color.text)
             .each(function (d) { d.width = this.getBBox().width; })
             .attr("x", function (d) {
-                return xScale(d.x) - d.width / 2;
-            })
+            return xScale(d.x) - d.width / 2;
+        })
             .attr("y", function (d) {
-                return yScale(d.y);
-            })
-            .attr('fill-opacity', 0)    // for more smooth visualization
+            return yScale(d.y);
+        })
+            .attr('fill-opacity', 0)// for more smooth visualization
             .transition()
             .delay(1200).duration(1000)
             .attr('fill-opacity', 1);
         landmarkShow(landmarkTags[0]);
-
+        
         /**
          * Additional functionality
          * Creates the box containing the lecture information when hovered
@@ -271,26 +271,26 @@ function landscapeGraph(_options) {
          */ 
         chartBody.selectAll(".points")
             .on("mouseover", function (d, idx) {
-                coords = [xScale(d.x), yScale(d.y)];
-                $(this).css("fill", d3.rgb(options.color.points).brighter(3));
-                // create the tooltip with the point's information
-                if (options.tooltipTextCallback) {
-                    var tooltipDiv = $("#landscape-tooltip");
-                    tooltipDiv.html(options.tooltipTextCallback(d));
-                    var x = coords[0] + options.margin.left;
-                    var y = coords[1] + options.margin.top;
-                    var scale = $(this).attr("transform") ? $(this).attr("transform").match(/[0-9.]+/g)[2] : 1;
-                    var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - pScale(d.views)*scale) : pScale(d.views)*scale;
-                    var yOffset = (coords[1] > ($(options.containerName).height() / 2)) ? (-tooltipDiv.outerHeight() + 60) : -60;
-                    tooltipDiv.css({ left: (x + xOffset) + "px", top: (y + yOffset) + "px" })
+            coords = [xScale(d.x), yScale(d.y)];
+            $(this).css("fill", d3.rgb(options.color.points).brighter(3));
+            // create the tooltip with the point's information
+            if (options.tooltipTextCallback) {
+                var tooltipDiv = $("#landscape-tooltip");
+                tooltipDiv.html(options.tooltipTextCallback(d));
+                var x = coords[0] + options.margin.left;
+                var y = coords[1] + options.margin.top;
+                var scale = $(this).attr("transform") ? $(this).attr("transform").match(/[0-9.]+/g)[2] : 1;
+                var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - pScale(d.views) * scale) : pScale(d.views) * scale;
+                var yOffset = (coords[1] > ($(options.containerName).height() / 2)) ? (-tooltipDiv.outerHeight() + 60) : -60;
+                tooltipDiv.css({ left: (x + xOffset) + "px", top: (y + yOffset) + "px" })
                         .removeClass("notvisible");
-                }
-            })
+            }
+        })
             .on("mouseout", function (d, idx) {
-                // hide the tooltip
-                $(this).css("fill", d3.rgb(options.color.points));
-                $("#landscape-tooltip").addClass("notvisible");
-            });
+            // hide the tooltip
+            $(this).css("fill", d3.rgb(options.color.points));
+            $("#landscape-tooltip").addClass("notvisible");
+        });
     }
 }
 
@@ -304,8 +304,8 @@ LHelperFunctions = {
     /**
      * Additional data, the date of the latest/used database.
      */ 
-    databaseDate : "02.16.2016",
-
+    databaseDate : "16.02.2016",
+    
     /**
      * Creates a string of the data info.
      * @param {object} data - The object containing the info of the lecture.
@@ -315,8 +315,8 @@ LHelperFunctions = {
     tooltipTextCallback : function (data) {
         // the paper title
         var text = "<b>Lecture title:</b> " + data.title + "<br>";
-        text += "<b>Presenter:</b> " + data.author + "<br>";
-        text += "<b>Organization:</b> " + data.organization + "<br><br>";
+        text += "<b>Presenter:</b> " + (data.author ? data.author : "not-found") + "<br>";
+        text += "<b>Organization:</b> " + (data.organization ? data.organization : "not-found") + "<br><br>";
         // description
         if (data.description) {
             text += "<b>Description: </b>" + LHelperFunctions.getDescription(data.description) + "<br><br>";
@@ -337,10 +337,10 @@ LHelperFunctions = {
         text += "It was published in " + date + " and it's duration is " +
         time + ". There have been <b>" + data.views +
         "</b> views until " + LHelperFunctions.databaseDate + ". ";
-         
+        
         return text;
     },
-
+    
     /**
      * Converts the miliseconds to time format. 
      * @param {string} duration - The duration in miliseconds.
@@ -365,7 +365,7 @@ LHelperFunctions = {
         else { time += seconds; }
         return time;
     },
-
+    
     /**
      * Get the random tag from the json object containing the key: tagName
      * and value: name frequency, based on a dice roll and it's distribution.
@@ -392,7 +392,7 @@ LHelperFunctions = {
             }
         }
     },
-
+    
     /**
      *  Helper function for description handling.
      *  It cuts the description if it's too long. It finds the next dot 
