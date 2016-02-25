@@ -99,7 +99,8 @@ exports.MDS = function (_options) {
         var V;
         if (mat.cols < docTresh) {
             // if the matrix has small amount of documents
-            KCentr = mat; var clust = Math.min(KCentr.rows, KCentr.cols);
+            console.time("SVD");
+            KCentr = mat.full(); var clust = Math.min(KCentr.rows, KCentr.cols);
             var svd = qm.la.svd(KCentr, clust, { iter: iter });
             var sing = svd.s, k = 1; // k: the number of singular vectors, so the criteria is > 0.8
             // sum of all singular values
@@ -114,6 +115,7 @@ exports.MDS = function (_options) {
             }
             // get the singular matrix of the rank k - 1
             V = svd.V.getColSubmatrix(qm.la.rangeVec(0, k - 1)).transpose();
+            console.timeEnd("SVD")
         } else {
             // if the matrix has alot of documents
             console.time("KMeans");
