@@ -41,7 +41,7 @@
 
     <!-- Body -->
     <!-- About section -->
-    <div class="container" style="width:100%;height:100%;padding:0px;">
+    <div class="container" id="body-container">
         <div class="project-info-container">
             <div class="project-info">
                 <h4>About Videolectures</h4>
@@ -54,7 +54,7 @@
                     public. All lectures, accompanying documents, information and links are systematically selected and
                     classified through the editorial process taking into account also users' comments.
                 </p>
-                <h4 style="padding-top:20px;">About EDSA</h4>
+                <h4 style="padding-top:30px;">About EDSA</h4>
                 <p>
                     The European Data Science Academy (EDSA) will establish a virtuous learning production cycle whereby
                     we: a) analyse the required sector specific skillsets for data analysts across the main industrial
@@ -95,8 +95,8 @@
                     </span>
                 </div>
 
+                <!-- advance search bars -->
                 <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
-                    <!-- advance search bars -->
                     <div class="form-horizontal" id="advance-options">
 
                         <!-- Advance options title -->
@@ -104,43 +104,45 @@
                             <div class="col-xs-12 col-sm-12 col-lg-12">
                                 <h4>Advance Options</h4>
                             </div>
-                        </div>
+                        </div><!-- Advance options title -->
+                       
 
                         <div class="row">
+                            <!-- category search -->
                             <div class="col-xs-12 col-md-12 col-lg-12">
-                                <!-- category search -->
                                 <div class="form-group">
                                     <label class="col-xs-3 col-sm-2 col-lg-1 control-label">Category:</label>
                                     <div class="col-xs-9 col-sm-10 col-lg-11">
                                         <input type="text" class="form-control" id="category_search" />
                                     </div>
                                 </div>
-                            </div>
+                            </div><!-- category search -->
                         </div>
 
                         <div class="row">
+                            <!-- presenter search -->
                             <div class="col-xs-12 col-md-12 col-lg-6">
-                                <!-- author search -->
                                 <div class="form-group">
-                                    <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Author:</label>
+                                    <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Presenter:</label>
                                     <div class="col-xs-9 col-sm-10 col-lg-10">
                                         <input type="text" class="form-control" id="author_search" />
                                     </div>
                                 </div>
-                            </div>
+                            </div><!-- presenter search -->
 
+                            <!-- organization search -->
                             <div class="col-xs-12 col-md-12 col-lg-6">
-                                <!-- organization search -->
                                 <div class="form-group">
                                     <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Organization:</label>
                                     <div class="col-xs-9 col-sm-10 col-lg-10">
                                         <input type="text" class="form-control" id="organization_search" />
                                     </div>
                                 </div>
-                            </div>
+                            </div><!-- organization search -->
                         </div>
-
+                        
                         <div class="row">
+                            <!-- min max views search -->
                             <div class="col-xs-12 col-md-12 col-lg-6">
                                 <div class="form-group">
                                     <label class="col-xs-3 col-sm-2 col-lg-2 control-label"># of views:</label>
@@ -151,9 +153,10 @@
                                         <input type="text" class="form-control" id="views_max_search" placeholder="max" />
                                     </div>
                                 </div>
-                            </div>
+                            </div><!-- min max views search -->
+
+                            <!-- language search -->
                             <div class="col-xs-12 col-md-12 col-lg-6">
-                                <!-- language search -->
                                 <div class="form-group">
                                     <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Language:</label>
                                     <div class="dropdown col-xs-9 col-sm-10 col-lg-10">
@@ -166,49 +169,82 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
+                            </div><!-- language search -->
                         </div>
 
                     </div>
-                </div>
+                </div><!-- advance search bars -->
 
-                <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
-                    <!-- landscape container -->
+                <!-- wait container -->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="container-fluid">
+                        <div id="wait-content" class="center-block"></div>
+                    </div>
+                </div><!-- wait container -->
 
-                        <!-- Wait container -->
-                        <div class="row">
-                            <div class="container-fluid col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div id="wait-content" class="center-block"></div>
+                <!-- landscape info container -->
+                <div class="col-xs-12 col-ms-12 col-md-12 col-lg-4">
+                    <div class="container-fluid">
+                        <div class="search-info-container">
+                            <div class="search-info">
+                                <h4>Searchwords</h4>
+                                <p>
+                                    <b>Presenter: </b>    <span class="info presenter-info"></span>     <br />
+                                    <b>Organization: </b> <span class="info organization-info"></span>  <br />
+                                    <b>Categories: </b>   <span class="info categories-info"></span>    <br />
+                                    <b># of views: </b>   <span class="info views-info"></span>         <br />
+                                    <b>Language: </b>     <span class="info language-info"></span>      <br />
+                                </p>
+                                <h4>Information</h4>
+                                <p>
+                                    <b>Number of found lectures: </b>   <span class="info found-lectures-info"></span>       <br />
+                                    <b>Total number of views: </b>      <span class="info num-of-views-info"></span>         <br />
+                                    <b>Categories with frequency: </b>  <span class="info categories-frequency-info"></span> <br />
+                                </p>
                             </div>
                         </div>
+                    </div>
+                </div><!-- landscape info container -->
 
-                        <!-- landscape content -->
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="row">
+                <!-- landscape container -->
+                <div class="col-xs-12 col-ms-12 col-md-12 col-lg-8">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <!-- landscape content -->
                                 <div id="landscape-content">
                                     <!-- landscape tooltip container -->
                                     <div id="landscape-tooltip" class="notvisible"></div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="graph-options">
                             <!-- Graph options title -->
                             <div class="row">
-                                Graph options.
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="graph-options-title">
+                                        <h4>Graph options</h4>
+                                    </div>
+                                </div>
                             </div>
+
                             <!-- Graph options -->
                             <div class="row">
-                                <div class="col-lg-1">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <label class="checkbox-inline">
                                         <input type="checkbox" id="checkLandmarks" value="true"> Landmarks
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div><!-- graph options -->
                     </div>
-                </div>
+                </div><!-- landscape container -->
             </div>
         </div>
     </div>
+
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary hidden" id="error_trigger" data-toggle="modal" data-target="#error_modal"></button>
 
@@ -225,7 +261,6 @@
                 </div>
 
                 <div class="modal-body">
-
                 </div>
 
                 <div class="modal-footer">
@@ -234,7 +269,7 @@
 
             </div>
         </div>
-    </div>
+    </div><!-- Popup Modal -->
 
     <!-- JS Scripts -->
     <script type="text/javascript" src="public/js/jquery/jquery-2.1.4.min.js"></script>

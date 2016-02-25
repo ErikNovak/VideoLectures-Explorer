@@ -164,10 +164,10 @@ app.post('/vl/landscape-points', function (req, res) {
     console.timeEnd("Feature Space");
     // extract the features and generate the points
     console.time("Extraction");
-    var featureMat = ftr.extractMatrix(search);
+    var featureMat = ftr.extractSparseMatrix(search);
     console.timeEnd("Extraction");
     console.time("MDS Construction");
-    var MDS = new algorithms.MDS({ iter: 1, convexN: 3, clusterN: 200, docTresh: 200 });
+    var MDS = new algorithms.MDS({ iter: 2, convexN: 3, clusterN: 200, docTresh: 200 });
     console.timeEnd("MDS Construction");
     console.time("MDS clusters");
     MDS.constructClusters(featureMat);
@@ -198,5 +198,5 @@ app.post('/vl/landscape-points', function (req, res) {
         });
     }
     console.log("Number of points: " + points.length);
-    res.send({ "points": points });
+    res.send({ "searchwords": sent_data.data, "points": points });
 })

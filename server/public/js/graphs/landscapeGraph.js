@@ -11,7 +11,7 @@ function landscapeGraph(_options) {
         landmarkNumber: 400,
         margin: { top: 20, left: 20, bottom: 20, right: 20 },               
         color: {
-            points: "#240C7E", background: "#FFFFFF", text: "#4828BE"
+            points: "#240C7E", background: "#FFFFFF", text: "#7457E0"
         }
     }, _options);
     
@@ -74,11 +74,15 @@ function landscapeGraph(_options) {
      */
     this.displayLandscapeGraph = function () {
         
+        // HACK: make options.containerName visible
+        $(options.containerName).css('visibility', 'hidden').show();
         var totalWidth = $(options.containerName).width(),
             totalHeight = $(options.containerName).height(),
             width = totalWidth - options.margin.left - options.margin.right,
             height = totalHeight - options.margin.top - options.margin.bottom;
         
+        $(options.containerName).css('visibility', 'visible').hide();
+
         // remove the previous SVG contained elements
         d3.select(options.containerName + " svg").remove();
         
@@ -202,6 +206,7 @@ function landscapeGraph(_options) {
                 .attr("cx", function (d) { return xScale(d.x) })
                 .attr("cy", function (d) { return yScale(d.y) })
                 .attr("fill", options.color.points)
+                .attr("fill-opacity", 0.9)
                 .attr("r", 0)
                 .transition().delay(500).duration(1000)
                 .attr("r", function (d) { return pScale(d.views) });;

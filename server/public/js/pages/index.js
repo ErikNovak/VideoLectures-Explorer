@@ -3,7 +3,7 @@
  * 
  */
 var wait = new waitAnimation({ containerName: "#wait-content" });
-var search = function (callFunction) {
+function search(callFunction) {
     
     // the arrays containing the keywords of different type
     var author = [],
@@ -55,7 +55,9 @@ var search = function (callFunction) {
     // call the search function
     if (search.length == 0) { return; }
     else {
+        $(".search-info-container").hide();
         $('#landscape-content').hide();
+        $(".graph-options").hide();
         callFunction(search);
     }
 
@@ -73,18 +75,19 @@ var SLandscape = function (value) {
         type: 'POST',
         url: '/vl/landscape-points',
         data: { data: value },
-        success: function (pack) {
-            if (pack.error != null) {
-                $(".modal-body").html("<p>" + pack.error + "</p>")
+        success: function (response) {
+            if (response.error != null) {
+                $(".modal-body").html("<p>" + response.error + "</p>")
                 $("#error_trigger").trigger("click");
                 wait.stopAnimation();
             } else {
+                // fill the info
+                searchInfo(response);
                 // shows the points on the screen
-                points = pack;
                 var graph = new landscapeGraph({ containerName: "#landscape-content" });
-                graph.setData(pack); graph.displayLandscapeGraph();
+                graph.setData(response); graph.displayLandscapeGraph();
                 // shows/hides the landmarks
-                landmarkShow();
+                $(".graph-options").show(); landmarkShow();
                 // stops the wait icon
                 wait.stopAnimation();
             }

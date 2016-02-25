@@ -85,7 +85,7 @@ button.navbar-toggle {
     }
 
         .project-info h4 {
-            padding-bottom: 20px;
+            padding-bottom: 30px;
         }
 
         .project-info p {
@@ -112,6 +112,14 @@ button.navbar-toggle {
     margin: 50px 10px 30px 10px;
 }
 
+
+#body-container {
+    width: 100%;
+    padding:0px;
+    position:absolute;
+    top:51.5px;
+    bottom:0px;
+}
 
 /* Search options stylz */
 
@@ -174,6 +182,7 @@ button.navbar-toggle {
     white-space: nowrap;
 }
 
+.tt-dataset .tt-suggestion:hover,
 .tt-cursor {
     font-weight: 600;
     background-color: #F2F6F8;
@@ -203,19 +212,20 @@ button.navbar-toggle {
 }
 
 #landscape-content {
-    width: 95%;
     height: 700px;
     display: none;
     position: relative;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-#land-container {
     border-radius: 25px;
     border: 2px solid;
     border-color: #4086AB;
+}
+
+#land-container {
+    width: 100%;
+    border-radius: 25px;
     background-color: white;
 }
 
@@ -229,6 +239,30 @@ button.navbar-toggle {
     border-radius: 5px;
     max-width: 500px;
     background-color: rgba(40, 12, 145, 0.8);
+}
+
+.search-info-container {
+    width:    100%;
+    overflow: auto;
+    max-height: 700px;
+    position: relative;
+    display:  none;
+    margin:        auto;
+    margin-top:    20px;
+    margin-bottom: 20px;
+    padding:       10px;
+    border:       1px solid;
+    border-color: lightgrey;
+    background-color: white;
+}
+
+.search-info h4 {
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.graph-options {
+    display:none;
 }
 
 /* Universal mini stylz */
