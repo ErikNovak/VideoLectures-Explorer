@@ -188,6 +188,11 @@ button.navbar-toggle {
     background-color: #F2F6F8;
 }
 
+.tag {
+    border-radius: 20px;
+    font-size:     12px;
+}
+
 .tt-input {
     width: 100%;
 }
