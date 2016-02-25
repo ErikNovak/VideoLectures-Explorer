@@ -47,11 +47,13 @@ while (!lectures.eof) {
 
     var categories = null;
     if (lecture[10] != '') {
-        var topics = lecture[10].replace(/[_]+/g, ' ').split(/[;,\/]+/g);
+        var topics = lecture[10].replace(/[_]+/g, ' ').split(/[,;\/]+/g);
         // create an array
         categories = [];
         for (t = 0; t < topics.length; t++) {
-            categories.push(topics[t]);
+            if (categories.indexOf(topics[t]) == -1) {
+                categories.push(topics[t]);
+            }
         }
     }
     
