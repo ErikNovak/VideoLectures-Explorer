@@ -5,6 +5,11 @@ html, body {
     height: 100%;
 }
 
+.navbar-default {
+    border-color: #408EB8;
+    border-radius: 0px;
+}
+
 .navbar-header a.navbar-brand,
 .navbar-default .navbar-nav li a {
     color: white;
@@ -110,6 +115,10 @@ button.navbar-toggle {
 
 /* Search options stylz */
 
+#advance-options {
+    display:none;
+}
+
 .row {
     margin-left:0px;
     margin-right:0px;
@@ -125,8 +134,6 @@ button.navbar-toggle {
 
 #span-basic-search {
     display:table-cell;
-    position: relative;
-    top: -12px;
     width: 100%;
 }
 
@@ -165,6 +172,11 @@ button.navbar-toggle {
     line-height: 1.428571429;
     color: #333333;
     white-space: nowrap;
+}
+
+.tt-cursor {
+    font-weight: 600;
+    background-color: #F2F6F8;
 }
 
 .tt-input {

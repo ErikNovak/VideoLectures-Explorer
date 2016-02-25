@@ -88,16 +88,16 @@
                     </span>
                     <!-- additional options button -->
                     <span id="span-basic-search-buttons">
-                        <button class="btn btn-additional pull-right" type="button" onclick="toggleOptions();">
+                        <button class="btn btn-additional pull-right" id="advance-search-button" data-open="close" type="button" onclick="toggleOptions();">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span id="search-chevron" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                         </button>
                     </span>
                 </div>
 
                 <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
                     <!-- advance search bars -->
-                    <div class="form-horizontal" id="advance-options" style="display:none">
+                    <div class="form-horizontal" id="advance-options">
 
                         <!-- Advance options title -->
                         <div class="row">
@@ -158,11 +158,11 @@
                                     <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Language:</label>
                                     <div class="dropdown col-xs-9 col-sm-10 col-lg-10">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="language_search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            ANY
+                                            all
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="language_search">
-                                            <li><a href="#">ANY</a></li>
+                                            <li><a href="#">all</a></li>
                                         </ul>
                                     </div>
                                 </div>

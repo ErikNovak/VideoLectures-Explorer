@@ -28,7 +28,7 @@ var search = function (callFunction) {
         function (el) { return el.name; }));
     organization = organization.concat($.map($('#organization_search').tagsinput('items'), 
         function (el) { return el.name; }));
-    var language = $('#language_search').text().replace(/[\s]+/g, '').toLowerCase();
+    var language = $('#language_search').text().replace(/[\s]+/g, '');
     
     var views_min = $("#views_min_search").val();
     var views_max = $("#views_max_search").val();
@@ -43,8 +43,8 @@ var search = function (callFunction) {
     if (organization.length != 0) {
         search.push({ type: "organization", data: organization });
     }
-    if (language != 'any') {
-        search.push({ type: "language", data: language });
+    if (language != 'all') {
+        search.push({ type: "language", data: SFormat.LanguageFullAbbr[language] });
     }
     if (views_min != '') {
         search.push({ type: "views_min", data: views_min });

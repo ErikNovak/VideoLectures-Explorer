@@ -3,11 +3,62 @@
  * animation transitions.
  */
 
+
+/**
+ * Contains the formats for handling search variables. 
+ * 
+ */ 
+var SFormat = {
+    LanguageAbbrFull : {
+        sl: "slovene",
+        en: "english",
+        de: "german",
+        fr: "french",
+        sr: "serbian",
+        hr: "croatian",
+        uk: "ukrainian",
+        es: "spanish",
+        it: "italian",
+        bs: "bosnian",
+        nl: "dutch",
+        pl: "polish",
+        ru: "russian",
+        tr: "turkish"
+    },
+    LanguageFullAbbr : {
+        slovene:    "sl",
+        english:    "en",
+        german:     "de",
+        french:     "fr",
+        serbian:    "sr",
+        croatian:   "hr",
+        ukrainian:  "uk",
+        spanish:    "es",
+        italian:    "it",
+        bosnian:    "bs",
+        dutch:      "nl",
+        polish:     "pl",
+        russian:    "ru",
+        turkish:    "tr"
+    }
+}
+
+
 /**
  * Toggle the visibility of the advance options.
  */ 
 var toggleOptions = function () {
     $("#advance-options").slideToggle("slow");
+    toggle_button = $("#advance-search-button");
+    if (toggle_button.attr("data-open") == "close") {
+        $("#search-chevron").removeClass("glyphicon glyphicon-chevron-right")
+                            .addClass("glyphicon glyphicon-chevron-down");
+        toggle_button.attr("data-open", "open");
+    } else {
+        $("#search-chevron").removeClass("glyphicon glyphicon-chevron-down")
+                            .addClass("glyphicon glyphicon-chevron-right");
+        toggle_button.attr("data-open", "close");
+    }
 }
 
 /**
@@ -112,7 +163,7 @@ $(document).ready(function () {
             // filling the language search dropdown
             var languages = data.languages;
             for (var langN = 0; langN < languages.length; langN++) {
-                $('.dropdown > ul').append('<li><a href="#">' + languages[langN].name.toUpperCase() + '</a></li>');
+                $('.dropdown > ul').append('<li><a href="#">' + SFormat.LanguageAbbrFull[languages[langN].name] + '</a></li>');
             }
             
             /**
@@ -123,6 +174,8 @@ $(document).ready(function () {
                     $('#language_search').html($(this).text() + ' <span class="caret"></span>');
                 });
             });
+            $("#span-basic-search").css("position", "relative")
+                                    .css("top", "-12px");
         }
     });
 });

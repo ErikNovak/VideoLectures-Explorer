@@ -323,7 +323,7 @@ LHelperFunctions = {
         }
         
         // lecture language
-        text += "The lecture is in " + data.language + ". ";
+        text += "The lecture is in " + SFormat.LanguageAbbrFull[data.language] + ". ";
         // category
         if (data.categories) {
             var num = data.categories.indexOf(',') == -1;
