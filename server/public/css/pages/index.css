@@ -112,13 +112,19 @@ button.navbar-toggle {
     margin: 50px 10px 30px 10px;
 }
 
-
 #body-container {
     width: 100%;
     padding:0px;
     position:absolute;
     top:51.5px;
     bottom:0px;
+}
+
+.modal-content {
+    background-color: #4086AB;
+    color: #FFFFFF;
+
+    
 }
 
 /* Search options stylz */

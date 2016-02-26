@@ -76,10 +76,9 @@ var SLandscape = function (value) {
         url: '/vl/landscape-points',
         data: { data: value },
         success: function (response) {
+            // if there is no query
             if (response.error != null) {
-                $(".modal-body").html("<p>" + response.error + "</p>")
                 $("#error_trigger").trigger("click");
-                wait.stopAnimation();
             } else {
                 // fill the info
                 searchInfo(response);
@@ -89,8 +88,8 @@ var SLandscape = function (value) {
                 // shows/hides the landmarks
                 $(".graph-options").show(); landmarkShow();
                 // stops the wait icon
-                wait.stopAnimation();
             }
+            wait.stopAnimation();
         }
     })
 }

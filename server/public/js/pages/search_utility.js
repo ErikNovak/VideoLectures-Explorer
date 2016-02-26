@@ -178,11 +178,11 @@ $(document).ready(function () {
         success: function (data) {
             
             // author typeahead and tags 
-            var authors = new Bloodhound({
+            var presenters = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 local: data.authors
-            }); authors.initialize();
+            }); presenters.initialize();
             
             $("#author_search").tagsinput({
                 maxTags: 1,
@@ -192,7 +192,7 @@ $(document).ready(function () {
                 typeaheadjs: {
                     name: "authors",
                     displayKey: 'name',
-                    source: authors.ttAdapter()
+                    source: presenters.ttAdapter()
                 }
             });
             

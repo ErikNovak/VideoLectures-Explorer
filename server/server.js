@@ -14,9 +14,14 @@ var http = require('http'),
 var app = express();
 var server = http.Server(app);
 
+// static folder
 app.use('/public', express.static(__dirname + '/public'));
+
+// data parsing
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
+// send the main page
 app.get('/vl', function (req, res) {
     var options = {
         root: __dirname + '/public/html/'
@@ -25,7 +30,7 @@ app.get('/vl', function (req, res) {
 });
 
 server.listen('5055', function () {
-    console.log('Videolectures on port 5055');
+    console.log('Videolectures Dashboard | Landscape on port 5055');
 });
 
 
@@ -35,12 +40,11 @@ server.listen('5055', function () {
  */
 
 var qm = require('qminer');
-var algorithms = require('./server_utility/algorithms.js');
 var formatJ = require('./server_utility/formatJ.js');
 
 var base = new qm.Base({
     mode: 'openReadOnly',
-    dbPath: './data/database/videos/'
+    dbPath: './data/database/lectures/'
 });
 
 var ftr = new qm.FeatureSpace(base, [
@@ -52,39 +56,40 @@ var ftr = new qm.FeatureSpace(base, [
 
 /**
  * Queries the data.
- * 
+ * @param {Array.<Object>} data - The query information.
+ * @returns {module:qm.RecordSet} The query record set.
  */
-var query = function (data) {
-    var quer = { $from: "Lectures" };
+var queryData = function (data) {
+    var query = { $from: "Lectures" };
     for (var dataN = 0; dataN < data.length; dataN++) {
-        var search_data = data[dataN];
-        if (search_data.data.length != 0) {
-            if (search_data.type == "author") {
+        var searchData = data[dataN];
+        if (searchData.data.length != 0) {
+            if (searchData.type == "author") {
                 // author
-                quer.author = search_data.data;
-            } else if (search_data.type == "organization") {
+                query.author = searchData.data;
+            } else if (searchData.type == "organization") {
                 // organization
-                quer.organization = search_data.data;
-            } else if (search_data.type == "category") {
+                query.organization = searchData.data;
+            } else if (searchData.type == "category") {
                 // categories
-                quer.categories = search_data.data;
-            } else if (search_data.type == "language") {
+                query.categories = searchData.data;
+            } else if (searchData.type == "language") {
                 // language
-                quer.language = search_data.data;
-            } else if (search_data.type == "views_min") {
+                query.language = searchData.data;
+            } else if (searchData.type == "views_min") {
                 // minimum number of views
-                quer.views = [{ $gt: parseInt(search_data.data) }];
-            } else if (search_data.type == "views_max") {
+                query.views = [{ $gt: parseInt(searchData.data) }];
+            } else if (searchData.type == "views_max") {
                 // maximum number of views
-                if (quer['views']) { quer['views'] = quer['views'].concat([{ $lt: parseInt(search_data.data) }]); } 
-                else { quer.views = { $lt: parseInt(search_data.data) }; }
+                if (query['views']) { query['views'] = query['views'].concat([{ $lt: parseInt(searchData.data) }]); } 
+                else { query.views = { $lt: parseInt(searchData.data) }; }
             }
             else {
                 throw "Error: Not recognizable data type " + search_data.type;
             }
         }
     }
-    var result = base.search(quer);
+    var result = base.search(query);
     return result;
 }
 
@@ -94,7 +99,7 @@ var query = function (data) {
 
 /**
  * Sends the data of the list for autocompletion used in the 
- * search bars.
+ * search bars. 
  */ 
 app.get('/vl/autocomplete', function (req, res) {
     // get the categories
@@ -149,54 +154,140 @@ app.get('/vl/autocomplete', function (req, res) {
 /**
  * Get the JSON containing the landscape points info. 
  */
-app.post('/vl/landscape-points', function (req, res) {
-    var sent_data = req.body;
-    var search = query(sent_data.data);
-    console.log("Number of lecture: " + search.length);
+app.post('/vl/landscape-points', function (request, result) {
+    var sentData = request.body;
+    var search = queryData(sentData.data);
+
     // if search query is empty
     if (search.length == 0) {
-        res.send({ error: "No data found!" });
+        result.send({ error: "No data found!" });
         return;
     }
     // reset and update the feature space
-    console.time("Feature Space");
     ftr.clear(); ftr.updateRecords(search);
-    console.timeEnd("Feature Space");
     // extract the features and generate the points
-    console.time("Extraction");
     var featureMat = ftr.extractSparseMatrix(search);
-    console.timeEnd("Extraction");
-    console.time("MDS Construction");
-    var MDS = new algorithms.MDS({ iter: 2, convexN: 3, clusterN: 200, docTresh: 200 });
-    console.timeEnd("MDS Construction");
-    console.time("MDS clusters");
-    MDS.constructClusters(featureMat);
-    console.timeEnd("MDS clusters");
-    console.time("Coordinates");
-    var coordinates = MDS.getArticlesCoord(featureMat);
-    console.timeEnd("Coordinates");
+    // set the parameters and make the async functions roll out
+    var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
     
-    // the functions that puts the points into a unit square
-    var xCoord = formatJ.linearF(coordinates.getCol(0));
-    var yCoord = formatJ.linearF(coordinates.getCol(1));
+    /**
+     * Calculates and sends the points to the client.
+     * The function sequence:
+     * SVD -> svdCallBack -> getLecturesCoord -> createSendPoints
+     */ 
+    SVD(featureMat, params);
     
-    // generate an array of coordinates
-    var points = [];
-    for (var pointN = 0; pointN < coordinates.rows; pointN++) {
-        points.push({
-            x: xCoord(coordinates.at(pointN, 0)), 
-            y: yCoord(coordinates.at(pointN, 1)), 
-            title: search[pointN].title,
-            author: search[pointN].author,
-            organization: search[pointN].organization,
-            language: search[pointN].language,
-            categories: search[pointN].categories != null ? search[pointN].categories.toString() : null,
-            published: search[pointN].published,
-            duration: search[pointN].duration,
-            views: search[pointN].views,
-            description: search[pointN].description
-        });
+    /**
+     * Calculates the svd of the feature matrix using the async function.
+     * @param {module:la.Matrix} mat - The feature matrix.
+     * @param {object} params - The parameters for calculation.
+     */
+    function SVD(mat, params) {
+
+        var fullMat;
+        if (mat.cols < params.docTresh) {
+            fullMat = mat.full(); var clust = Math.min(fullMat.rows, fullMat.cols);
+            qm.la.svdAsync(fullMat, clust, { iter: params.iter }, svdCallback);
+
+        } else {
+            var clust = Math.min(mat.cols, params.clusterN);
+            var kmeans = new qm.analytics.KMeans({ iter: params.iter, k: clust });
+            kmeans.fit(mat);
+            fullMat = kmeans.getModel().C;
+            qm.la.svdAsync(fullMat, params.clusterN, { iter: params.iter }, svdCallback);
+        }
+        
+        /**
+         * Callback function for svdAsync. It constructs a new matrix and calls 
+         * MDS.fitTransform.
+         * @param {error} err - The error if something goes wrong.
+         * @param {Object} svd - The SVD decomposition gained with svdAsync.
+         */ 
+        function svdCallback(err, svd) {
+            if (err) { console.log(err); return; }
+            
+            var singularValues = svd.s, k = 1;
+            var singularSum = singularValues.sum();
+            for (var partN = 0; partN < fullMat.cols; partN++) {
+                // the sum of the first N singular values
+                var partialSum = singularValues.subVec(qm.la.rangeVec(0, partN)).sum();
+                if (partialSum / singularSum > 0.8) {
+                    k = partN; break;
+                }
+            }
+            V = svd.V.getColSubmatrix(qm.la.rangeVec(0, k - 1)).transpose();
+            var mdsParam = { maxStep: 3000, maxSecs: 2, minDiff: 1e-3, distType: 'Cos' };
+            var MDS = new qm.analytics.MDS(mdsParam);
+            
+            // calculate the coordinates of the lectures
+            MDS.fitTransformAsync(V, getLecturesCoord);
+        }
+        /**
+         * Callback for the MDS.fitTransform function. It creates the coordinates for the
+         * lectures and sends them to createSendPoints.
+         * @param {error} err - The error if something goes wrong.
+         * @param {module:la.Matrix} coordinateMatrix - The coordinate matrix gained from 
+         * MDS.fitTransformAsync.
+         */ 
+        function getLecturesCoord(err, coordinateMatrix) {
+            if (err) { console.log(err); return; }
+
+            var points = new qm.la.Matrix({ rows: mat.cols, cols: 2 });
+            
+            var normalizedMat = mat; normalizedMat.normalizeCols();
+            // for each lecture get the distance to the clusters
+            var distanceMat = fullMat.multiplyT(normalizedMat);
+            var newConvexN  = distanceMat.cols < params.newConvexN ? distanceMat.cols : params.convexN;
+            // get coordinates for each lecture
+            for (var ColN = 0; ColN < distanceMat.cols; ColN++) {
+                var columnVec   = distanceMat.getCol(ColN);
+                var sortedVec   = columnVec.sortPerm(false);
+                var distanceVec = sortedVec.vec.subVec(qm.la.rangeVec(0, newConvexN - 1));
+                var indexVec    = sortedVec.perm.subVec(qm.la.rangeVec(0, newConvexN - 1));
+                // create the article point coordinates
+                var x = new qm.la.Vector([0, 0]);
+                var totalW = distanceVec.sum();
+
+                for (var CltN = 0; CltN < newConvexN; CltN++) {
+                    var clt = coordinateMatrix.getRow(indexVec.at(CltN));
+                    x = x.plus(clt.multiply(distanceVec.at(CltN) / totalW));
+                }
+                points.setRow(ColN, x);
+            }
+            // create the propper point format and send it to client
+            createSendPoints(points);
+        }
+                
+        /**
+         * Callback function: Creates the points and sends the points to the client.
+         * @param {error} err - The possible error thrown by the async function.
+         * @param {module:la.Matrix} pointsMat - The matrix containing the coordinates.
+         */ 
+        function createSendPoints(pointsMat) {
+            // the functions that puts the points into a unit square
+            var xCoord = formatJ.linearF(pointsMat.getCol(0));
+            var yCoord = formatJ.linearF(pointsMat.getCol(1));
+            
+            // generate an array of coordinates
+            var points = [];
+            for (var pointN = 0; pointN < pointsMat.rows; pointN++) {
+                points.push({
+                    x:            xCoord(pointsMat.at(pointN, 0)), 
+                    y:            yCoord(pointsMat.at(pointN, 1)), 
+                    title:        search[pointN].title,
+                    author:       search[pointN].author,
+                    organization: search[pointN].organization,
+                    language:     search[pointN].language,
+                    categories:   search[pointN].categories != null ? search[pointN].categories.toString() : null,
+                    published:    search[pointN].published,
+                    duration:     search[pointN].duration,
+                    views:        search[pointN].views,
+                    description:  search[pointN].description
+                });
+            }
+            result.send({ "searchwords": sentData.data, "points": points });
+        }
+    
+    
     }
-    console.log("Number of points: " + points.length);
-    res.send({ "searchwords": sent_data.data, "points": points });
 })
