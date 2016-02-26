@@ -14,7 +14,7 @@ var lectures = new fs.FIn('videolectures-20160216.csv');
 var base = new qm.Base({
     mode:       "createClean",
     schemaPath: "schema.json",
-    dbPath:     "videos/"
+    dbPath:     "lectures/"
 })
 
 // the first line is skipped, it contains the column names
