@@ -28,7 +28,7 @@ server/node_modules
 
 # data files
 server/data/autocomplete/*.txt
-server/data/database/videos
+server/data/database/lectures
 server/data/database/*.csv
 
 # visual studio node checker
