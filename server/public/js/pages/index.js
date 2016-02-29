@@ -56,6 +56,7 @@ function search(callFunction) {
     if (search.length == 0) { return; }
     else {
         $(".search-info-container").hide();
+        $(".landscape-container").show();
         $('#landscape-content').hide();
         $(".graph-options").hide();
         callFunction(search);
@@ -86,6 +87,7 @@ var SLandscape = function (value) {
                 var graph = new landscapeGraph({ containerName: "#landscape-content" });
                 graph.setData(response); graph.displayLandscapeGraph();
                 // shows/hides the landmarks
+                $(".landscape-container").show();
                 $(".graph-options").show(); landmarkShow();
                 // stops the wait icon
             }
