@@ -5,13 +5,14 @@
  * ction of the landscape graph.
  */
 
-var http = require('http'),
-    express = require('express'),
-    bodyParser = require('body-parser'),
-    fs = require('fs'),
-    path = require('path');
+var http        = require('http'),
+    express     = require('express'),
+    bodyParser  = require('body-parser'),
+    favicon     = require('serve-favicon'),
+    fs          = require('fs'),
+    path        = require('path');
 
-var app = express();
+var app    = express();
 var server = http.Server(app);
 
 // static folder
@@ -20,6 +21,7 @@ app.use('/public', express.static(__dirname + '/public'));
 // data parsing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(favicon(path.join(__dirname, 'public', 'pics', 'favicon.ico')));
 
 // send the main page
 app.get('/vl', function (req, res) {
@@ -28,9 +30,9 @@ app.get('/vl', function (req, res) {
     };
     res.sendFile('index.html', options);
 });
-
-server.listen('5055', function () {
-    console.log('Videolectures Dashboard | Landscape on port 5055');
+var PORT = 5055;
+server.listen(PORT, function () {
+    console.log('Videolectures Dashboard | Landscape on port ' + PORT);
 });
 
 
@@ -173,28 +175,29 @@ app.post('/vl/landscape-points', function (request, result) {
     /**
      * Calculates and sends the points to the client.
      * The function sequence:
-     * SVD -> svdCallBack -> getLecturesCoord -> createSendPoints
+     * SVD -> MDS -> Coordinates
      */ 
-    SVD(featureMat, params);
+    SendPoints(featureMat, params);
     
     /**
      * Calculates the svd of the feature matrix using the async function.
      * @param {module:la.Matrix} mat - The feature matrix.
      * @param {object} params - The parameters for calculation.
      */
-    function SVD(mat, params) {
-
+    function SendPoints(mat, params) {
         var fullMat;
-        if (mat.cols < params.docTresh) {
+        if (mat.cols <= params.docTresh) {
             fullMat = mat.full(); var clust = Math.min(fullMat.rows, fullMat.cols);
-            qm.la.svdAsync(fullMat, clust, { iter: params.iter }, svdCallback);
+            qm.la.svdAsync(fullMat, clust, { iter: params.iter }, callMDS);
 
         } else {
             var clust = Math.min(mat.cols, params.clusterN);
-            var kmeans = new qm.analytics.KMeans({ iter: params.iter, k: clust });
-            kmeans.fit(mat);
-            fullMat = kmeans.getModel().C;
-            qm.la.svdAsync(fullMat, params.clusterN, { iter: params.iter }, svdCallback);
+            var kmeans = new qm.analytics.KMeans({ iter: params.iter, k: clust, distanceType: "Cos" });
+            kmeans.fitAsync(mat, function (err) { 
+                fullMat = kmeans.getModel().C;
+                qm.la.svdAsync(fullMat, params.clusterN, { iter: params.iter }, callMDS);
+            });
+            
         }
         
         /**
@@ -203,10 +206,9 @@ app.post('/vl/landscape-points', function (request, result) {
          * @param {error} err - The error if something goes wrong.
          * @param {Object} svd - The SVD decomposition gained with svdAsync.
          */ 
-        function svdCallback(err, svd) {
+        function callMDS(err, SVD) {
             if (err) { console.log(err); return; }
-            
-            var singularValues = svd.s, k = 1;
+            var singularValues = SVD.s, k = 1;
             var singularSum = singularValues.sum();
             for (var partN = 0; partN < fullMat.cols; partN++) {
                 // the sum of the first N singular values
@@ -215,12 +217,11 @@ app.post('/vl/landscape-points', function (request, result) {
                     k = partN; break;
                 }
             }
-            V = svd.V.getColSubmatrix(qm.la.rangeVec(0, k - 1)).transpose();
-            var mdsParam = { maxStep: 3000, maxSecs: 2, minDiff: 1e-3, distType: 'Cos' };
-            var MDS = new qm.analytics.MDS(mdsParam);
-            
+            V = SVD.V.getColSubmatrix(qm.la.rangeVec(0, k - 1)).transpose();
+            var MDSParam = { maxStep: 3000, maxSecs: 2, minDiff: 1e-3, distType: 'Cos' };
+            var MDS = new qm.analytics.MDS(MDSParam);
             // calculate the coordinates of the lectures
-            MDS.fitTransformAsync(V, getLecturesCoord);
+            MDS.fitTransformAsync(V, Coordinates);
         }
         /**
          * Callback for the MDS.fitTransform function. It creates the coordinates for the
@@ -229,65 +230,53 @@ app.post('/vl/landscape-points', function (request, result) {
          * @param {module:la.Matrix} coordinateMatrix - The coordinate matrix gained from 
          * MDS.fitTransformAsync.
          */ 
-        function getLecturesCoord(err, coordinateMatrix) {
+        function Coordinates(err, coordinateMatrix) {
             if (err) { console.log(err); return; }
-
             var points = new qm.la.Matrix({ rows: mat.cols, cols: 2 });
-            
             var normalizedMat = mat; normalizedMat.normalizeCols();
             // for each lecture get the distance to the clusters
             var distanceMat = fullMat.multiplyT(normalizedMat);
-            var newConvexN  = distanceMat.cols < params.newConvexN ? distanceMat.cols : params.convexN;
+            var newConvexN = distanceMat.cols < params.newConvexN ? distanceMat.cols : params.convexN;
             // get coordinates for each lecture
-            for (var ColN = 0; ColN < distanceMat.cols; ColN++) {
-                var columnVec   = distanceMat.getCol(ColN);
-                var sortedVec   = columnVec.sortPerm(false);
+            for (var ColN = 0; ColN < mat.cols; ColN++) {
+                //console.log("Loop number: " + ColN);
+                var columnVec = distanceMat.getCol(ColN);
+                var sortedVec = columnVec.sortPerm(false);
                 var distanceVec = sortedVec.vec.subVec(qm.la.rangeVec(0, newConvexN - 1));
-                var indexVec    = sortedVec.perm.subVec(qm.la.rangeVec(0, newConvexN - 1));
+                var indexVec = sortedVec.perm;
+
                 // create the article point coordinates
                 var x = new qm.la.Vector([0, 0]);
                 var totalW = distanceVec.sum();
-
                 for (var CltN = 0; CltN < newConvexN; CltN++) {
                     var clt = coordinateMatrix.getRow(indexVec.at(CltN));
                     x = x.plus(clt.multiply(distanceVec.at(CltN) / totalW));
                 }
                 points.setRow(ColN, x);
+                
             }
             // create the propper point format and send it to client
-            createSendPoints(points);
-        }
-                
-        /**
-         * Callback function: Creates the points and sends the points to the client.
-         * @param {error} err - The possible error thrown by the async function.
-         * @param {module:la.Matrix} pointsMat - The matrix containing the coordinates.
-         */ 
-        function createSendPoints(pointsMat) {
             // the functions that puts the points into a unit square
-            var xCoord = formatJ.linearF(pointsMat.getCol(0));
-            var yCoord = formatJ.linearF(pointsMat.getCol(1));
-            
+            var xCoord = formatJ.linearF(points.getCol(0));
+            var yCoord = formatJ.linearF(points.getCol(1));
             // generate an array of coordinates
-            var points = [];
-            for (var pointN = 0; pointN < pointsMat.rows; pointN++) {
-                points.push({
-                    x:            xCoord(pointsMat.at(pointN, 0)), 
-                    y:            yCoord(pointsMat.at(pointN, 1)), 
-                    title:        search[pointN].title,
-                    author:       search[pointN].author,
+            var pointsArr = [];
+            for (var pointN = 0; pointN < points.rows; pointN++) {
+                pointsArr.push({
+                    x: xCoord(points.at(pointN, 0)), 
+                    y: yCoord(points.at(pointN, 1)), 
+                    title: search[pointN].title,
+                    author: search[pointN].author,
                     organization: search[pointN].organization,
-                    language:     search[pointN].language,
-                    categories:   search[pointN].categories != null ? search[pointN].categories.toString() : null,
-                    published:    search[pointN].published,
-                    duration:     search[pointN].duration,
-                    views:        search[pointN].views,
-                    description:  search[pointN].description
+                    language: search[pointN].language,
+                    categories: search[pointN].categories != null ? search[pointN].categories.toString() : null,
+                    published: search[pointN].published,
+                    duration: search[pointN].duration,
+                    views: search[pointN].views,
+                    description: search[pointN].description
                 });
             }
-            result.send({ "searchwords": sentData.data, "points": points });
-        }
-    
-    
+            result.send({ "searchwords": sentData.data, "points": pointsArr });
+        }       
     }
 })
