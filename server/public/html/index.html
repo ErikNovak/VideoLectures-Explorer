@@ -68,7 +68,6 @@
 
         <!-- Body container -->
         <div class="dashboard-body">
-
             <div class="row">
                 <!-- Title -->
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -88,7 +87,7 @@
                     </span>
                     <!-- additional options button -->
                     <span id="span-basic-search-buttons">
-                        <button class="btn btn-additional pull-right" id="advance-search-button" data-open="close" type="button" onclick="toggleOptions();">
+                        <button class="btn btn-default pull-right" id="advance-search-button" data-open="close" type="button" onclick="toggleOptions();">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             <span id="search-chevron" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                         </button>
@@ -236,10 +235,21 @@
                         </div><!-- graph options -->
                     </div>
                 </div><!-- landscape container -->
-
             </div>
-        </div>  <!-- Body container -->
-    </div> <!-- Body -->
+        </div>
+
+    </div>  <!-- Body container -->
+
+    <div class="footer" role="contentinfo">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    © 2016 <a href="http://ailab.ijs.si/si/">AILAB JSI</a>. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary hidden" id="error_trigger" data-toggle="modal" data-target="#error_modal"></button>
 

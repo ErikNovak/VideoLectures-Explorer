@@ -25,9 +25,8 @@ function landscapeGraph(_options) {
     
     /**
      * The points is a JSON object containing the data landscape and additional
-     * points.
-     * The data contains the x and y coordinate of the document, created by
-     * the multidimensional scaling, and it's info.
+     * points. The data contains the x and y coordinate of the document, created 
+     * by the multidimensional scaling, and it's info.
      */
     var points = null;
     
@@ -128,7 +127,7 @@ function landscapeGraph(_options) {
         // they are not clipped in half
         var padding = { left: 30, right: 30, top: 30, bottom: 30 };
         
-        // the x coordinate scale
+        // the x, y coordinate scale
         var minX, maxX, minY, maxY;
         if (points.length < 10) {
             minX = (3 * width - height) / 6 + padding.left;
@@ -155,12 +154,12 @@ function landscapeGraph(_options) {
         // the point size scale based on the number of views
         pScale = d3.scale.linear()
             .domain([0, maxView])
-            .range([2, 12]);
+            .range([3, 10]);
         
         // zoom configurations
         zoom.x(xScale)
             .y(yScale)
-            .scaleExtent([1, 10]);
+            .scaleExtent([1, 5]);
         
         // redraw the graph
         this.redraw();
@@ -197,10 +196,12 @@ function landscapeGraph(_options) {
         // add the points
         var LPoints = chartBody.selectAll(".points")
                 .data(points);
+
         LPoints.exit()
                .transition()
                .attr("r", 0)
                .remove();
+
         LPoints.enter().append("circle")
                 .attr("class", "points")
                 .attr("cx", function (d) { return xScale(d.x) })
@@ -210,7 +211,99 @@ function landscapeGraph(_options) {
                 .transition().delay(500).duration(1000)
                 .attr("r", function (d) { return pScale(d.views) });;
         
+
         // set the landmark coordinates
+        //if (points.length < 50) {
+        //    landmarks = $.map(points, function (pnt) { return { x: pnt.x, y: pnt.y } });
+        //} else {
+        //    for (var landN = 0; landN < options.landmarkNumber; landN++) {
+        //        landmarks.push({ x: Math.random(), y: Math.random() });
+        //    }
+        //}
+        
+        // create the landmarks
+        this.createLandmarks();
+
+        //landmarkTags = chartBody.selectAll(".landmark")
+        //    .data(landmarks);
+        //landmarkTags.exit().remove();
+        //landmarkTags.enter().append("text")
+        //    .attr("class", "landmark")
+        //    .attr("id", function (d, i) { return "Text" + i; })
+        //    .text(function (d, i) {
+        //    // get the points, that are close to the landmark position 
+        //    closestPoints = $.grep(points, function (point) {
+        //        return Math.sqrt(Math.pow((xScale(d.x) - xScale(point.x)), 2) + 
+        //                                Math.pow((yScale(d.y) - yScale(point.y)), 2)) < 25;
+        //    });
+        //    if (closestPoints.length == 0) { $("#Text" + i).remove(); return; }
+        //    // get the frequency of the categories
+        //    var landmarkFrequency = {};
+        //    for (var MatN = 0; MatN < closestPoints.length; MatN++) {
+        //        if (!closestPoints[MatN].categories) { continue; }
+        //        var categories = closestPoints[MatN].categories.split(/,[ ]*/g);
+        //        for (var KeyN = 0; KeyN < categories.length; KeyN++) {
+        //            if (landmarkFrequency[categories[KeyN]] != null) {
+        //                landmarkFrequency[categories[KeyN]] += 1;
+        //            } else {
+        //                landmarkFrequency[categories[KeyN]] = 1;
+        //            }
+        //        }
+        //    }
+        //    if (Object.keys(landmarkFrequency).length == 0) {
+        //        return;
+        //    }
+        //    return LHelperFunctions.getTag(landmarkFrequency);
+        //})
+        //    .attr("font-size", "12px")
+        //    .attr("font-weight", "bold")
+        //    .attr("font-family", "sans-serif")
+        //    .attr("fill", options.color.text)
+        //    .each(function (d) { d.width = this.getBBox().width; })
+        //    .attr("x", function (d) {
+        //    return xScale(d.x) - d.width / 2;
+        //})
+        //    .attr("y", function (d) {
+        //    return yScale(d.y);
+        //})
+        //    .attr('fill-opacity', 0)// for more smooth visualization
+        //    .transition()
+        //    .delay(1200).duration(1000)
+        //    .attr('fill-opacity', 1);
+        //landmarkShow(landmarkTags[0]);
+        
+        /**
+         * Additional functionality
+         * Creates the box containing the lecture information when hovered
+         * over the points.
+         */ 
+        chartBody.selectAll(".points")
+                .on("mouseover", function (d, idx) {
+                    coords = [xScale(d.x), yScale(d.y)];
+                    $(this).css("fill", d3.rgb(options.color.points).brighter(3));
+                    // create the tooltip with the point's information
+                    if (options.tooltipTextCallback) {
+                        var tooltipDiv = $("#landscape-tooltip");
+                        tooltipDiv.html(options.tooltipTextCallback(d));
+                        var x = coords[0] + options.margin.left;
+                        var y = coords[1] + options.margin.top;
+                        var scale = $(this).attr("transform") ? $(this).attr("transform").match(/[0-9.]+/g)[2] : 1;
+                        var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - pScale(d.views) * scale) : pScale(d.views) * scale;
+                        var yOffset = (coords[1] > ($(options.containerName).height() / 2)) ? (-tooltipDiv.outerHeight() + 60) : -60;
+                        tooltipDiv.css({ left: (x + xOffset) + "px", top: (y + yOffset) + "px" })
+                                .removeClass("notvisible");
+                    }
+                })
+                .on("mouseout", function (d, idx) {
+                    // hide the tooltip
+                    $(this).css("fill", d3.rgb(options.color.points));
+                    $("#landscape-tooltip").addClass("notvisible");
+                });
+    },
+
+    this.createLandmarks = function () {
+        // create the landmark points 
+        // based on the number of points
         if (points.length < 50) {
             landmarks = $.map(points, function (pnt) { return { x: pnt.x, y: pnt.y } });
         } else {
@@ -218,8 +311,7 @@ function landscapeGraph(_options) {
                 landmarks.push({ x: Math.random(), y: Math.random() });
             }
         }
-        
-        // create the categories tags
+
         landmarkTags = chartBody.selectAll(".landmark")
             .data(landmarks);
         landmarkTags.exit().remove();
@@ -267,34 +359,6 @@ function landscapeGraph(_options) {
             .delay(1200).duration(1000)
             .attr('fill-opacity', 1);
         landmarkShow(landmarkTags[0]);
-        
-        /**
-         * Additional functionality
-         * Creates the box containing the lecture information when hovered
-         * over the points.
-         */ 
-        chartBody.selectAll(".points")
-            .on("mouseover", function (d, idx) {
-            coords = [xScale(d.x), yScale(d.y)];
-            $(this).css("fill", d3.rgb(options.color.points).brighter(3));
-            // create the tooltip with the point's information
-            if (options.tooltipTextCallback) {
-                var tooltipDiv = $("#landscape-tooltip");
-                tooltipDiv.html(options.tooltipTextCallback(d));
-                var x = coords[0] + options.margin.left;
-                var y = coords[1] + options.margin.top;
-                var scale = $(this).attr("transform") ? $(this).attr("transform").match(/[0-9.]+/g)[2] : 1;
-                var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - pScale(d.views) * scale) : pScale(d.views) * scale;
-                var yOffset = (coords[1] > ($(options.containerName).height() / 2)) ? (-tooltipDiv.outerHeight() + 60) : -60;
-                tooltipDiv.css({ left: (x + xOffset) + "px", top: (y + yOffset) + "px" })
-                        .removeClass("notvisible");
-            }
-        })
-            .on("mouseout", function (d, idx) {
-            // hide the tooltip
-            $(this).css("fill", d3.rgb(options.color.points));
-            $("#landscape-tooltip").addClass("notvisible");
-        });
     }
 }
 
@@ -389,9 +453,9 @@ LHelperFunctions = {
         for (var i = 1; i < jsonArr.length; i++) {
             distribution.push(distribution[i] + jsonArr[i][1]);
         }
-        var diceToss = Math.floor(Math.random() * distribution[distribution.length - 1]);
+        var diceRoll = Math.floor(Math.random() * distribution[distribution.length - 1]);
         for (var n = 0; n < distribution.length - 1; n++) {
-            if (distribution[n] <= diceToss && diceToss < distribution[n + 1]) {
+            if (distribution[n] <= diceRoll && diceRoll < distribution[n + 1]) {
                 return jsonArr[n][0];
             }
         }

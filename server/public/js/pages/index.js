@@ -84,7 +84,7 @@ var SLandscape = function (value) {
                 // fill the info
                 searchInfo(response);
                 // shows the points on the screen
-                var graph = new landscapeGraph({ containerName: "#landscape-content" });
+                graph = new landscapeGraph({ containerName: "#landscape-content" });
                 graph.setData(response); graph.displayLandscapeGraph();
                 // shows/hides the landmarks
                 $(".landscape-container").show();

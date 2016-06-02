@@ -43,7 +43,6 @@
     <Compile Include="public\js\pages\index.js" />
     <Compile Include="public\js\pages\search_utility.js" />
     <Compile Include="server.js" />
-    <Compile Include="server_utility\algorithms.js" />
     <Compile Include="server_utility\formatJ.js" />
     <Content Include="data\autocomplete\authors.txt" />
     <Content Include="data\autocomplete\categories.txt" />
