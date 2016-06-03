@@ -10,9 +10,7 @@ function landscapeGraph(_options) {
         tooltipTextCallback: LHelperFunctions.tooltipTextCallback,      // the callback that generates the text info on the chart (defined at the end of the file)
         landmarkNumber: 400,
         margin: { top: 20, left: 20, bottom: 20, right: 20 },               
-        color: {
-            points: "#240C7E", background: "#FFFFFF", text: "#7457E0"
-        }
+        color: { points: "#A289FE", background: "#FFFFFF" }
     }, _options);
     
     var zoom = undefined;
@@ -206,72 +204,13 @@ function landscapeGraph(_options) {
                 .attr("class", "points")
                 .attr("cx", function (d) { return xScale(d.x) })
                 .attr("cy", function (d) { return yScale(d.y) })
-                .attr("fill", options.color.points)
                 .attr("r", 0)
                 .transition().delay(500).duration(1000)
                 .attr("r", function (d) { return pScale(d.views) });;
         
-
-        // set the landmark coordinates
-        //if (points.length < 50) {
-        //    landmarks = $.map(points, function (pnt) { return { x: pnt.x, y: pnt.y } });
-        //} else {
-        //    for (var landN = 0; landN < options.landmarkNumber; landN++) {
-        //        landmarks.push({ x: Math.random(), y: Math.random() });
-        //    }
-        //}
-        
         // create the landmarks
         this.createLandmarks();
 
-        //landmarkTags = chartBody.selectAll(".landmark")
-        //    .data(landmarks);
-        //landmarkTags.exit().remove();
-        //landmarkTags.enter().append("text")
-        //    .attr("class", "landmark")
-        //    .attr("id", function (d, i) { return "Text" + i; })
-        //    .text(function (d, i) {
-        //    // get the points, that are close to the landmark position 
-        //    closestPoints = $.grep(points, function (point) {
-        //        return Math.sqrt(Math.pow((xScale(d.x) - xScale(point.x)), 2) + 
-        //                                Math.pow((yScale(d.y) - yScale(point.y)), 2)) < 25;
-        //    });
-        //    if (closestPoints.length == 0) { $("#Text" + i).remove(); return; }
-        //    // get the frequency of the categories
-        //    var landmarkFrequency = {};
-        //    for (var MatN = 0; MatN < closestPoints.length; MatN++) {
-        //        if (!closestPoints[MatN].categories) { continue; }
-        //        var categories = closestPoints[MatN].categories.split(/,[ ]*/g);
-        //        for (var KeyN = 0; KeyN < categories.length; KeyN++) {
-        //            if (landmarkFrequency[categories[KeyN]] != null) {
-        //                landmarkFrequency[categories[KeyN]] += 1;
-        //            } else {
-        //                landmarkFrequency[categories[KeyN]] = 1;
-        //            }
-        //        }
-        //    }
-        //    if (Object.keys(landmarkFrequency).length == 0) {
-        //        return;
-        //    }
-        //    return LHelperFunctions.getTag(landmarkFrequency);
-        //})
-        //    .attr("font-size", "12px")
-        //    .attr("font-weight", "bold")
-        //    .attr("font-family", "sans-serif")
-        //    .attr("fill", options.color.text)
-        //    .each(function (d) { d.width = this.getBBox().width; })
-        //    .attr("x", function (d) {
-        //    return xScale(d.x) - d.width / 2;
-        //})
-        //    .attr("y", function (d) {
-        //    return yScale(d.y);
-        //})
-        //    .attr('fill-opacity', 0)// for more smooth visualization
-        //    .transition()
-        //    .delay(1200).duration(1000)
-        //    .attr('fill-opacity', 1);
-        //landmarkShow(landmarkTags[0]);
-        
         /**
          * Additional functionality
          * Creates the box containing the lecture information when hovered
@@ -280,7 +219,7 @@ function landscapeGraph(_options) {
         chartBody.selectAll(".points")
                 .on("mouseover", function (d, idx) {
                     coords = [xScale(d.x), yScale(d.y)];
-                    $(this).css("fill", d3.rgb(options.color.points).brighter(3));
+                    $(this).css("fill", d3.rgb(options.color.points).brighter(1));
                     // create the tooltip with the point's information
                     if (options.tooltipTextCallback) {
                         var tooltipDiv = $("#landscape-tooltip");
@@ -346,7 +285,6 @@ function landscapeGraph(_options) {
             .attr("font-size", "12px")
             .attr("font-weight", "bold")
             .attr("font-family", "sans-serif")
-            .attr("fill", options.color.text)
             .each(function (d) { d.width = this.getBBox().width; })
             .attr("x", function (d) {
             return xScale(d.x) - d.width / 2;

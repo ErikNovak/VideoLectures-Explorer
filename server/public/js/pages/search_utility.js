@@ -85,12 +85,27 @@ function stringify(arr) {
     var text = "";
     for (var catN = 0; catN < arr.length; catN++) {
         var pair = arr[catN];
-        text += pair.category + "(" + pair.freq + ")";
+        text += "<a onclick='queryMe(\"" + pair.category + "\")'>" + pair.category + "</a>" + "(" + pair.freq + ")";
         if (catN != arr.length - 1) {
             text += ", ";
         }
     }
     return text;
+}
+
+
+function queryMe(category) {
+    // remove all tags
+    $("#basic_search").tagsinput("removeAll");
+    $("#category_search").tagsinput("removeAll");
+    $("#author_search").tagsinput("removeAll");
+    $("#organization_search").tagsinput("removeAll");
+    $("#views_min_search").val("");
+    $("#views_max_search").val("");
+
+    // add the tag to the main basic input
+    $("#basic_search").tagsinput("add", { name: category, type: "category" });
+    search(SLandscape);
 }
 
 /**

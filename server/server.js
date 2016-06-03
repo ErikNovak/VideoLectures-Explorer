@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(favicon(path.join(__dirname, 'data', 'favicon', 'favicon.ico')));
 
 // send the main page
-app.get('/vl', function (req, res) {
+app.get('/', function (req, res) {
     var options = {
         root: __dirname + '/public/html/'
     };

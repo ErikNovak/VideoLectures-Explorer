@@ -38,7 +38,11 @@ html, body {
 }
 
 .navbar-header a,
-.navbar-header a.navbar-brand:hover {
+.navbar-header a.navbar-brand:hover,
+.navbar-header a.navbar-brand:active,
+.navbar-header a.navbar-brand:visited,
+.navbar-header a.navbar-brand:link {
+    color: white;
     background-color: #4086AB;
 }
 
@@ -64,6 +68,8 @@ button.navbar-toggle {
     font-weight: 500;
 }
 
+
+
 /**********************************************
  * Dashboard
  */
@@ -77,7 +83,7 @@ button.navbar-toggle {
         min-height:100%;
         width: 231px;
         overflow-y: hidden;
-        height: 1200px;
+        height: 1220px;
         padding: 10px;
         background-color: #1C2F3A;
         float:left;
@@ -149,7 +155,7 @@ button.navbar-toggle {
 
 
 /**************************************
- * Search options style
+ * Search options
  */
 
 #advance-options {
@@ -230,7 +236,9 @@ button.navbar-toggle {
     min-width: 50px;
 }
 
-/* Landscape visualization stylz */
+/************************************
+ * Landscape visualization
+ */
 
 #wait-content {
     width: 100px;
@@ -263,6 +271,14 @@ button.navbar-toggle {
     background-color: white;
 }
 
+#land-container .points {
+    fill: #A289FE;
+}
+
+#land-container .landmark {
+    fill: #06141C;
+}
+
 #landscape-tooltip {
     position: absolute;
     display: block;
@@ -279,8 +295,8 @@ button.navbar-toggle {
     width:    100%;
     overflow: auto;
     max-height: 700px;
-    position: relative;
-    display:  none;
+    display:    none;
+    position:   relative;
     margin:        auto;
     margin-top:    20px;
     margin-bottom: 20px;
@@ -291,7 +307,7 @@ button.navbar-toggle {
 }
 
 .search-info h4 {
-    margin-top: 20px;
+    margin-top:   20px;
     margin-bottom: 5px;
 }
 
