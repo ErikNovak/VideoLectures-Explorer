@@ -9,7 +9,6 @@
 var express     = require('express'),
     bodyParser  = require('body-parser'),
     favicon     = require('serve-favicon'),
-    Promise     = require('promise'),
     fs          = require('fs'),
     path        = require('path');
 
