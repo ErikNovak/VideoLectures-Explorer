@@ -1,0 +1,103 @@
+﻿/***************************************
+ * Body style
+ */
+html, body {
+    background-color: #F2F6F8;
+    width:  100%;
+    height: 100%;
+}
+
+/**************************************
+ * Navbar
+ */
+
+.navbar-default {
+    border-color: #408EB8;
+    border-radius: 0px;
+}
+
+.navbar-header a.navbar-brand,
+.navbar-default .navbar-nav li a {
+    color: white;
+    font-size: 20px;
+    float: left;
+    padding-right: 35px;
+    padding-left: 35px;
+}
+
+.navbar-header a > .main {
+    font-weight: 600;
+}
+
+.navbar-header a > .secondary {
+    font-weight: 500;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+.navbar-header a,
+.navbar-header a.navbar-brand:hover,
+.navbar-header a.navbar-brand:active,
+.navbar-header a.navbar-brand:visited,
+.navbar-header a.navbar-brand:link {
+    color: white;
+    background-color: #4086AB;
+}
+
+    .navbar-header a.navbar-brand:hover,
+    .navbar-default .navbar-nav li a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+.navbar.navbar-default {
+    background-color: #408EB8;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #F2F6F8;
+}
+
+.btn, btn:hover,
+button.navbar-toggle.collapsed,
+button.navbar-toggle {
+    background-color: #5BAEDB !important;
+    color: white !important;
+    font-weight: 500;
+}
+
+
+
+/**********************************************
+ * Dashboard
+ */
+
+.main-title {
+    color:      grey;
+    text-align: center;
+    margin: 50px 10px 30px 10px;
+}
+
+#body-container {
+    min-height: 100%;
+    width:      100%;
+    padding-bottom: 50px;
+    height:     auto !important;
+}
+
+.footer {
+    position: relative;
+    display: block;
+    clear: both;
+    margin-top: -50px;
+    height: 50px;
+    padding-top: 20px;
+    background-color: #FFFFFF; 
+}
+
+.content {
+    min-height: 100%;
+    height: auto !important;
+}

@@ -26,6 +26,9 @@ build/Release
 # Dependency directory
 server/node_modules
 
+# public files
+server/public/components
+
 # data files
 server/data/autocomplete/*.txt
 server/data/database/lectures

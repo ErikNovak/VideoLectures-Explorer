@@ -189,7 +189,7 @@ $(document).ready(function () {
     // get the autocomplete data
     $.ajax({
         type: 'GET',
-        url: '/vl/autocomplete',
+        url: '/autocomplete',
         success: function (data) {
             
             // author typeahead and tags 

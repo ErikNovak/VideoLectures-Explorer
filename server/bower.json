@@ -1,0 +1,24 @@
+{
+  "name": "Videolectures-Explore",
+  "description": "The server used for the visualization of the Videolectures dataset, specifically it's lectures.",
+  "main": "server.js",
+  "authors": [
+    "[object Object]"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ErikNovak/Videolecture-landscape",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "d3": "^3.5.17",
+    "bootstrap-tagsinput": "^0.8.0",
+    "typeahead.js": "^0.11.1"
+  }
+}

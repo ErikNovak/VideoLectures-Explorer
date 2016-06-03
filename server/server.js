@@ -12,7 +12,8 @@ var express     = require('express'),
     fs          = require('fs'),
     path        = require('path');
 
-var app    = express();
+var app = express();
+var router = express.Router();
 
 // static folder
 app.use('/public', express.static(__dirname + '/public'));
@@ -21,6 +22,8 @@ app.use('/public', express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(favicon(path.join(__dirname, 'data', 'favicon', 'favicon.ico')));
+
+// router
 
 // send the main page
 app.get('/', function (req, res) {
@@ -95,7 +98,7 @@ var queryData = function (data) {
 /**
  * Sends the data for the input autocompletion.
  */ 
-app.get('/vl/autocomplete', function (req, res) {
+app.get('/autocomplete', function (req, res) {
     // get all categories
     var categoriesFile = qm.fs.openRead('./data/autocomplete/categories.txt');
     var categories = [];
@@ -148,7 +151,7 @@ app.get('/vl/autocomplete', function (req, res) {
 /**
  * Get the JSON containing the landscape points info. 
  */
-app.post('/vl/landscape-points', function (request, result) {
+app.post('/landscape-points', function (request, result) {
     var sentData = request.body;
     var search = queryData(sentData.data);
     
@@ -298,4 +301,33 @@ app.post('/vl/landscape-points', function (request, result) {
     }
 });
 
-   
+
+/******************************************
+ * Error/missing pages handler
+ */
+
+app.get('/404', function (req, res, next) { 
+    next();
+})
+
+app.get('/403', function (req, res, next) {
+    var err = new Error('not allowed!');
+    err.status = 403;
+    next(err);
+})
+
+app.use(function (req, res, next) {
+    res.status(404);
+
+    // respond with html page
+    if (req.accepts('html')) {
+        var options = {
+            root: __dirname + '/public/html/'
+        };
+        res.sendFile('404.html', options);
+        return;
+    }
+
+    // default to plain-text
+    res.type('txt').send('Not found');
+});

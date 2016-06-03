@@ -74,7 +74,7 @@ var SLandscape = function (value) {
     
     $.ajax({
         type: 'POST',
-        url: '/vl/landscape-points',
+        url: '/landscape-points',
         data: { data: value },
         success: function (response) {
             // if there is no query
