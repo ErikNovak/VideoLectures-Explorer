@@ -7,12 +7,20 @@ html, body {
     height: 100%;
 }
 
+.container,
+.main-container {
+    width:      100%;
+    min-height: 1250px;
+    height:     auto !important;
+    padding:    0px;
+}
+
 /**************************************
  * Navbar
  */
 
 .navbar-default {
-    border-color: #408EB8;
+    border-color: #367fa9;
     border-radius: 0px;
 }
 
@@ -43,7 +51,7 @@ html, body {
 .navbar-header a.navbar-brand:visited,
 .navbar-header a.navbar-brand:link {
     color: white;
-    background-color: #4086AB;
+    background-color: #367fa9;
 }
 
     .navbar-header a.navbar-brand:hover,
@@ -53,17 +61,17 @@ html, body {
     }
 
 .navbar.navbar-default {
-    background-color: #408EB8;
+    background-color: #3c8dbc;
 }
 
 .navbar-default .navbar-toggle .icon-bar {
-    background-color: #F2F6F8;
+    background-color: #3c8dbc;
 }
 
 .btn, btn:hover,
 button.navbar-toggle.collapsed,
 button.navbar-toggle {
-    background-color: #5BAEDB !important;
+    background-color: #3c8dbc !important;
     color: white !important;
     font-weight: 500;
 }
@@ -74,17 +82,61 @@ button.navbar-toggle {
  * Dashboard
  */
 
+@media screen and (min-width:992px) {
+    .project-info-container {
+        min-height:100%;
+        width:  232px;
+        height: 1250px;
+        z-index: 100;
+        padding: 10px;
+        overflow-y: hidden;
+        background-color: #222d32;
+        position: absolute;
+        float: left;
+    }
+
+    .project-info {
+        color: white;
+        text-align: justify;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 3px;
+        border: 1px solid #374850;
+    }
+
+        .project-info h4 {
+            padding-bottom: 30px;
+        }
+
+        .project-info p {
+            color: lightgrey;
+        }
+
+    .dashboard-body {
+        margin-left: 231px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .project-info-container {
+        display: none !important;
+    }
+    .dashboard-body {
+        margin-left: 0px;
+    }
+}
+
 .main-title {
     color:      grey;
     text-align: center;
     margin: 50px 10px 30px 10px;
 }
 
-#body-container {
-    min-height: 100%;
+.body-container {
     width:      100%;
-    padding-bottom: 50px;
+    min-height: 100%;
     height:     auto !important;
+
 }
 
 .footer {
@@ -97,7 +149,8 @@ button.navbar-toggle {
     background-color: #FFFFFF; 
 }
 
-.content {
-    min-height: 100%;
-    height: auto !important;
+.row {
+    margin-left:0px;
+    margin-right:0px;
+    width: 100%;
 }

@@ -12,7 +12,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>092aac1c-c2f0-4961-a3c7-c3c7a8b63c5e</ProjectGuid>
     <ProjectHome>../server</ProjectHome>
-    <StartupFile>server.js</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -32,70 +33,33 @@
   <ItemGroup>
     <Compile Include="data\autocomplete\createfiles.js" />
     <Compile Include="data\database\createBase.js" />
-    <Compile Include="public\js\d3\d3.hexbin.min.js" />
-    <Compile Include="public\js\d3\d3.js" />
-    <Compile Include="public\js\d3\d3.min.js" />
     <Compile Include="public\js\graphs\landscapeGraph.js" />
     <Compile Include="public\js\graphs\wait.js" />
-    <Compile Include="public\js\jquery\jquery-2.1.4.min.js" />
-    <Compile Include="public\js\jquery\jquery-ui.min.js" />
     <Compile Include="public\js\pages\graph_utility.js" />
     <Compile Include="public\js\pages\index.js" />
     <Compile Include="public\js\pages\search_utility.js" />
-    <Compile Include="server.js" />
-    <Compile Include="server_utility\formatJ.js" />
+    <Compile Include="vl-server.js" />
     <Content Include="data\autocomplete\authors.txt" />
     <Content Include="data\autocomplete\categories.txt" />
     <Content Include="data\autocomplete\organizations.txt" />
     <Content Include="data\database\schema.json" />
     <Content Include="data\database\videolectures-20150410.csv" />
-    <Content Include="data\database\videos\Base.dat" />
-    <Content Include="data\database\videos\Index.BTree" />
-    <Content Include="data\database\videos\Index.Geo" />
-    <Content Include="data\database\videos\Index.Gix" />
-    <Content Include="data\database\videos\Index.mbb" />
-    <Content Include="data\database\videos\Index.mbb000" />
-    <Content Include="data\database\videos\IndexSmall.Gix" />
-    <Content Include="data\database\videos\IndexSmall.mbb" />
-    <Content Include="data\database\videos\IndexSmall.mbb000" />
-    <Content Include="data\database\videos\IndexVoc.dat" />
-    <Content Include="data\database\videos\Lectures.BaseStore" />
-    <Content Include="data\database\videos\Lectures.Cache.Dat" />
-    <Content Include="data\database\videos\Lectures.GenericStore" />
-    <Content Include="data\database\videos\Lectures.mbb" />
-    <Content Include="data\database\videos\Lectures.mbb000" />
-    <Content Include="data\database\videos\LecturesMemCache" />
-    <Content Include="data\database\videos\LecturesMemCacheBlob.mbb" />
-    <Content Include="data\database\videos\LecturesMemCacheBlob.mbb000" />
-    <Content Include="data\database\videos\StoreList.json" />
     <Content Include="package.json" />
-    <Content Include="public\css\bootstrap\bootstrap.css.map" />
-    <Content Include="public\css\bootstrap\bootstrap.min.css" />
-    <Content Include="public\css\jquery\jquery-ui.min.css" />
     <Content Include="public\css\pages\index.css" />
     <Content Include="public\html\index.html" />
-    <Content Include="public\pics\Preloader_circles.gif" />
-    <Content Include="public\pics\Preloader_squares.gif" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
     <Folder Include="data\autocomplete\" />
     <Folder Include="data\database\" />
-    <Folder Include="data\database\videos\" />
     <Folder Include="public\" />
-    <Folder Include="public\css\bootstrap\" />
-    <Folder Include="public\css\jquery\" />
     <Folder Include="public\css\pages\" />
     <Folder Include="public\html\" />
     <Folder Include="public\css\" />
     <Folder Include="public\js\" />
-    <Folder Include="public\js\bootstrap\" />
-    <Folder Include="public\js\d3\" />
     <Folder Include="public\js\graphs\" />
-    <Folder Include="public\js\jquery\" />
     <Folder Include="public\js\pages\" />
-    <Folder Include="public\pics\" />
     <Folder Include="server_utility\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->

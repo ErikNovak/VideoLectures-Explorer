@@ -4,16 +4,14 @@
     <meta charset="utf-8" />
     <meta name="author" content="Erik Novak (erik.novak@ijs.si)">
 
-    <!-- stylesheet -->
     <link rel="stylesheet" type="text/css" href="public/components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="public/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
-
-    <!-- page style -->
     <link rel="stylesheet" type="text/css" href="public/css/pages/index.css" />
 
     <title>Videolectures Learning Analytics | Landscape</title>
 </head>
 <body>
+
     <!-- navbar -->
     <nav class="navbar navbar-default">
         <!-- header navbar -->
@@ -26,227 +24,232 @@
                 <span class="icon-bar"></span>
             </button>
             <!-- Brand name -->
-            <a class="navbar-brand" href="http://pankretas.ijs.si:8072/latest">
+            <a class="navbar-brand" href="http://learninganalytics.videolectures.net">
                 <span class="main">Videolectures</span>
                 <span class="secondary">LA</span>
             </a>
         </div>
-        <div class=" collapse navbar-collapse" id=" vl-links">
+        <div class="collapse navbar-collapse" id="vl-links">
             <ul class="nav navbar-nav">
                 <li><a href="/">Landscape</a></li>
             </ul>
         </div>
     </nav>
+    <div class="main-container">
 
-    <!-- Body -->
-    <div class="container" id="body-container">
-        <!-- About section -->
-        <div class="project-info-container">
-            <div class="project-info">
-                <h4>About Videolectures</h4>
-                <p>
-                    VideoLectures.NET is an award-winning free and open access educational video lectures repository.
-                    The lectures are given by distinguished scholars and scientists at the most important and prominent
-                    events like conferences, summer schools, workshops and science promotional events from many fields
-                    of Science. The portal is aimed at promoting science, exchanging ideas and fostering knowledge sharing
-                    by providing high quality didactic contents not only to the scientific community but also to the general
-                    public. All lectures, accompanying documents, information and links are systematically selected and
-                    classified through the editorial process taking into account also users' comments.
-                </p>
-                <h4 style="padding-top:30px;">About EDSA</h4>
-                <p>
-                    The European Data Science Academy (EDSA) will establish a virtuous learning production cycle whereby
-                    we: a) analyse the required sector specific skillsets for data analysts across the main industrial
-                    sectors in Europe; b) develop modular and adaptable data science curricula to meet these needs; and
-                    c) deliver training supported by multi-platform and multilingual learning resources based on our curricula.
-                </p>
+        <div class="container">
+            <!-- About section -->
+            <div class="project-info-container">
+                <div class="project-info">
+                    <h4>About Videolectures</h4>
+                    <p>
+                        VideoLectures.NET is an award-winning free and open access educational video lectures repository.
+                        The lectures are given by distinguished scholars and scientists at the most important and prominent
+                        events like conferences, summer schools, workshops and science promotional events from many fields
+                        of Science. The portal is aimed at promoting science, exchanging ideas and fostering knowledge sharing
+                        by providing high quality didactic contents not only to the scientific community but also to the general
+                        public. All lectures, accompanying documents, information and links are systematically selected and
+                        classified through the editorial process taking into account also users' comments.
+                    </p>
+                    <h4 style="padding-top:30px;">About EDSA</h4>
+                    <p>
+                        The European Data Science Academy (EDSA) will establish a virtuous learning production cycle whereby
+                        we: a) analyse the required sector specific skillsets for data analysts across the main industrial
+                        sectors in Europe; b) develop modular and adaptable data science curricula to meet these needs; and
+                        c) deliver training supported by multi-platform and multilingual learning resources based on our curricula.
+                    </p>
+                </div>
             </div>
-        </div>
 
 
-
-        <!-- Body container -->
-        <div class="dashboard-body">
-            <div class="row">
-                <!-- Title -->
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="main-title">
-                        <h3>VIDEOLECTURES LA DASHBOARD Version 0.1 | Landscape</h3>
-                    </div>
-                </div>
-
-                <!-- default search bar -->
-                <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
-                    <h4>Search presenter or category</h4>
-                    <span id="span-basic-search"><input type="text" class="form-control" id="basic_search" /></span>
-                    <span id="span-basic-search-buttons">
-                        <!-- search button -->
-                        <button class="btn btn-default pull-right" type="button" onclick="search(SLandscape);">Search</button>
-                    </span>
-                    <!-- additional options button -->
-                    <span id="span-basic-search-buttons">
-                        <button class="btn btn-default pull-right" id="advance-search-button" data-open="close" type="button" onclick="toggleOptions();">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                            <span id="search-chevron" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- advance search bars -->
-                <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
-                    <div class="form-horizontal" id="advance-options">
-
-                        <!-- Advance options title -->
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-lg-12">
-                                <h4>Advance Options</h4>
-                            </div>
-                        </div><!-- Advance options title -->
-
-
-                        <div class="row">
-                            <!-- category search -->
-                            <div class="col-xs-12 col-md-12 col-lg-12">
-                                <div class="form-group">
-                                    <label class="col-xs-3 col-sm-2 col-lg-1 control-label">Category:</label>
-                                    <div class="col-xs-9 col-sm-10 col-lg-11">
-                                        <input type="text" class="form-control" id="category_search" placeholder="Type a category"/>
-                                    </div>
-                                </div>
-                            </div><!-- category search -->
-                        </div>
-
-                        <div class="row">
-                            <!-- presenter search -->
-                            <div class="col-xs-12 col-md-12 col-lg-6">
-                                <div class="form-group">
-                                    <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Presenter:</label>
-                                    <div class="col-xs-9 col-sm-10 col-lg-10">
-                                        <input type="text" class="form-control" id="author_search" placeholder="Type a presenter" />
-                                    </div>
-                                </div>
-                            </div><!-- presenter search -->
-                            <!-- organization search -->
-                            <div class="col-xs-12 col-md-12 col-lg-6">
-                                <div class="form-group">
-                                    <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Organization:</label>
-                                    <div class="col-xs-9 col-sm-10 col-lg-10">
-                                        <input type="text" class="form-control" id="organization_search" placeholder="Type an organization" />
-                                    </div>
-                                </div>
-                            </div><!-- organization search -->
-                        </div>
-
-                        <div class="row">
-                            <!-- min max views search -->
-                            <div class="col-xs-12 col-md-12 col-lg-6">
-                                <div class="form-group">
-                                    <label class="col-xs-3 col-sm-2 col-lg-2 control-label"># of views:</label>
-                                    <div class="col-xs-4 col-sm-5 col-lg-5">
-                                        <input type="text" class="form-control" id="views_min_search" placeholder="min" />
-                                    </div>
-                                    <div class="col-xs-4 col-sm-5 col-lg-5">
-                                        <input type="text" class="form-control" id="views_max_search" placeholder="max" />
-                                    </div>
-                                </div>
-                            </div><!-- min max views search -->
-                            <!-- language search -->
-                            <div class="col-xs-12 col-md-12 col-lg-6">
-                                <div class="form-group">
-                                    <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Language:</label>
-                                    <div class="dropdown col-xs-9 col-sm-10 col-lg-10">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="language_search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            all
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="language_search">
-                                            <li><a href="#">all</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div><!-- language search -->
-                        </div>
-
-                    </div>
-                </div><!-- advance search bars -->
-                <!-- wait container -->
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="container-fluid">
-                        <div id="wait-content" class="center-block"></div>
-                    </div>
-                </div><!-- wait container -->
-                <!-- landscape info container -->
-                <div class="col-xs-12 col-ms-12 col-md-12 col-lg-4">
-                    <div class="container-fluid">
-                        <div class="search-info-container">
-                            <div class="search-info">
-                                <h4>Searchwords</h4>
-                                <p>
-                                    <b>Presenter: </b>    <span class="info presenter-info"></span>     <br />
-                                    <b>Organization: </b> <span class="info organization-info"></span>  <br />
-                                    <b>Categories: </b>   <span class="info categories-info"></span>    <br />
-                                    <b># of views: </b>   <span class="info views-info"></span>         <br />
-                                    <b>Language: </b>     <span class="info language-info"></span>      <br />
-                                </p>
-                                <h4>Information</h4>
-                                <p>
-                                    <b>Number of found lectures: </b>   <span class="info found-lectures-info"></span>       <br />
-                                    <b>Total number of views: </b>      <span class="info num-of-views-info"></span>         <br />
-                                    <b>Categories with frequency: </b>  <span class="info categories-frequency-info"></span> <br />
-                                </p>
+            <!-- Body container -->
+            <div class="dashboard-body">
+                <div class="main-container container-fluid">
+                    <div class="row">
+                        <!-- Title -->
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="main-title">
+                                <h3>VIDEOLECTURES LA DASHBOARD Version 0.1 | Landscape</h3>
                             </div>
                         </div>
                     </div>
-                </div><!-- landscape info container -->
-                <!-- landscape container -->
-                <div class="col-xs-12 col-ms-12 col-md-12 col-lg-8">
-                    <div class="container-fluid">
+                    <div class="row">
+                        <!-- default search bar -->
+                        <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
+                            <h4>Search presenter or category</h4>
+                            <span id="span-basic-search"><input type="text" class="form-control" id="basic_search" /></span>
+                            <span id="span-basic-search-buttons">
+                                <!-- search button -->
+                                <button class="btn btn-default pull-right" type="button" onclick="search(SLandscape);">Search</button>
+                            </span>
+                            <!-- additional options button -->
+                            <span id="span-basic-search-buttons">
+                                <button class="btn btn-default pull-right" id="advance-search-button" data-open="close" type="button" onclick="toggleOptions();">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                    <span id="search-chevron" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- advance search bars -->
+                    <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
+                        <div class="form-horizontal" id="advance-options">
 
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <!-- landscape content -->
-                                <div id="landscape-content">
-                                    <!-- landscape tooltip container -->
-                                    <div id="landscape-tooltip" class="notvisible"></div>
+                            <!-- Advance options title -->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12">
+                                    <h4>Advance Options</h4>
+                                </div>
+                            </div><!-- Advance options title -->
+
+
+                            <div class="row">
+                                <!-- category search -->
+                                <div class="col-xs-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 col-sm-2 col-lg-1 control-label">Category:</label>
+                                        <div class="col-xs-9 col-sm-10 col-lg-11">
+                                            <input type="text" class="form-control" id="category_search" placeholder="Type a category" />
+                                        </div>
+                                    </div>
+                                </div><!-- category search -->
+                            </div>
+
+                            <div class="row">
+                                <!-- presenter search -->
+                                <div class="col-xs-12 col-md-12 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Presenter:</label>
+                                        <div class="col-xs-9 col-sm-10 col-lg-10">
+                                            <input type="text" class="form-control" id="author_search" placeholder="Type a presenter" />
+                                        </div>
+                                    </div>
+                                </div><!-- presenter search -->
+                                <!-- organization search -->
+                                <div class="col-xs-12 col-md-12 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Organization:</label>
+                                        <div class="col-xs-9 col-sm-10 col-lg-10">
+                                            <input type="text" class="form-control" id="organization_search" placeholder="Type an organization" />
+                                        </div>
+                                    </div>
+                                </div><!-- organization search -->
+                            </div>
+
+                            <div class="row">
+                                <!-- min max views search -->
+                                <div class="col-xs-12 col-md-12 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 col-sm-2 col-lg-2 control-label"># of views:</label>
+                                        <div class="col-xs-4 col-sm-5 col-lg-5">
+                                            <input type="text" class="form-control" id="views_min_search" placeholder="min" />
+                                        </div>
+                                        <div class="col-xs-4 col-sm-5 col-lg-5">
+                                            <input type="text" class="form-control" id="views_max_search" placeholder="max" />
+                                        </div>
+                                    </div>
+                                </div><!-- min max views search -->
+                                <!-- language search -->
+                                <div class="col-xs-12 col-md-12 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 col-sm-2 col-lg-2 control-label">Language:</label>
+                                        <div class="dropdown col-xs-9 col-sm-10 col-lg-10">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="language_search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                all
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="language_search">
+                                                <li><a>all</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div><!-- language search -->
+                            </div>
+
+                        </div>
+                    </div><!-- advance search bars -->
+                    <!-- wait container -->
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="container-fluid">
+                            <div id="wait-content" class="center-block"></div>
+                        </div>
+                    </div><!-- wait container -->
+                    <!-- landscape info container -->
+                    <div class="col-xs-12 col-ms-12 col-md-12 col-lg-4">
+                        <div class="container-fluid">
+                            <div class="search-info-container">
+                                <div class="search-info">
+                                    <h4>Searchwords</h4>
+                                    <p>
+                                        <b>Presenter: </b>    <span class="info presenter-info"></span>     <br />
+                                        <b>Organization: </b> <span class="info organization-info"></span>  <br />
+                                        <b>Categories: </b>   <span class="info categories-info"></span>    <br />
+                                        <b># of views: </b>   <span class="info views-info"></span>         <br />
+                                        <b>Language: </b>     <span class="info language-info"></span>      <br />
+                                    </p>
+                                    <h4>Information</h4>
+                                    <p>
+                                        <b>Number of found lectures: </b>   <span class="info found-lectures-info"></span>       <br />
+                                        <b>Total number of views: </b>      <span class="info num-of-views-info"></span>         <br />
+                                        <b>Categories with frequency: </b>  <span class="info categories-frequency-info"></span> <br />
+                                    </p>
                                 </div>
                             </div>
                         </div>
+                    </div><!-- landscape info container -->
+                    <!-- landscape container -->
+                    <div class="col-xs-12 col-ms-12 col-md-12 col-lg-8">
+                        <div class="container-fluid">
 
-                        <div class="graph-options">
-                            <!-- Graph options title -->
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="graph-options-title">
-                                        <h4>Graph options</h4>
+                                    <!-- landscape content -->
+                                    <div id="landscape-content">
+                                        <!-- landscape tooltip container -->
+                                        <div id="landscape-tooltip" class="notvisible"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Graph options -->
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" id="checkLandmarks" value="true" checked/> Landmarks
-                                    </label>
+                            <div class="graph-options">
+                                <!-- Graph options title -->
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="graph-options-title">
+                                            <h4>Graph options</h4>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- Graph options -->
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="checkLandmarks" value="true" checked /> Landmarks
+                                        </label>
+                                    </div>
+                                </div>
+                            </div><!-- graph options -->
+                        </div>
+                    </div><!-- landscape container -->
+                </div>
+                <div class="footer" role="contentinfo">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                © 2016 <a href="http://ailab.ijs.si/si/">AILAB JSI</a>. All rights reserved. <span class="pull-right"><b>Version</b> 0.1</span>
                             </div>
-                        </div><!-- graph options -->
+                            
+                        </div>
                     </div>
-                </div><!-- landscape container -->
-            </div>
-        </div>
-
-    </div>  <!-- Body container -->
-
-    <div class="footer" role="contentinfo">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    © 2016 <a href="http://ailab.ijs.si/si/">AILAB JSI</a>. All rights reserved.
                 </div>
             </div>
-        </div>
+
+        </div>  <!-- Body container -->
+
     </div>
+
+
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary hidden" id="error_trigger" data-toggle="modal" data-target="#error_modal"></button>

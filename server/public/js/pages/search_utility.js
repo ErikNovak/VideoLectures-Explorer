@@ -278,7 +278,7 @@ $(document).ready(function () {
             // filling the language search dropdown
             var languages = data.languages;
             for (var langN = 0; langN < languages.length; langN++) {
-                $('.dropdown > ul').append('<li><a href="#">' + SFormat.LanguageAbbrFull[languages[langN].name] + '</a></li>');
+                $('.dropdown > ul').append('<li><a>' + SFormat.LanguageAbbrFull[languages[langN].name] + '</a></li>');
             }
             
             /**

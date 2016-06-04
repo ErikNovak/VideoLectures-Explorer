@@ -1,22 +1,22 @@
 {
-    "name": "Videolectures-Explore",
-    "version": "0.1.0",
-    "description": "The server used for the visualization of the Videolectures dataset, specifically it's lectures.",
-    "homepage": "https://github.com/ErikNovak/Videolectures.git",
-    "main": "server.js",
-    "author": {
-        "name": "Erik Novak",
-        "email": "novak.erik@ijs.si"
-    },
-    "scripts": {
-        "start": "node server.js"
-    },
-    "dependencies": {
-        "body-parser": "^1.15.0",
-        "express": "^4.13.4",
-        "fs": "0.0.2",
-        "path": "^0.12.7",
-        "qminer": "^4.4.0",
-        "serve-favicon": "^2.3.0"
-    }
+  "name": "videolectures-explorer",
+  "version": "0.1.0",
+  "description": "The server used for the visualization of the Videolectures dataset, specifically it's lectures.",
+  "homepage": "https://github.com/ErikNovak/Videolectures.git",
+  "main": "server.js",
+  "author": {
+    "name": "Erik Novak",
+    "email": "novak.erik@ijs.si"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "fs": "0.0.2",
+    "path": "^0.12.7",
+    "qminer": "^4.4.0",
+    "serve-favicon": "^2.3.0"
+  }
 }
