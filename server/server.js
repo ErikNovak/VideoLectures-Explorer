@@ -333,7 +333,7 @@ function initialData() {
     return points;
 }
 
-//var initialPoints = initialData();
+var initialPoints = initialData();
 app.get('/initial-landscape-points', function (request, response) {
     response.send({
         searchwords: [
