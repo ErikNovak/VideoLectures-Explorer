@@ -47,17 +47,19 @@ var SFormat = {
 /**
  * Toggle the visibility of the advance options.
  */ 
-function toggleOptions() {
-    $("#advance-options").slideToggle("slow");
-    toggle_button = $("#advance-search-button");
-    if (toggle_button.attr("data-open") == "close") {
-        $("#search-chevron").removeClass("glyphicon glyphicon-chevron-right")
-                            .addClass("glyphicon glyphicon-chevron-down");
-        toggle_button.attr("data-open", "open");
+function toggleAdvancedOptions() {
+    $("#advanced-options").slideToggle("slow");
+
+    var toggleButton = $("#toggle-advanced-search-button");
+    
+    if (toggleButton.attr("data-open") == "close") {
+        toggleButton.attr("data-open", "open");
+        $("#open-close-arrow").removeClass("glyphicon-chevron-right")
+                              .addClass("glyphicon-chevron-down");
     } else {
-        $("#search-chevron").removeClass("glyphicon glyphicon-chevron-down")
-                            .addClass("glyphicon glyphicon-chevron-right");
-        toggle_button.attr("data-open", "close");
+        toggleButton.attr("data-open", "close");
+        $("#open-close-arrow").removeClass("glyphicon-chevron-down")
+                              .addClass("glyphicon-chevron-right");
     }
 }
 
@@ -96,15 +98,15 @@ function stringify(arr) {
 
 function queryMe(category) {
     // remove all tags
-    $("#basic_search").tagsinput("removeAll");
-    $("#category_search").tagsinput("removeAll");
-    $("#author_search").tagsinput("removeAll");
-    $("#organization_search").tagsinput("removeAll");
+    $("#basic-search-input").tagsinput("removeAll");
+    $("#category-search-input").tagsinput("removeAll");
+    $("#author-search-input").tagsinput("removeAll");
+    $("#organization-search-input").tagsinput("removeAll");
     $("#views_min_search").val("");
-    $("#views_max_search").val("");
+    $("#views-max-search").val("");
 
     // add the tag to the main basic input
-    $("#basic_search").tagsinput("add", { name: category, type: "category" });
+    $("#basic-search-input").tagsinput("add", { name: category, type: "category" });
     search(SLandscape);
 }
 
@@ -169,11 +171,11 @@ function searchInfo(search) {
         }
     }
     var sortArr = sortedArr(cat);
-    $(".found-lectures-info").append(points.length);
+    $(".num-of-lectures-info").append(points.length);
     $(".categories-frequency-info").append(stringify(sortArr));
     $(".num-of-views-info").append(views);
     
-    $(".search-info-container").show();
+    $("#query-info-container").show();
 }
 
 /**
@@ -199,7 +201,7 @@ $(document).ready(function () {
                 local: data.authors
             }); presenters.initialize();
             
-            $("#author_search").tagsinput({
+            $("#author-search-input").tagsinput({
                 maxTags: 1,
                 itemValue: function (item) {
                     return item.name;
@@ -218,7 +220,7 @@ $(document).ready(function () {
                 local: data.categories
             }); categories.initialize();
             
-            $("#category_search").tagsinput({
+            $("#category-search-input").tagsinput({
                 itemValue: function (item) {
                     return item.name
                 },
@@ -236,7 +238,7 @@ $(document).ready(function () {
                 local: data.organizations
             }); organizations.initialize();
             
-            $("#organization_search").tagsinput({
+            $("#organization-search-input").tagsinput({
                 maxTags: 1,
                 splitOn: null,
                 itemValue: function (item) {
@@ -262,7 +264,7 @@ $(document).ready(function () {
                 local: all
             }); basic.initialize();
             
-            $('#basic_search').tagsinput({
+            $('#basic-search-input').tagsinput({
                 splitOn: null,
                 itemValue: function (item) {
                     return item.name
@@ -286,11 +288,9 @@ $(document).ready(function () {
              */ 
             $(function () {
                 $('.dropdown-menu > li').on('click', function () {
-                    $('#language_search').html($(this).text() + ' <span class="caret"></span>');
+                    $('#language-search').html($(this).text() + ' <span class="caret"></span>');
                 });
             });
-            $("#span-basic-search").css("position", "relative")
-                                    .css("top", "-12px");
         }
     });
 });

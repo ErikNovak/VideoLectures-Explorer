@@ -10,8 +10,14 @@ function waitAnimation(_options) {
         color: { background: "#ddd", foreground: "#6375fc" }        // the background and foreground color of the wait icon
     }, _options);
     
-    // the interval used for starting and stopping the wait animation
-    var interval = null;
+    // self pointer
+    var self = this;
+
+    /**
+     * Wait variables
+     */ 
+    var interval = null,
+        isRunning = false;
 
     /**
      * Displays the animation of the waiting object. 
@@ -101,7 +107,7 @@ function waitAnimation(_options) {
             .call(arcTweenOut, startAngleFirst, endAngleFirst);
             
             // update the second arc
-            startAngleSecond +=  + tau/2;
+            startAngleSecond +=  tau/2;
             endAngleSecond +=  tau/2;
             
             foregroundSecond.transition()
@@ -163,4 +169,10 @@ function waitAnimation(_options) {
         d3.select(options.containerName + " svg").remove();
         $(options.containerName).hide();
     }
+
+    $(window).resize(function () {
+        if (isRunning) {
+
+        }
+    })
 }

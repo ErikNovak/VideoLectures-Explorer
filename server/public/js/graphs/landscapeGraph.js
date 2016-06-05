@@ -1,7 +1,8 @@
 ﻿/*
  * LANDSCAPE GRAPH
  * Creates the topic landscape using d3.js.
- * 
+ * @param {Object} [_options] - The options for the graph construction.
+ * @param {string} [_options.containerName = null] - The indetifier for the graph container.
  */
 function landscapeGraph(_options) {
     // setting
@@ -10,7 +11,7 @@ function landscapeGraph(_options) {
         tooltipTextCallback: LHelperFunctions.tooltipTextCallback,      // the callback that generates the text info on the chart (defined at the end of the file)
         landmarkNumber: 400,
         margin: { top: 20, left: 20, bottom: 20, right: 20 },               
-        color: { points: "#A289FE", background: "#FFFFFF" }
+        color: { points: "#A289FE", background: "#FFFFFF", landmarks: "#06141C" }
     }, _options);
     
     var zoom = undefined;
@@ -178,7 +179,7 @@ function landscapeGraph(_options) {
         var onZoom = function () {
             
             // change the points position and size
-            chartBody.selectAll(".points")
+            chartBody.selectAll(".point")
                 .attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
             
             // change the landmark position and the visibility
@@ -186,13 +187,13 @@ function landscapeGraph(_options) {
                 .attr("x", function (d) { return xScale(d.x) - d.width / 2; })
                 .attr("y", function (d) { return yScale(d.y); });
             landmarkTags.classed("hidden", false);
-            landmarkShow(landmarkTags[0]);
+            toggleLandmarks(landmarkTags[0]);
             
         }
         zoom.on("zoom", onZoom);
         
         // add the points
-        var LPoints = chartBody.selectAll(".points")
+        var LPoints = chartBody.selectAll(".point")
                 .data(points);
 
         LPoints.exit()
@@ -201,9 +202,10 @@ function landscapeGraph(_options) {
                .remove();
 
         LPoints.enter().append("circle")
-                .attr("class", "points")
+                .attr("class", "point")
                 .attr("cx", function (d) { return xScale(d.x) })
                 .attr("cy", function (d) { return yScale(d.y) })
+                .attr("fill", options.color.points)
                 .attr("r", 0)
                 .transition().delay(500).duration(1000)
                 .attr("r", function (d) { return pScale(d.views) });;
@@ -216,17 +218,20 @@ function landscapeGraph(_options) {
          * Creates the box containing the lecture information when hovered
          * over the points.
          */ 
-        chartBody.selectAll(".points")
+        chartBody.selectAll(".point")
                 .on("mouseover", function (d, idx) {
                     coords = [xScale(d.x), yScale(d.y)];
                     $(this).css("fill", d3.rgb(options.color.points).brighter(1));
                     // create the tooltip with the point's information
                     if (options.tooltipTextCallback) {
-                        var tooltipDiv = $("#landscape-tooltip");
+                        // remove previous tooltip
+                $("#landscape-tooltip").remove();
+                $(options.containerName).append("<div id=\"landscape-tooltip\" class=\"notvisible\"></div>");
+                var tooltipDiv = $("#landscape-tooltip");
                         tooltipDiv.html(options.tooltipTextCallback(d));
                         var x = coords[0] + options.margin.left;
                         var y = coords[1] + options.margin.top;
-                        var scale = $(this).attr("transform") ? $(this).attr("transform").match(/[0-9.]+/g)[2] : 1;
+                        var scale = zoom.scale();
                         var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - pScale(d.views) * scale) : pScale(d.views) * scale;
                         var yOffset = (coords[1] > ($(options.containerName).height() / 2)) ? (-tooltipDiv.outerHeight() + 60) : -60;
                         tooltipDiv.css({ left: (x + xOffset) + "px", top: (y + yOffset) + "px" })
@@ -256,14 +261,13 @@ function landscapeGraph(_options) {
         landmarkTags.exit().remove();
         landmarkTags.enter().append("text")
             .attr("class", "landmark")
-            .attr("id", function (d, i) { return "Text" + i; })
             .text(function (d, i) {
             // get the points, that are close to the landmark position 
             closestPoints = $.grep(points, function (point) {
                 return Math.sqrt(Math.pow((xScale(d.x) - xScale(point.x)), 2) + 
                                         Math.pow((yScale(d.y) - yScale(point.y)), 2)) < 25;
             });
-            if (closestPoints.length == 0) { $("#Text" + i).remove(); return; }
+            if (closestPoints.length == 0) { $(this).remove(); return; }
             // get the frequency of the categories
             var landmarkFrequency = {};
             for (var MatN = 0; MatN < closestPoints.length; MatN++) {
@@ -296,7 +300,7 @@ function landscapeGraph(_options) {
             .transition()
             .delay(1200).duration(1000)
             .attr('fill-opacity', 1);
-        landmarkShow(landmarkTags[0]);
+        toggleLandmarks(landmarkTags[0]);
     }
 }
 

@@ -1,0 +1,82 @@
+﻿/************************************
+ * Landscape visualization
+ */
+
+#wait-container {
+    position: absolute;
+    top: -20px;
+    left: 2px;
+    width: calc(100% - 2px);
+    height: 800px;
+    display: none;
+    z-index: 200;
+    margin-top:    40px;
+    margin-bottom: 40px;
+    background-color: #F2F6F8;
+    opacity: 0.85;
+}
+
+.center-block {
+    align-content: center;
+}
+
+#landscape-graph-container {
+    height: 700px;
+    position: relative;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    border: 2px solid;
+    border-color: #4086AB;
+    background-color: #FFFFFF;
+}
+
+#landscape-graph {
+    width: 100%;
+    border-radius: 25px;
+    background-color: white;
+}
+
+#landscape-tooltip {
+    position: absolute;
+    display: block;
+    color: white;
+    height: auto;
+    width: auto;
+    padding: 3px 5px;
+    border-radius: 5px;
+    max-width: 500px;
+    background-color: #222d32;
+    opacity: 0.8;
+}
+
+#query-info-container {
+    width:    100%;
+    overflow: auto;
+    max-height: 700px;
+    position:   relative;
+    margin:        auto;
+    margin-top:    20px;
+    margin-bottom: 20px;
+    padding:       10px;
+    border:       1px solid;
+    border-color: lightgrey;
+    background-color: white;
+}
+
+.query-info h4 {
+    margin-bottom: 5px;
+}
+
+.query-info h4.information {
+    margin-top:   20px;
+    margin-bottom: 5px;
+}
+
+/* Universal mini stylz */
+
+.notvisible {
+    display: none;
+    visibility: hidden;
+}

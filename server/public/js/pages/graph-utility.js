@@ -36,8 +36,8 @@ var tagsVisibility = function (_tags) {
 /**
  * Shows/hides the landmarks on the landscape.
  */ 
-var landmarkShow = function () {
-    var tick = $("#checkLandmarks").is(':checked');
+var toggleLandmarks = function () {
+    var tick = $("#landmarks-check").is(':checked');
     var landmark = d3.selectAll(".landmark");
     if (!tick) {
         landmark.classed('hidden', true);
@@ -50,4 +50,4 @@ var landmarkShow = function () {
 /**
  * Adds the functionality of the landscape tickbox 
  */ 
-$("#checkLandmarks").on('click', landmarkShow);
+$("#landmarks-check").on('click', toggleLandmarks);
