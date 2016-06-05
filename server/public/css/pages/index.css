@@ -21,7 +21,7 @@ html, body {
  * Dashboard
  */
 
-@media screen and (min-width:992px) {
+@media screen and (min-width:1200px) {
     .project-info-content {
         min-height:100%;
         width:  233px;
@@ -60,7 +60,7 @@ html, body {
     }
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1200px) {
     .project-info-content {
         display: none !important;
     }
