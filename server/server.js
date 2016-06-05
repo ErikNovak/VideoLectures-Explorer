@@ -88,6 +88,7 @@ var queryData = function (data) {
         }
     }
     var result = base.search(query);
+    console.log(result);
     return result;
 }
 
@@ -177,6 +178,7 @@ app.post('/landscape-points', function (request, result) {
             description:  search[0].description
         });
         result.send({ "searchwords": sentData.data, "points": points });
+        return;
     }
 
     // reset and update the feature space
