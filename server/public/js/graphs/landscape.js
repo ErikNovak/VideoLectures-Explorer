@@ -34,7 +34,8 @@ function landscapeGraph(_options) {
     /**
      * If the landscape is already active
      */ 
-    var active = false;
+    var active = false,
+        newData = false;
 
     /**
      * Database container.
@@ -65,6 +66,7 @@ function landscapeGraph(_options) {
             throw "landscapeGraph.setLandscapeData: must contain the points data!";
         }
         landscapeData.points = _data.points;
+        newData = true;
         self.drawLandscape();
     }
     
@@ -72,6 +74,9 @@ function landscapeGraph(_options) {
      * Draws the landscape.
      */ 
     this.drawLandscape = function () {
+        if (!landscapeData.points) {
+            throw "landscapeGraph.drawLandscape: points must be specified!";
+        }
         if (!active) {
             prepareLandscapeDisplay();
         }
@@ -132,43 +137,10 @@ function landscapeGraph(_options) {
         landscapeBody = svg.append("g")
                            .attr("clip-path", "url(#area-clip)");
         
-        // prepare the 'padding' for the points
-        // this will make sure that points are not cut off in half
-        var padding = { left: 30, right: 30, top: 30, bottom: 30 };
         
-        // calulate the minimum and maximum range for the x, y scales
-        // based on the number of data points
-        var minX, maxX, minY, maxY;
-        var minXY = Math.abs(width - height) / 2,
-            maxXY = Math.abs(width + height) / 2;
-        
-        if (width <= height) {
-            minX = 0     + padding.left;
-            maxX = width - padding.right;
-            minY = minXY + padding.top;
-            maxY = maxXY - padding.bottom;
-        } else {
-            minX = minXY + padding.left;
-            maxX = maxXY - padding.right;
-            minY = 0     + padding.top;
-            maxY = height - padding.bottom;
-        }
-        
-        xScale = d3.scale.linear()
-                   .domain([0, 1])
-                   .range([minX, maxX]);
-        
-        yScale = d3.scale.linear()
-                    .domain([0, 1])
-                    .range([minY, maxY]);
-        
-        // get the maximum number of views
-        var maxView = Math.max.apply(null, $.map(landscapeData.points, function (pt) { return pt["views"] }));
-        
-        rScale = d3.scale.linear()
-                   .domain([0, maxView])
-                   .range([2, 10]);
-        
+        xScale = d3.scale.linear();
+        yScale = d3.scale.linear();
+
         function onZoom() {
             landscapeBody.selectAll(".point")
                          .attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -176,8 +148,11 @@ function landscapeGraph(_options) {
                 landmarks = landscapeBody.selectAll(".landmark")
                                          .attr("x", function (d) { return xScale(d.x) - d.width / 2; })
                                          .attr("y", function (d) { return yScale(d.y); });
-                landmarks.classed("hidden", false);
-                toggleLandmarks(landmarks[0]);
+                // if there is a hide/show function for landmarks
+                if (options.landmarkClass.toggleLandmarks) {
+                    landmarks.classed("hidden", false);
+                    options.landmarkClass.toggleLandmarks(landmarks[0]);
+                }
             }
         }
         
@@ -221,6 +196,16 @@ function landscapeGraph(_options) {
           .attr("height", height);
 
         landscapeBody.attr("clip-path", "url(#area-clip)");
+    }
+
+    /**
+     * Redraws the landscape.
+     */ 
+    function redraw() {
+        var totalWidth = $(options.containerName).width(),
+            totalHeight = $(options.containerName).height(),
+            width = totalWidth - options.margin.left - options.margin.right,
+            height = totalHeight - options.margin.top - options.margin.bottom;
 
         // prepare the 'padding' for the points
         // this will make sure that points are not cut off in half
@@ -232,47 +217,69 @@ function landscapeGraph(_options) {
         var minXY = Math.abs(width - height) / 2,
             maxXY = Math.abs(width + height) / 2;
         
-        if (width <= height) {
-            minX = 0 + padding.left;
-            maxX = width - padding.right;
-            minY = minXY + padding.top;
-            maxY = maxXY - padding.bottom;
+        if (landscapeData.points.length < 10) {
+            if (width <= height) {
+                minX =     width / 3 + padding.left;
+                maxX = 2 * width / 3 - padding.right;
+                minY = (3 * height - width) / 6 + padding.top;
+                maxY = (3 * height + width) / 6 - padding.bottom;
+            } else {
+                minX = (3 * width - height) / 6 + padding.left;
+                maxX = (3 * width + height) / 6 - padding.right;
+                minY =     height / 3 + padding.top;
+                maxY = 2 * height / 3 - padding.bottom;
+            }
         } else {
-            minX = minXY + padding.left;
-            maxX = maxXY - padding.right;
-            minY = 0 + padding.top;
-            maxY = height - padding.bottom;
+            if (width <= height) {
+                minX = 0 + padding.left;
+                maxX = width - padding.right;
+                minY = minXY + padding.top;
+                maxY = maxXY - padding.bottom;
+            } else {
+                minX = minXY + padding.left;
+                maxX = maxXY - padding.right;
+                minY = 0 + padding.top;
+                maxY = height - padding.bottom;
+            }
         }
 
-        xScale.range([minX, maxX]);
-        yScale.range([minY, maxY]);
+        xScale.domain([0, 1])
+              .range([minX, maxX]);
+        yScale.domain([0, 1])
+              .range([minY, maxY]);
 
         // zoom configure
         zoom.x(xScale)
             .y(yScale);
 
-    }
-
-    /**
-     * Redraws the landscape.
-     */ 
-    function redraw() { 
-
+        // get the maximum number of views
+        var maxView = Math.max.apply(null, $.map(landscapeData.points, function (pt) { return pt["views"] }));
+        
+        rScale = d3.scale.linear()
+                   .domain([0, maxView])
+                   .range([2, 10]);
+        
+        landscapeBody.selectAll(".point")
+                         .attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
+        
         var LSPoints = landscapeBody.selectAll(".point")
                                     .data(landscapeData.points);
         
-        LSPoints.attr("cx", function (d) { return xScale(d.x); })
+        LSPoints.transition().duration(1000)
+        .attr("cx", function (d) { return xScale(d.x); })
                 .attr("cy", function (d) { return yScale(d.y); })
                 .attr("r", function (d) { return rScale(d["views"]); });
         
-        LSPoints.exit().remove();
+        LSPoints.exit().transition().duration(1000).attr("r", 0).remove();
 
         LSPoints.enter().append("circle")
                 .attr("class", "point")
                 .attr("cx", function (d) { return xScale(d.x); })
                 .attr("cy", function (d) { return yScale(d.y); })
+                .attr("r", 0)
+                .attr("fill", options.color.points)
+                .transition().duration(1000)
                 .attr("r", function (d) { return rScale(d["views"]); })
-                .attr("fill", options.color.points);
 
         
         // Construct tooltip
@@ -303,50 +310,84 @@ function landscapeGraph(_options) {
         // Create the landmarks
         if (options.landmarkClass) {
             // initialize landmarks array
-            landscapeData.landmarks = [];
-            if (landscapeData.points.length < 50) {
-                landscapeData.landmarks = $.map(landscapeData.points, function (pt) { return { x: pt.x, y: pt.y } });
-            } else {
-                for (var n = 0; n < options.landmarkClass.numberOfLandmarks; n++) {
-                    landscapeData.landmarks.push({ x: Math.random(), y: Math.random() });
+            if (newData) {
+                landscapeData.landmarks = [];
+                if (landscapeData.points.length < 50) {
+                    landscapeData.landmarks = $.map(landscapeData.points, function (pt) { return { x: pt.x, y: pt.y } });
+                } else {
+                    for (var n = 0; n < options.landmarkClass.numberOfLandmarks; n++) {
+                        landscapeData.landmarks.push({ x: Math.random(), y: Math.random() });
+                    }
                 }
-            }
-
-            landmarks = landscapeBody.selectAll(".landmark")
-                                     .data(landscapeData.landmarks);
             
-            landmarks.each(function (d) { d.width = this.getBBox().width; })
-                     .attr("x", function (d) {
-                         return xScale(d.x) - d.width / 2;
-                     })
-                     .attr("y", function (d) {
-                         return yScale(d.y);
-                     });
+                landmarks = landscapeBody.selectAll(".landmark")
+                                         .data(landscapeData.landmarks);
+            
+                landmarks.each(function (d) { d.width = this.getBBox().width; })
+                         .attr("opacity", 0)
+                         .attr("x", function (d) {
+                              return xScale(d.x) - d.width / 2;
+                          })
+                         .attr("y", function (d) {
+                             return yScale(d.y);
+                         })
+                         .transition().duration(1000)
+                         .attr("opacity", 1);
 
-            landmarks.exit().remove();
 
-            landmarks.enter().append("text")
-                     .attr("class", "landmark")
-                     .text(function (d, i) {
-                         closestPoints = $.grep(landscapeData.points, function (pt) {
-                             return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 25;
+                landmarks.exit()
+                         .transition().duration(1000)
+                         .attr("opacity", 0).remove();
+
+                landmarks.enter().append("text")
+                         .attr("class", "landmark")
+                         .attr("id", function (d, i) { "landmark-number-" + i })
+                         .text(function (d, i) {
+                            closestPoints = $.grep(landscapeData.points, function (pt) {
+                                return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 25;
+                            });
+                            if (closestPoints.length == 0) { $(this).remove(); return; }
+                                return options.landmarkClass.setText(closestPoints);
+                         })
+                         .attr("font-size", "12px")
+                         .attr("font-weight", "600")
+                         .attr("font-family", "Helvetica, Arial, sans-serif")
+                         .attr("pointer-events", "none")
+                         .each(function (d) { d.width = this.getBBox().width; })
+                         .attr("x", function (d) { 
+                              return xScale(d.x) - d.width / 2;
+                          })
+                         .attr("y", function (d) { 
+                             return yScale(d.y);
+                         })
+                         .attr("opacity", 0)
+                         .transition().duration(1000)
+                         .attr("opacity", 1);
+            
+                // remove those with no points in the vicinity
+                landmarks.each(function (d, i) { 
+                    closestPoints = $.grep(landscapeData.points, function (pt) {
+                        return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 25;
+                    });
+                    if (closestPoints.length == 0) { $(this).remove(); return; }
+                })
+
+                landmarks.classed("hidden", false);
+                    options.landmarkClass.toggleLandmarks(landmarks[0]);
+            } else {
+                landmarks.each(function (d) { d.width = this.getBBox().width; })
+                         .transition().duration(1000)
+                         .attr("x", function (d) {
+                              return xScale(d.x) - d.width / 2;
+                          })
+                         .attr("y", function (d) {
+                             return yScale(d.y);
                          });
-                         if (closestPoints.length == 0) { $(this).remove(); return; }
-                         return options.landmarkClass.setText(closestPoints);
-                     })
-                     .attr("font-size", "12px")
-                     .attr("font-weight", "600")
-                     .attr("font-family", "Helvetica, Arial, sans-serif")
-                     .each(function (d) { d.width = this.getBBox().width; })
-                     .attr("x", function (d) { 
-                          return xScale(d.x) - d.width / 2;
-                      })
-                     .attr("y", function (d) { 
-                         return yScale(d.y);
-                     });
-            landmarks.classed("hidden", false);
-            toggleLandmarks(landmarks[0]);
+            }
         }
+
+        // graph is initialized; waiting for new data
+        newData = false;
     }
 
     //----------------------------------------------
@@ -361,6 +402,7 @@ function landscapeGraph(_options) {
                 redraw();
                 }, 1000);
         }
+        windowResize = false;
     })
 
 }

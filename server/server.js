@@ -170,7 +170,7 @@ app.post('/landscape-points', function (request, result) {
     /**
      * Calculates and sends the points to the client.
      * The function sequence:
-     * SVD -> MDS -> Coordinates
+     * SVD -> runMDS -> Coordinates
      */                                          
     SendPoints(featureMatrix, params);
     

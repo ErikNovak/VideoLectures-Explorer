@@ -83,8 +83,7 @@ var SLandscape = function (value) {
                 // shows the points on the screen
                 landscape.setData(response);
                 // shows/hides the landmarks
-                $(".landscape-container").show();
-                $(".graph-options").show(); toggleLandmarks();
+                landmarkClass.toggleLandmarks();
                 // stops the wait icon
             }
             wait.stopAnimation();
