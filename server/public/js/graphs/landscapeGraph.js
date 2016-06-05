@@ -319,7 +319,7 @@ function landscapeGraph(_options) {
                         landscapeData.landmarks.push({ x: Math.random(), y: Math.random() });
                     }
                 }
-            
+                landscapeBody.selectAll(".landmark").remove();
                 landmarks = landscapeBody.selectAll(".landmark")
                                          .data(landscapeData.landmarks);
             

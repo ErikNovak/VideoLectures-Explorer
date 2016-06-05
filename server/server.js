@@ -88,7 +88,6 @@ var queryData = function (data) {
         }
     }
     var result = base.search(query);
-    console.log(result);
     return result;
 }
 
