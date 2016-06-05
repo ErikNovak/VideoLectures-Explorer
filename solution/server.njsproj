@@ -33,12 +33,9 @@
   <ItemGroup>
     <Compile Include="data\autocomplete\createfiles.js" />
     <Compile Include="data\database\createBase.js" />
-    <Compile Include="public\js\graphs\landscape.js" />
     <Compile Include="public\js\graphs\landscapeConstruct.js" />
     <Compile Include="public\js\graphs\landscapeGraph.js" />
     <Compile Include="public\js\graphs\waitAnimation.js" />
-    <Compile Include="public\js\pages\graph-utility.js" />
-    <Compile Include="public\js\pages\index.js" />
     <Compile Include="public\js\pages\search-utility.js" />
     <Compile Include="server.js" />
     <Content Include=".bowerrc" />

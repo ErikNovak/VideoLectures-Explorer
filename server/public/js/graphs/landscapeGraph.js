@@ -91,9 +91,6 @@ function landscapeGraph(_options) {
         if (!options.containerName) {
             throw "landscapeGraph: must set containerName before preparing the display!";
         }
-        // TODO: need to remove this line
-        $(options.containerName).show();
-        // TODO
         // set the active flag 
         active = true;
 
@@ -360,7 +357,6 @@ function landscapeGraph(_options) {
                          .attr("y", function (d) { 
                              return yScale(d.y);
                          })
-                         .attr("z-index", 50)
                          .attr("opacity", 0)
                          .transition().duration(1000)
                          .attr("opacity", 1);
@@ -378,8 +374,7 @@ function landscapeGraph(_options) {
                     options.landmarkClass.toggleLandmarks(landmarks[0]);
                 }
             } else {
-                landmarks.each(function (d) { d.width = this.getBBox().width; })
-                         .transition().duration(1000)
+                landmarks.transition().duration(1000)
                          .attr("x", function (d) {
                               return xScale(d.x) - d.width / 2;
                           })
@@ -388,8 +383,10 @@ function landscapeGraph(_options) {
                          });
                 // if there is a hide/show function for landmarks
                 if (options.landmarkClass.toggleLandmarks) {
-                    landmarks.classed("hidden", false);
-                    options.landmarkClass.toggleLandmarks(landmarks[0]);
+                    setTimeout(function () {
+                        landmarks.classed("hidden", false);
+                        options.landmarkClass.toggleLandmarks(landmarks[0]);
+                    }, 1000);
                 }
             }
         }
