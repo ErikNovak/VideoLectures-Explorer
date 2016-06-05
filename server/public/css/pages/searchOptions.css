@@ -1,0 +1,94 @@
+﻿/**************************************
+ * Search options
+ */
+
+#basic-search {
+    position: relative;
+    display:table-cell;
+    width: 100%;
+    top: -12px;
+}
+
+#basic-search-input,
+.bootstrap-tagsinput {
+    width: 100%;
+}
+
+.basic-search-button {
+    display: table-cell;
+}
+
+#advanced-options {
+    display:none;
+}
+
+/**************************************
+ * Typeahed style
+ */
+
+.tt-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+    cursor: pointer;
+}
+
+.tt-suggestion {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333333;
+    white-space: nowrap;
+}
+
+.tt-dataset .tt-suggestion:hover,
+.tt-cursor {
+    background-color: #F2F6F8;
+}
+
+.tag {
+    border-radius: 20px;
+    font-size:     12px;
+}
+.label-info {
+    background-color: #3c8dbc;
+}
+
+.tt-input {
+    width: 100%;
+}
+
+.dropdown-menu {
+    min-width: 50px;
+}
+
+/**
+ * Additional css class
+ */
+
+.row {
+    margin-left:  0px;
+    margin-right: 0px;
+    width: 100%;
+}
+
+.pull-right {
+    margin-left: 10px;
+}

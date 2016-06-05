@@ -1,4 +1,4 @@
-﻿/***************************************
+﻿/**************************************
  * Body style
  */
 html, body {
@@ -8,84 +8,23 @@ html, body {
 }
 
 .container,
-.main-container {
+.body-content,
+.explorer-search-and-visual {
     width:      100%;
     min-height: 1250px;
     height:     auto !important;
     padding:    0px;
 }
 
+
 /**************************************
- * Navbar
- */
-
-.navbar-default {
-    border-color: #367fa9;
-    border-radius: 0px;
-}
-
-.navbar-header a.navbar-brand,
-.navbar-default .navbar-nav li a {
-    color: white;
-    font-size: 20px;
-    float: left;
-    padding-right: 35px;
-    padding-left: 35px;
-}
-
-.navbar-header a > .main {
-    font-weight: 600;
-}
-
-.navbar-header a > .secondary {
-    font-weight: 500;
-}
-
-.navbar {
-    margin-bottom: 0px;
-}
-
-.navbar-header a,
-.navbar-header a.navbar-brand:hover,
-.navbar-header a.navbar-brand:active,
-.navbar-header a.navbar-brand:visited,
-.navbar-header a.navbar-brand:link {
-    color: white;
-    background-color: #367fa9;
-}
-
-    .navbar-header a.navbar-brand:hover,
-    .navbar-default .navbar-nav li a:hover {
-        color: white;
-        text-decoration: underline;
-    }
-
-.navbar.navbar-default {
-    background-color: #3c8dbc;
-}
-
-.navbar-default .navbar-toggle .icon-bar {
-    background-color: #3c8dbc;
-}
-
-.btn, btn:hover,
-button.navbar-toggle.collapsed,
-button.navbar-toggle {
-    background-color: #3c8dbc !important;
-    color: white !important;
-    font-weight: 500;
-}
-
-
-
-/**********************************************
  * Dashboard
  */
 
-@media screen and (min-width:992px) {
-    .project-info-container {
+@media screen and (min-width:1200px) {
+    .project-info-content {
         min-height:100%;
-        width:  232px;
+        width:  233px;
         height: 1250px;
         z-index: 100;
         padding: 10px;
@@ -95,7 +34,7 @@ button.navbar-toggle {
         float: left;
     }
 
-    .project-info {
+    .project-info-text {
         color: white;
         text-align: justify;
         padding-left: 10px;
@@ -104,29 +43,33 @@ button.navbar-toggle {
         border: 1px solid #374850;
     }
 
-        .project-info h4 {
+        .project-info-text h4 {
             padding-bottom: 30px;
         }
+        .project-info-text h4.about-edsa {
+            padding-top: 30px;
+        }
 
-        .project-info p {
+
+        .project-info-text p {
             color: lightgrey;
         }
 
-    .dashboard-body {
+    .explorer-body {
         margin-left: 231px;
     }
 }
 
-@media screen and (max-width: 992px) {
-    .project-info-container {
+@media screen and (max-width: 1200px) {
+    .project-info-content {
         display: none !important;
     }
-    .dashboard-body {
+    .explorer-body {
         margin-left: 0px;
     }
 }
 
-.main-title {
+.explorer-header-title {
     color:      grey;
     text-align: center;
     margin: 50px 10px 30px 10px;
@@ -139,7 +82,7 @@ button.navbar-toggle {
 
 }
 
-.dashboard-body {
+.explorer-body {
     float:    right;
     position: absolute;
 }
@@ -157,175 +100,4 @@ button.navbar-toggle {
 .modal-content {
     background-color: #4086AB;
     color: #FFFFFF;
-}
-
-
-/**************************************
- * Search options
- */
-
-#advance-options {
-    display:none;
-}
-
-.row {
-    margin-left:0px;
-    margin-right:0px;
-    width: 100%;
-}
-
-.pull-right {
-    margin-left: 10px;
-}
-#span-basic-search-buttons {
-    display: table-cell;
-}
-
-#span-basic-search {
-    display:table-cell;
-    width: 100%;
-}
-
-#basic_search,
-.bootstrap-tagsinput {
-    width: 100%;
-}
-
-.tt-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 160px;
-    padding: 5px 0;
-    margin: 2px 0 0;
-    list-style: none;
-    font-size: 14px;
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    background-clip: padding-box;
-    cursor: pointer;
-}
-
-.tt-suggestion {
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: normal;
-    line-height: 1.428571429;
-    color: #333333;
-    white-space: nowrap;
-}
-
-.tt-dataset .tt-suggestion:hover,
-.tt-cursor {
-    background-color: #F2F6F8;
-}
-
-.tag {
-    border-radius: 20px;
-    font-size:     12px;
-}
-.label-info {
-    background-color: #3c8dbc;
-}
-
-.tt-input {
-    width: 100%;
-}
-
-.dropdown-menu {
-    min-width: 50px;
-}
-
-/************************************
- * Landscape visualization
- */
-
-#wait-content {
-    width: 100px;
-    height: 700px;
-    display: none;
-    position: relative;
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
-
-.center-block {
-    align-content: center;
-}
-
-#landscape-content {
-    height: 700px;
-    display: none;
-    position: relative;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 25px;
-    border: 2px solid;
-    border-color: #4086AB;
-}
-
-#land-container {
-    width: 100%;
-    border-radius: 25px;
-    background-color: white;
-}
-
-#land-container .points {
-    fill: #A289FE;
-}
-
-#land-container .landmark {
-    fill: #06141C;
-}
-
-#landscape-tooltip {
-    position: absolute;
-    display: block;
-    color: white;
-    height: auto;
-    width: auto;
-    padding: 3px 5px;
-    border-radius: 5px;
-    max-width: 500px;
-    background-color: rgba(40, 12, 145, 0.8);
-}
-
-.search-info-container {
-    width:    100%;
-    overflow: auto;
-    max-height: 700px;
-    display:    none;
-    position:   relative;
-    margin:        auto;
-    margin-top:    20px;
-    margin-bottom: 20px;
-    padding:       10px;
-    border:       1px solid;
-    border-color: lightgrey;
-    background-color: white;
-}
-
-.search-info h4 {
-    margin-top:   20px;
-    margin-bottom: 5px;
-}
-
-.graph-options {
-    display:none;
-}
-
-/* Universal mini stylz */
-
-.notvisible {
-    display: none;
-    visibility: hidden;
 }

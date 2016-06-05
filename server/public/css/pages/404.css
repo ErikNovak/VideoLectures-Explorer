@@ -8,84 +8,22 @@ html, body {
 }
 
 .container,
-.main-container {
+.body-content,
+.explorer-search-and-visual {
     width:      100%;
     min-height: 1250px;
     height:     auto !important;
     padding:    0px;
 }
 
-/**************************************
- * Navbar
- */
-
-.navbar-default {
-    border-color: #367fa9;
-    border-radius: 0px;
-}
-
-.navbar-header a.navbar-brand,
-.navbar-default .navbar-nav li a {
-    color: white;
-    font-size: 20px;
-    float: left;
-    padding-right: 35px;
-    padding-left: 35px;
-}
-
-.navbar-header a > .main {
-    font-weight: 600;
-}
-
-.navbar-header a > .secondary {
-    font-weight: 500;
-}
-
-.navbar {
-    margin-bottom: 0px;
-}
-
-.navbar-header a,
-.navbar-header a.navbar-brand:hover,
-.navbar-header a.navbar-brand:active,
-.navbar-header a.navbar-brand:visited,
-.navbar-header a.navbar-brand:link {
-    color: white;
-    background-color: #367fa9;
-}
-
-    .navbar-header a.navbar-brand:hover,
-    .navbar-default .navbar-nav li a:hover {
-        color: white;
-        text-decoration: underline;
-    }
-
-.navbar.navbar-default {
-    background-color: #3c8dbc;
-}
-
-.navbar-default .navbar-toggle .icon-bar {
-    background-color: #3c8dbc;
-}
-
-.btn, btn:hover,
-button.navbar-toggle.collapsed,
-button.navbar-toggle {
-    background-color: #3c8dbc !important;
-    color: white !important;
-    font-weight: 500;
-}
-
-
-
 /**********************************************
  * Dashboard
  */
 
 @media screen and (min-width:992px) {
-    .project-info-container {
+    .project-info-content {
         min-height:100%;
-        width:  232px;
+        width:  233px;
         height: 1250px;
         z-index: 100;
         padding: 10px;
@@ -95,7 +33,7 @@ button.navbar-toggle {
         float: left;
     }
 
-    .project-info {
+    .project-info-text {
         color: white;
         text-align: justify;
         padding-left: 10px;
@@ -104,32 +42,32 @@ button.navbar-toggle {
         border: 1px solid #374850;
     }
 
-        .project-info h4 {
+        .project-info-text h4 {
             padding-bottom: 30px;
         }
+        .project-info-text h4.about-edsa {
+            padding-top: 30px;
+        }
 
-        .project-info p {
+
+        .project-info-text p {
             color: lightgrey;
         }
 
-    .dashboard-body {
+    .explorer-body {
+        width: calc(100% - 231px);
         margin-left: 231px;
     }
 }
 
 @media screen and (max-width: 992px) {
-    .project-info-container {
+    .project-info-content {
         display: none !important;
     }
-    .dashboard-body {
+    .explorer-body {
+        width: 100%;
         margin-left: 0px;
     }
-}
-
-.main-title {
-    color:      grey;
-    text-align: center;
-    margin: 50px 10px 30px 10px;
 }
 
 .body-container {
@@ -137,6 +75,11 @@ button.navbar-toggle {
     min-height: 100%;
     height:     auto !important;
 
+}
+
+.explorer-body {
+    float:    right;
+    position: absolute;
 }
 
 .footer {
@@ -150,7 +93,7 @@ button.navbar-toggle {
 }
 
 .row {
-    margin-left:0px;
-    margin-right:0px;
+    margin-left:  0px;
+    margin-right: 0px;
     width: 100%;
 }

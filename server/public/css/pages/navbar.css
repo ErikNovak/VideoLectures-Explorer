@@ -1,0 +1,60 @@
+﻿/**************************************
+ * Navbar
+ */
+
+.navbar-default {
+    border-color: #367fa9;
+    border-radius: 0px;
+}
+
+.navbar-header a.navbar-brand,
+.navbar-default .navbar-nav li a {
+    color: white;
+    font-size: 20px;
+    float: left;
+    padding-right: 35px;
+    padding-left: 35px;
+}
+
+.navbar-header a > .main {
+    font-weight: 600;
+}
+
+.navbar-header a > .secondary {
+    font-weight: 500;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+.navbar-header a,
+.navbar-header a.navbar-brand:hover,
+.navbar-header a.navbar-brand:active,
+.navbar-header a.navbar-brand:visited,
+.navbar-header a.navbar-brand:link {
+    color: white;
+    background-color: #367fa9;
+}
+
+    .navbar-header a.navbar-brand:hover,
+    .navbar-default .navbar-nav li a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+.navbar.navbar-default {
+    background-color: #3c8dbc;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #3c8dbc;
+}
+
+.btn, btn:hover,
+button.navbar-toggle.collapsed,
+button.navbar-toggle {
+    background-color: #3c8dbc !important;
+    color: white !important;
+    font-weight: 500;
+}

@@ -5,43 +5,42 @@
     <meta name="author" content="Erik Novak (erik.novak@ijs.si)">
 
     <link rel="stylesheet" type="text/css" href="public/components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="public/css/pages/404.css" />
 
+    <link rel="stylesheet" type="text/css" href="public/css/pages/404.css" />
+    <link rel="stylesheet" type="text/css" href="public/css/pages/navbar.css" />
     <title>Videolectures Learning Analytics | Landscape</title>
 </head>
 <body>
     <!-- navbar -->
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- header navbar -->
-            <div class="navbar-header">
-                <!-- Collapsed links -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#vl-links" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Brand name -->
-                <a class="navbar-brand" href="http://learninganalytics.videolectures.net">
-                    <span class="main">Videolectures</span>
-                    <span class="secondary">LA</span>
-                </a>
-            </div>
-            <div class="collapse navbar-collapse" id="vl-links">
-                <ul class="nav navbar-nav">
-                    <li><a href="/">Landscape</a></li>
-                </ul>
-            </div>
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#vl-links" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="http://learninganalytics.videolectures.net">
+                <span class="main">Videolectures</span>
+                <span class="secondary">EX</span>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="vl-links">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Analytics</a></li>
+            </ul>
         </div>
     </nav>
 
-    <div class="main-container">
+    <div class="body-content">
 
         <div class="container">
-            <!-- About section -->
-            <div class="project-info-container">
-                <div class="project-info">
+            <!-- Contains the project information -->
+            <div class="project-info-content">
+                <div class="project-info-text">
                     <h4>About Videolectures</h4>
                     <p>
                         VideoLectures.NET is an award-winning free and open access educational video lectures repository.
@@ -52,7 +51,7 @@
                         public. All lectures, accompanying documents, information and links are systematically selected and
                         classified through the editorial process taking into account also users' comments.
                     </p>
-                    <h4 style="padding-top:30px;">About EDSA</h4>
+                    <h4 class="about-edsa">About EDSA</h4>
                     <p>
                         The European Data Science Academy (EDSA) will establish a virtuous learning production cycle whereby
                         we: a) analyse the required sector specific skillsets for data analysts across the main industrial
@@ -62,9 +61,9 @@
                 </div>
             </div>
 
-            <!-- Body -->
-            <div class="dashboard-body">
-                <div class="main-container container-fluid">
+            <!-- 404 body components -->
+            <div class="explorer-body">
+                <div class="explorer-search-and-visual container-fluid">
 
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -76,6 +75,7 @@
                         </div>
                     </div>
                 </div>
+
                 <footer class="footer" role="contentinfo">
                     <div class="container-fluid">
                         <div class="row">
@@ -85,10 +85,11 @@
                         </div>
                     </div>
                 </footer>
-            </div>  <!-- Body container -->
+
+            </div> 
         </div>
     </div>
-    
+
 
     <script type="text/javascript" src="public/components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="public/components/bootstrap/dist/js/bootstrap.min.js"></script>

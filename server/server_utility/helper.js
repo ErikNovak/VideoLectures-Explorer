@@ -36,3 +36,96 @@ exports.createLinearFunction = function (vec) {
         };
     }
 }
+
+/**
+ * Calculates the svd of the feature matrix using the async function.
+ * @param {module:la.Matrix} matrix - The feature matrix.
+ * @param {object} params - The parameters for calculation.
+ */
+exports.getPoints = function (query, matrix, params) {
+    var denseMatrix, SVD;
+    // small matrices
+    if (matrix.cols <= params.docTresh) {
+        denseMatrix = matrix.full();
+        var numOfSingVal = Math.min(denseMatrix.rows, denseMatrix.cols);
+        SVD = qm.la.svd(denseMatrix, numOfSingVal, { iter: params.iter });
+    } 
+    // large matrices
+    else {
+        var numOfSingVal = Math.min(matrix.cols, params.clusterN);
+        var KMeans = new qm.analytics.KMeans({
+            iter: params.iter, 
+            k: numOfSingVal, 
+            distanceType: "Cos"
+        });
+        KMeans.fit(matrix);
+        denseMatrix = KMeans.getModel().C;
+        SVD = qm.la.svd(denseMatrix, params.clusterN, { iter: params.iter });
+    }
+    // calculating for mds
+    var singularValues = SVD.s, 
+        numberOfSingVal = 0;
+    var singValSum = singularValues.sum();
+    for (var partN = 0; partN < denseMatrix.cols; partN++) {
+        // the sum of the first N singular values
+        var partSum = singularValues.subVec(qm.la.rangeVec(0, partN)).sum();
+        // if the info is greater than 80%
+        if (partSum / singValSum > 0.8) {
+            numberOfSingVal = partN;
+            break;
+        }
+    }
+    V = SVD.V.getColSubmatrix(qm.la.rangeVec(0, numberOfSingVal - 1)).transpose();
+    var mdsParams = { maxStep: 3000, maxSecs: 2, minDiff: 1e-3, distType: 'Cos' };
+    var MDS = new qm.analytics.MDS(mdsParams);
+
+    // calculate the coordinates of the lectures
+    var coordinateMatrix = MDS.fitTransform(V);
+    
+    // calculating the points
+    var pointStorage = new qm.la.Matrix({ rows: matrix.cols, cols: 2 });
+    // get the original matrix and normalize it
+    var normalizedMatrix = matrix; normalizedMatrix.normalizeCols();
+    // for each lecture get the distance to the clusters
+    var distMatrix = denseMatrix.multiplyT(normalizedMatrix);
+    var convexNumber = distMatrix.cols < params.convexN ? distMatrix.cols : params.convexN;
+    // get coordinates for each lecture
+    for (var ColN = 0; ColN < matrix.cols; ColN++) {
+        var columnVector = distMatrix.getCol(ColN);
+        var sortedVector = columnVector.sortPerm(false);
+        var distVector = sortedVector.vec.subVec(qm.la.rangeVec(0, convexNumber - 1));
+        var indexVector = sortedVector.perm;
+        
+        // create the article point coordinates
+        var pt = new qm.la.Vector([0, 0]);
+        var totalDistance = distVector.sum();
+        for (var ClusterN = 0; ClusterN < convexNumber; ClusterN++) {
+            var cluster = coordinateMatrix.getRow(indexVector.at(ClusterN));
+            pt = pt.plus(cluster.multiply(distVector.at(ClusterN) / totalDistance));
+        }
+        pointStorage.setRow(ColN, pt);
+    }
+    
+    // create the propper point format and send it to client
+    // the functions that puts the points into a unit square
+    var xCoord = helper.createLinearFunction(pointStorage.getCol(0));
+    var yCoord = helper.createLinearFunction(pointStorage.getCol(1));
+    // generate an array of coordinates
+    var points = [];
+    for (var pointN = 0; pointN < pointStorage.rows; pointN++) {
+        points.push({
+            x: xCoord(pointStorage.at(pointN, 0)), 
+            y: yCoord(pointStorage.at(pointN, 1)), 
+            title:        query[pointN].title,
+            author:       query[pointN].author,
+            organization: query[pointN].organization,
+            language:     query[pointN].language,
+            categories:   query[pointN].categories != null ? query[pointN].categories.toString() : null,
+            published:    query[pointN].published,
+            duration:     query[pointN].duration,
+            views:        query[pointN].views,
+            description:  query[pointN].description
+        });
+    }
+    return points;
+}
