@@ -371,9 +371,8 @@ function landscapeGraph(_options) {
                     });
                     if (closestPoints.length == 0) { $(this).remove(); return; }
                 })
-
                 landmarks.classed("hidden", false);
-                    options.landmarkClass.toggleLandmarks(landmarks[0]);
+                options.landmarkClass.toggleLandmarks(landmarks[0]);
             } else {
                 landmarks.each(function (d) { d.width = this.getBBox().width; })
                          .transition().duration(1000)
@@ -383,6 +382,8 @@ function landscapeGraph(_options) {
                          .attr("y", function (d) {
                              return yScale(d.y);
                          });
+                landmarks.classed("hidden", false);
+                options.landmarkClass.toggleLandmarks(landmarks[0]);
             }
         }
 
