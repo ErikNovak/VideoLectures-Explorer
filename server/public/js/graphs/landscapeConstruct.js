@@ -33,7 +33,7 @@ var tooltipClass = {
         }
         
         // lecture language
-        var language = SFormat.LanguageAbbrFull[data.language];
+        var language = languageFormat.abbrToFull[data.language];
         text += "The lecture is in " + language + ". ";
         // category
         if (data.categories) {

@@ -86,7 +86,7 @@
                             <span id="basic-search"><input type="text" class="form-control" id="basic-search-input" /></span>
                             <span class="basic-search-button ">
                                 <!-- search button -->
-                                <button class="btn btn-default pull-right" type="button" onclick="search(SLandscape);">Search</button>
+                                <button class="btn btn-default pull-right" type="button" onclick="search(fillLandscape);">Search</button>
                             </span>
                             <!-- additional options button -->
                             <span class="basic-search-button">
@@ -255,17 +255,17 @@
     </div>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary hidden" id="error_trigger" data-toggle="modal" data-target="#error_modal"></button>
+    <button type="button" class="btn btn-primary hidden" id="error-trigger" data-toggle="modal" data-target="#error-modal"></button>
 
     <!-- Popup Modal -->
-    <div class="modal fade" id="error_modal" role="dialog">
+    <div class="modal fade" id="error-modal" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">404: Query not found!</h4>
+                    <h4 class="modal-title">Query not found!</h4>
                 </div>
 
                 <div class="modal-body">
@@ -289,12 +289,11 @@
     <script type="text/javascript" src="public/components/d3/d3.min.js"></script>
 
     <script type="text/javascript" src="public/js/graphs/waitAnimation.js"></script>
-    <script type="text/javascript" src="public/js/graphs/landscape.js"></script>
+    <script type="text/javascript" src="public/js/graphs/landscapeGraph.js"></script>
     <script type="text/javascript" src="public/js/graphs/landscapeConstruct.js"></script>
 
-    <script type="text/javascript" src="public/js/pages/index.js"></script>
+    <script type="text/javascript" src="public/js/pages/initial-search-and-autocomplete.js"></script>
     <script type="text/javascript" src="public/js/pages/search-utility.js"></script>
-    <script type="text/javascript" src="public/js/pages/graph-utility.js"></script>
 
 </body>
 </html>

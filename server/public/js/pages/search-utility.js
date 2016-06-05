@@ -8,8 +8,8 @@
  * Contains the formats for handling search variables. 
  * 
  */ 
-var SFormat = {
-    LanguageAbbrFull : {
+var languageFormat = {
+    abbrToFull : {
         sl: "slovene",
         en: "english",
         de: "german",
@@ -25,7 +25,7 @@ var SFormat = {
         ru: "russian",
         tr: "turkish"
     },
-    LanguageFullAbbr : {
+    fullToAbbr : {
         slovene: "sl",
         english: "en",
         german: "de",
@@ -63,32 +63,35 @@ function toggleAdvancedOptions() {
     }
 }
 
+//-------------------------------------
+// Helper functions
+//-------------------------------------
+
+
 /**
  * Returns a sorted array of objects.
  */ 
-function sortedArr(json) {
-    var arr = [];
+function sortedArray(json) {
+    var array = [];
     var keys = Object.keys(json);
     for (var keyN = 0; keyN < keys.length; keyN++) {
-        arr.push({ category: keys[keyN], freq: json[keys[keyN]] });
+        array.push({ category: keys[keyN], freq: json[keys[keyN]] });
     }
-    arr.sort(function (a, b) {
-        if (a.freq > b.freq) { return -1; }
-        if (a.freq < b.freq) { return 1; }
-        return 0;
+    array.sort(function (a, b) {
+        return b.freq - a.freq;
     });
-    return arr;
+    return array;
 }
 
 /**
- * Creates a string containg the categories (frequency).
+ * Creates a string containing the categories and their frequency.
  */ 
-function stringify(arr) {
+function stringify(array) {
     var text = "";
-    for (var catN = 0; catN < arr.length; catN++) {
-        var pair = arr[catN];
-        text += "<a onclick='queryMe(\"" + pair.category + "\")'>" + pair.category + "</a>" + "(" + pair.freq + ")";
-        if (catN != arr.length - 1) {
+    for (var catN = 0; catN < array.length; catN++) {
+        var pair = array[catN];
+        text += "<a onclick='queryCategory(\"" + pair.category + "\")'>" + pair.category + "</a>" + "(" + pair.freq + ")";
+        if (catN != array.length - 1) {
             text += ", ";
         }
     }
@@ -96,7 +99,7 @@ function stringify(arr) {
 }
 
 
-function queryMe(category) {
+function queryCategory(category) {
     // remove all tags
     $("#basic-search-input").tagsinput("removeAll");
     $("#category-search-input").tagsinput("removeAll");
@@ -107,20 +110,134 @@ function queryMe(category) {
 
     // add the tag to the main basic input
     $("#basic-search-input").tagsinput("add", { name: category, type: "category" });
-    search(SLandscape);
+    search(fillLandscape);
+}
+
+
+
+//-------------------------------------
+// Search query functions
+//-------------------------------------
+
+function search(callback) {
+    
+    // the arrays containing the keywords of different type
+    var author       = [],
+        organization = [],
+        categories   = [];
+    
+    // get and sort the input values of the basic search window
+    var basic = $('#basic-search-input').tagsinput('items');
+
+    for (var tagN = 0; tagN < basic.length; tagN++) {
+        var tag = basic[tagN];
+        if (tag.type == 'author') {
+            author.push(tag.name);
+        } else if (tag.type == 'category') {
+            categories.push(tag.name);
+        } else if (tag.type == 'organization') {
+            organization.push(tag.name);
+        } else {
+            throw "Not supported tag type: " + tag.type;
+        }
+    }
+    // add the input values of the corresponding advanced search
+    author       = author.concat($.map($('#author-search-input').tagsinput('items'), function (tag) { return tag.name; }));
+    categories   = categories.concat($.map($('#category-search-input').tagsinput('items'), function (tag) { return tag.name; }));
+    organization = organization.concat($.map($('#organization-search-input').tagsinput('items'), function (tag) { return tag.name; }));
+
+    var language = $('#language-search-dropdown').text().replace(/[\s]+/g, '');
+    
+    var minViews = $("#views-min-search-input").val();
+    var maxViews = $("#views-max-search-input").val();
+
+    // prepare the query options
+    var search = [];
+    // authors
+    if (author.length != 0) {
+        search.push({
+            type: "author", 
+            data: author
+        });
+    }
+    // categories
+    if (categories.length != 0) {
+        search.push({
+            type: "category", 
+            data: categories
+        });
+    }
+    // organization
+    if (organization.length != 0) {
+        search.push({
+            type: "organization", 
+            data: organization
+        });
+    }
+    // language
+    if (language != 'all') {
+        search.push({
+            type: "language", 
+            data: languageFormat.fullToAbbr[language]
+        });
+    }
+    // min views
+    if (minViews != '') {
+        search.push({
+            type: "views-min", 
+            data: minViews
+        });
+    }
+    // max views
+    if (maxViews != '') {
+        search.push({
+            type: "views-max", 
+            data: maxViews
+        });
+    }
+    // call the search function
+    if (search.length == 0) { return; }
+    else {
+        callback(search);
+    }
+
 }
 
 /**
- * Processes the found data and sends the information to div .search-info. 
+ * Fill the landscape.
  */
+function fillLandscape(value) {
+    // run the wait animation
+    wait.displayAnimation();
+    
+    $.ajax({
+        type: 'POST',
+        url: '/landscape-points',
+        data: { data: value },
+        success: function (responseData) {
+            // if there is no query
+            if (responseData.error != null) {
+                $("#error-trigger").trigger("click");
+            } else {
+                searchInfo(responseData);
+                landscape.setData(responseData);
+                landmarkClass.toggleLandmarks();
+            }
+            // stop the wait animation
+            wait.stopAnimation();
+        }
+    });
+}
+
+// Processes the found data and sends the information to div .search-info
 function searchInfo(search) {
     // remove the previous info
     $(".info").empty();
     
     // add the search words
     var searchwords = search.searchwords;
-    for (var swordN = 0; swordN < searchwords.length; swordN++) {
-        var wordGroup = searchwords[swordN];
+    for (var wordN = 0; wordN < searchwords.length; wordN++) {
+        var wordGroup = searchwords[wordN];
         // fill the correct info field
         switch (wordGroup.type) {
             case "author":
@@ -132,15 +249,15 @@ function searchInfo(search) {
             case "category":
                 $(".categories-info").append(wordGroup.data.join(', '));
                 break;
-            case "views_min":
+            case "views-min":
                 $(".views-info").append("min: " + wordGroup.data);
                 break;
-            case "views_max":
+            case "views-max":
                 var max = $(".views-info").is(":empty") ? "max: " : ", max: ";
                 $(".views-info").append(max + wordGroup.data);
                 break;
             case "language":
-                $(".language-info").append(SFormat.LanguageAbbrFull[wordGroup.data]);
+                $(".language-info").append(languageFormat.abbrToFull[wordGroup.data]);
                 break;
             default:
                 throw "Error: search type not recognized!";
@@ -149,9 +266,6 @@ function searchInfo(search) {
     }
     // add the additional information
     var points = search.points;
-    // number of found lectures
-    
-    
     // categories with frequencies
     var cat = {}, views = 0;
     for (var lectureN = 0; lectureN < points.length; lectureN++) {
@@ -170,13 +284,15 @@ function searchInfo(search) {
             }
         }
     }
-    var sortArr = sortedArr(cat);
+    var sortArr = sortedArray(cat);
     $(".num-of-lectures-info").append(points.length);
     $(".categories-frequency-info").append(stringify(sortArr));
     $(".num-of-views-info").append(views);
-    
-    $("#query-info-container").show();
 }
+
+//-------------------------------------
+// On document ready functions
+//-------------------------------------
 
 /**
  * Initialized at the construction point of the window. 
@@ -188,109 +304,6 @@ function searchInfo(search) {
  * 
  */
 $(document).ready(function () {
-    // get the autocomplete data
-    $.ajax({
-        type: 'GET',
-        url: '/autocomplete',
-        success: function (data) {
-            
-            // author typeahead and tags 
-            var presenters = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: data.authors
-            }); presenters.initialize();
-            
-            $("#author-search-input").tagsinput({
-                maxTags: 1,
-                itemValue: function (item) {
-                    return item.name;
-                },
-                typeaheadjs: {
-                    name: "authors",
-                    displayKey: 'name',
-                    source: presenters.ttAdapter()
-                }
-            });
-            
-            // category typeahead and tags 
-            var categories = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: data.categories
-            }); categories.initialize();
-            
-            $("#category-search-input").tagsinput({
-                itemValue: function (item) {
-                    return item.name
-                },
-                typeaheadjs: {
-                    name: "categories",
-                    displayKey: 'name',
-                    source: categories.ttAdapter()
-                }
-            });
-            
-            // organization typeahead and tags 
-            var organizations = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: data.organizations
-            }); organizations.initialize();
-            
-            $("#organization-search-input").tagsinput({
-                maxTags: 1,
-                splitOn: null,
-                itemValue: function (item) {
-                    return item.name
-                },
-                typeaheadjs: {
-                    name: "organizations",
-                    displayKey: 'name',
-                    source: organizations.ttAdapter()
-                }
-            });
-            
-            // getting the values 
-            var all = [];
-            for (var ValN = 0; ValN < Object.keys(data).length; ValN++) {
-                all = all.concat(data[Object.keys(data)[ValN]]);
-            }
-            
-            // basic search typeahead and tags
-            var basic = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: all
-            }); basic.initialize();
-            
-            $('#basic-search-input').tagsinput({
-                splitOn: null,
-                itemValue: function (item) {
-                    return item.name
-                },
-                typeaheadjs: {
-                    name: "all",
-                    displayKey: 'name',
-                    highlight: true,
-                    source: basic.ttAdapter()
-                }
-            });
-            
-            // filling the language search dropdown
-            var languages = data.languages;
-            for (var langN = 0; langN < languages.length; langN++) {
-                $('.dropdown > ul').append('<li><a>' + SFormat.LanguageAbbrFull[languages[langN].name] + '</a></li>');
-            }
-            
-            /**
-             * Changes the selected language.
-             */ 
-            $(function () {
-                $('.dropdown-menu > li').on('click', function () {
-                    $('#language-search').html($(this).text() + ' <span class="caret"></span>');
-                });
-            });
-        }
-    });
+    fillAutocomplete();
+    initialSearch();
 });

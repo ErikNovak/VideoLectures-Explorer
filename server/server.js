@@ -77,9 +77,9 @@ var queryData = function (data) {
                 query.categories = searchData.data;
             } else if (searchData.type == "language") {
                 query.language = searchData.data;
-            } else if (searchData.type == "views_min") {
+            } else if (searchData.type == "views-min") {
                 query.views = [{ $gt: parseInt(searchData.data) }];
-            } else if (searchData.type == "views_max") {
+            } else if (searchData.type == "views-max") {
                 if (query['views']) { query['views'] = query['views'].concat([{ $lt: parseInt(searchData.data) }]); } 
                 else { query.views = { $lt: parseInt(searchData.data) }; }
             } else {
@@ -300,6 +300,32 @@ app.post('/landscape-points', function (request, result) {
         }       
     }
 });
+
+function initialData() {
+    var query = queryData([{ type: "category", data: ["Artificial Intelligence"] }]);
+    // reset and update the feature space
+    ftr.clear(); ftr.updateRecords(query);
+    // extract the features and generate the points
+    var featureMatrix = ftr.extractSparseMatrix(query);
+    // set the parameters and make the async functions roll out
+    var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
+    var points = helper.getPoints(query, featureMatrix, params);
+    return points;
+}
+
+var initialPoints = initialData();
+app.get('/initial-landscape-points', function (request, response) {
+    result.send({
+        searchwords: [
+            {
+                type: "category", 
+                data: ["Artificial Intelligence"]
+            }
+        ], 
+        points: initialPoints
+    });
+})
+
 
 
 /******************************************
