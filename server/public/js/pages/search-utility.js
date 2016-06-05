@@ -305,5 +305,5 @@ function searchInfo(search) {
  */
 $(document).ready(function () {
     fillAutocomplete();
-    initialSearch();
+    //initialSearch();
 });

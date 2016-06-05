@@ -160,6 +160,25 @@ app.post('/landscape-points', function (request, result) {
         result.send({ error: "No data found!" });
         return;
     }
+    // if there is only one point
+    if (search.length == 1) {
+        var points = [];
+        points.push({
+            x: 0.5, 
+            y: 0.5, 
+            title:        search[0].title,
+            author:       search[0].author,
+            organization: search[0].organization,
+            language:     search[0].language,
+            categories:   search[0].categories != null ? search[0].categories.toString() : null,
+            published:    search[0].published,
+            duration:     search[0].duration,
+            views:        search[0].views,
+            description:  search[0].description
+        });
+        result.send({ "searchwords": sentData.data, "points": points });
+    }
+
     // reset and update the feature space
     ftr.clear(); ftr.updateRecords(search);
     // extract the features and generate the points
@@ -313,7 +332,7 @@ function initialData() {
     return points;
 }
 
-var initialPoints = initialData();
+//var initialPoints = initialData();
 app.get('/initial-landscape-points', function (request, response) {
     response.send({
         searchwords: [

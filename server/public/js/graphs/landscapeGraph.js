@@ -360,6 +360,7 @@ function landscapeGraph(_options) {
                          .attr("y", function (d) { 
                              return yScale(d.y);
                          })
+                         .attr("z-index", 50)
                          .attr("opacity", 0)
                          .transition().duration(1000)
                          .attr("opacity", 1);
