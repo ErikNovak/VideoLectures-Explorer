@@ -11,7 +11,7 @@ var qm = require('qminer');
   * @returns {object} The json objexct, where json.min is the
   * minimal value and json.max is the maximal value of vec.
   */  
- var getMinMax = function (vec) {
+function getMinMax (vec) {
     var sorted = vec.sort();
     var min = sorted.at(0);
     var max = sorted.at(sorted.length - 1);
@@ -26,7 +26,7 @@ var qm = require('qminer');
  * returns the value between 0 and 1, based on the minimal and
  * maximal value of the vector.
  */ 
-exports.createLinearFunction = function (vec) {
+function createLinearFunction (vec) {
     var m = getMinMax(vec);
     if (m.min == m.max) {
         return function (t) { return 0.5; }
@@ -36,6 +36,7 @@ exports.createLinearFunction = function (vec) {
         };
     }
 }
+exports.createLinearFunction = createLinearFunction;
 
 /**
  * Calculates the svd of the feature matrix using the async function.
@@ -108,8 +109,8 @@ exports.getPoints = function (query, matrix, params) {
     
     // create the propper point format and send it to client
     // the functions that puts the points into a unit square
-    var xCoord = helper.createLinearFunction(pointStorage.getCol(0));
-    var yCoord = helper.createLinearFunction(pointStorage.getCol(1));
+    var xCoord = createLinearFunction(pointStorage.getCol(0));
+    var yCoord = createLinearFunction(pointStorage.getCol(1));
     // generate an array of coordinates
     var points = [];
     for (var pointN = 0; pointN < pointStorage.rows; pointN++) {
