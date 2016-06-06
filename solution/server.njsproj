@@ -36,8 +36,11 @@
     <Compile Include="public\js\graphs\landscapeConstruct.js" />
     <Compile Include="public\js\graphs\landscapeGraph.js" />
     <Compile Include="public\js\graphs\waitAnimation.js" />
+    <Compile Include="public\js\pages\initial-search-and-autocomplete.js" />
     <Compile Include="public\js\pages\search-utility.js" />
     <Compile Include="server.js" />
+    <Compile Include="foreverRun.js" />
+    <Compile Include="service.js" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="data\autocomplete\authors.txt" />
@@ -46,10 +49,12 @@
     <Content Include="data\database\schema.json" />
     <Content Include="data\database\videolectures-20150410.csv" />
     <Content Include="package.json" />
+    <Content Include="public\css\pages\404.css" />
     <Content Include="public\css\pages\index.css" />
     <Content Include="public\css\pages\landscape.css" />
     <Content Include="public\css\pages\navbar.css" />
     <Content Include="public\css\pages\searchOptions.css" />
+    <Content Include="public\html\404.html" />
     <Content Include="public\html\index.html" />
     <Content Include="README.md" />
   </ItemGroup>

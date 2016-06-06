@@ -25,6 +25,7 @@ build/Release
 
 # Dependency directory
 server/node_modules
+server/log
 
 # public files
 server/public/components

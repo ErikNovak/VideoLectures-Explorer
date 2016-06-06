@@ -2,12 +2,23 @@
  * Landscape visualization
  */
 
+@media screen and (min-width:1200px) {
+    #wait-container {
+        height: 800px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+        #wait-container {
+        height: 1200px;
+    }
+}
+
 #wait-container {
     position: absolute;
     top: -20px;
     left: 2px;
     width: calc(100% - 2px);
-    height: 800px;
     display: none;
     z-index: 200;
     margin-top:    40px;

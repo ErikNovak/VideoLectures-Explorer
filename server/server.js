@@ -9,21 +9,38 @@
 var express     = require('express'),
     bodyParser  = require('body-parser'),
     favicon     = require('serve-favicon'),
-    fs          = require('fs'),
-    path        = require('path');
+    path        = require('path')
 
-var app = express();
-var router = express.Router();
+// logger dependancies
+var FileStreamRotator = require('file-stream-rotator'),
+    morgan            = require('morgan'),
+    fs                = require('fs')
 
-// static folder
-app.use('/public', express.static(__dirname + '/public'));
 
-// data parsing
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
-app.use(favicon(path.join(__dirname, 'data', 'favicon', 'favicon.ico')));
 
-// router
+var app = express()
+
+// logger
+var logDirectory = path.join(__dirname, 'log')
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+// create a rotating write stream
+var accessLogStream = FileStreamRotator.getStream({
+    date_format: 'YYYY-MM-DD',
+    filename:    path.join(logDirectory, 'access-%DATE%.log'),
+    frequency:   'daily',
+    verbose:     false
+})
+
+var morganFormat = ':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:http-version" :response-time[3]ms :status :res[content-length]'
+app.use(morgan(morganFormat, { stream: accessLogStream }))
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
+app.use(favicon(path.join(__dirname, 'data', 'favicon', 'favicon.ico')))
+
+app.use('/public', express.static(__dirname + '/public'))
+
 
 // send the main page
 app.get('/', function (req, res) {

@@ -14,6 +14,10 @@
     width: 100%;
 }
 
+.bootstrap-tagsinput input {
+    width: 100% !important;
+}
+
 .basic-search-button {
     display: table-cell;
 }
@@ -23,7 +27,7 @@
 }
 
 /**************************************
- * Typeahed style
+ * Typeahead style
  */
 
 .tt-menu {
