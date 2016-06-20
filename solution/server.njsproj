@@ -39,8 +39,6 @@
     <Compile Include="public\js\pages\initial-search-and-autocomplete.js" />
     <Compile Include="public\js\pages\search-utility.js" />
     <Compile Include="server.js" />
-    <Compile Include="foreverRun.js" />
-    <Compile Include="service.js" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="data\autocomplete\authors.txt" />

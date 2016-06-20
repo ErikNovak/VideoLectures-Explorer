@@ -320,7 +320,7 @@ function landscapeGraph(_options) {
                 landmarks = landscapeBody.selectAll(".landmark")
                                          .data(landscapeData.landmarks);
             
-                landmarks.each(function (d) { d.width = this.getBBox().width; })
+                landmarks.each(function (d) { d.width = this.getBoundingClientRect().width; })
                          .attr("opacity", 0)
                          .attr("x", function (d) {
                               return xScale(d.x) - d.width / 2;
@@ -350,7 +350,7 @@ function landscapeGraph(_options) {
                          .attr("font-weight", "600")
                          .attr("font-family", "Helvetica, Arial, sans-serif")
                          .attr("pointer-events", "none")
-                         .each(function (d) { d.width = this.getBBox().width; })
+                         .each(function (d) { d.width = this.getBoundingClientRect().width; })
                          .attr("x", function (d) { 
                               return xScale(d.x) - d.width / 2;
                           })

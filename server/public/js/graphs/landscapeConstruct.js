@@ -175,12 +175,12 @@ var landmarkClass = {
         var DOMs = _tags;
         for (var ClustN = 0; ClustN < DOMs.length; ClustN++) {
             var currentClust = DOMs[ClustN];
-            var currentBox = currentClust.getBBox();
+            var currentBox = currentClust.getBoundingClientRect();
             for (var i = 0; i < visibles.length; i++) {
-                var visibleBox = visibles[i].getBBox();
+                var visibleBox = visibles[i].getBoundingClientRect();
                 // if the bounding boxes cover each other
-                if (Math.abs(currentBox.x - visibleBox.x) - addBorder <= Math.max(currentBox.width, visibleBox.width) && 
-                        Math.abs(currentBox.y - visibleBox.y) - addBorder <= Math.max(currentBox.height, visibleBox.height)) {
+                if (Math.abs(currentBox.left - visibleBox.left) - addBorder <= Math.max(currentBox.width, visibleBox.width) && 
+                        Math.abs(currentBox.top - visibleBox.top) - addBorder <= Math.max(currentBox.height, visibleBox.height)) {
                     $(currentClust).attr("class", $(currentClust).attr("class") + " hidden");
                     break;
                 }
