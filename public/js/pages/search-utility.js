@@ -1,13 +1,13 @@
 ﻿/**
- * Contains the functions used for searching and smooth 
+ * Contains the functions used for searching and smooth
  * animation transitions.
  */
 
 
 /**
- * Contains the formats for handling search variables. 
- * 
- */ 
+ * Contains the formats for handling search variables.
+ *
+ */
 var languageFormat = {
     abbrToFull : {
         sl: "slovene",
@@ -46,12 +46,12 @@ var languageFormat = {
 
 /**
  * Toggle the visibility of the advance options.
- */ 
+ */
 function toggleAdvancedOptions() {
     $("#advanced-options").slideToggle("slow");
 
     var toggleButton = $("#toggle-advanced-search-button");
-    
+
     if (toggleButton.attr("data-open") == "close") {
         toggleButton.attr("data-open", "open");
         $("#open-close-arrow").removeClass("glyphicon-chevron-right")
@@ -70,7 +70,7 @@ function toggleAdvancedOptions() {
 
 /**
  * Returns a sorted array of objects.
- */ 
+ */
 function sortedArray(json) {
     var array = [];
     var keys = Object.keys(json);
@@ -85,7 +85,7 @@ function sortedArray(json) {
 
 /**
  * Creates a string containing the categories and their frequency.
- */ 
+ */
 function stringify(array) {
     var text = "";
     for (var catN = 0; catN < array.length; catN++) {
@@ -120,12 +120,12 @@ function queryCategory(category) {
 //-------------------------------------
 
 function search(callback) {
-    
+
     // the arrays containing the keywords of different type
     var author       = [],
         organization = [],
         categories   = [];
-    
+
     // get and sort the input values of the basic search window
     var basic = $('#basic-search-input').tagsinput('items');
 
@@ -147,7 +147,7 @@ function search(callback) {
     organization = organization.concat($.map($('#organization-search-input').tagsinput('items'), function (tag) { return tag.name; }));
 
     var language = $('#language-search-dropdown').text().replace(/[\s]+/g, '');
-    
+
     var minViews = $("#views-min-search-input").val();
     var maxViews = $("#views-max-search-input").val();
 
@@ -156,42 +156,42 @@ function search(callback) {
     // authors
     if (author.length != 0) {
         search.push({
-            type: "author", 
+            type: "author",
             data: author
         });
     }
     // categories
     if (categories.length != 0) {
         search.push({
-            type: "category", 
+            type: "category",
             data: categories
         });
     }
     // organization
     if (organization.length != 0) {
         search.push({
-            type: "organization", 
+            type: "organization",
             data: organization
         });
     }
     // language
     if (language != 'all') {
         search.push({
-            type: "language", 
+            type: "language",
             data: languageFormat.fullToAbbr[language]
         });
     }
     // min views
     if (minViews != '') {
         search.push({
-            type: "views-min", 
+            type: "views-min",
             data: minViews
         });
     }
     // max views
     if (maxViews != '') {
         search.push({
-            type: "views-max", 
+            type: "views-max",
             data: maxViews
         });
     }
@@ -209,7 +209,7 @@ function search(callback) {
 function fillLandscape(value) {
     // run the wait animation
     wait.displayAnimation();
-    
+
     $.ajax({
         type: 'POST',
         url: '/landscape-points',
@@ -233,7 +233,7 @@ function fillLandscape(value) {
 function searchInfo(search) {
     // remove the previous info
     $(".info").empty();
-    
+
     // add the search words
     var searchwords = search.searchwords;
     for (var wordN = 0; wordN < searchwords.length; wordN++) {
@@ -274,7 +274,7 @@ function searchInfo(search) {
         views += lecture.views;
         // get the categories
         if (lecture.categories) {
-            var categories = lecture.categories.split(/,[ ]*/g);
+            var categories = lecture.categories;
             for (catN = 0; catN < categories.length; catN++) {
                 if (cat[categories[catN]]) {
                     cat[categories[catN]] += 1;
@@ -295,13 +295,13 @@ function searchInfo(search) {
 //-------------------------------------
 
 /**
- * Initialized at the construction point of the window. 
- * It constructs the autocomplete list for the search 
+ * Initialized at the construction point of the window.
+ * It constructs the autocomplete list for the search
  * options, where the selected keyword becomes a tag.
  * Using:
  * Typeahead: http://twitter.github.io/typeahead.js/
  * Bootstrap Tags Input: http://bootstrap-tagsinput.github.io/bootstrap-tagsinput/examples/
- * 
+ *
  */
 $(document).ready(function () {
     fillAutocomplete();

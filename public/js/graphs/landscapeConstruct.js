@@ -1,7 +1,7 @@
 ﻿/**
- * Initializes the landscape graph and the wait 
+ * Initializes the landscape graph and the wait
  * container.
- */ 
+ */
 
 //-------------------------------------
 // Tooltip class
@@ -9,7 +9,7 @@
 var tooltipClass = {
     /**
      * Additional data, the date of the latest/used database.
-     */ 
+     */
     databaseDate : "16.02.2016",
 
     /**
@@ -17,7 +17,7 @@ var tooltipClass = {
      * @param {object} data - The point object containing the info of the lecture.
      * @returns {string} The html string containing the info of the data. It
      * is used for the toolbox info, when hovering over a point.
-     */ 
+     */
     CreateText : function (data) {
         var title = data.title;
         var author = data.author ? data.author : "not-found";
@@ -26,12 +26,12 @@ var tooltipClass = {
         var text = "<b>Lecture title:</b> " + title + "<br>";
         text += "<b>Presenter:</b> " + author + "<br>";
         text += "<b>Organization:</b> " + organization + "<br><br>";
-        
+
         if (data.description) {
             var description = tooltipClass.getDescription(data.description);
             text += "<b>Description: </b>" + description + "<br><br>";
         }
-        
+
         // lecture language
         var language = languageFormat.abbrToFull[data.language];
         text += "The lecture is in " + language + ". ";
@@ -40,7 +40,7 @@ var tooltipClass = {
             var num = data.categories.indexOf(',') == -1;
             var categories = num ? "category" : "categories";
             var timeWas = num ? "was" : "were";
-            text += "The main " + categories + " of the lecture " + 
+            text += "The main " + categories + " of the lecture " +
                     timeWas + " <b>" + data.categories + "</b>. ";
         }
         // published and duration
@@ -49,18 +49,18 @@ var tooltipClass = {
         text += "It was published in " + date + " and it's duration is " +
         time + ". There have been <b>" + data.views +
         "</b> views until " + tooltipClass.databaseDate + ". ";
-        
+
         return text;
     },
 
     /**
-     * Converts the miliseconds to time format. 
+     * Converts the miliseconds to time format.
      * @param {string} duration - The duration in miliseconds.
      * @returns {string} The representation hh:mm:ss of duration.
-     */ 
+     */
     getTime: function (duration) {
         // get the duration
-        var time = '', 
+        var time = '',
             miliseconds = parseInt(duration);
         // get hours
         var hours = Math.floor(miliseconds / 3600000);
@@ -81,9 +81,9 @@ var tooltipClass = {
 
     /**
      *  Helper function for description handling.
-     *  It cuts the description if it's too long. It finds the next dot 
+     *  It cuts the description if it's too long. It finds the next dot
      *  after the first 200 characters and returns everything in between.
-     */ 
+     */
     getDescription : function (str) {
         var getDot = str.indexOf('.', 300);
         var desc = getDot != -1 ? str.substr(0, getDot + 1) + '...' : str;
@@ -97,16 +97,16 @@ var tooltipClass = {
 var landmarkClass = {
     // max number of landmarks
     numberOfLandmarks: 400,
-    
+
     /**
      * Sets the text for the landmark.
-     */ 
+     */
     setText: function (points) {
         // get the frequency of the categories
         var landmarkFreq = {};
         for (var MatN = 0; MatN < points.length; MatN++) {
             if (!points[MatN].categories) { continue; }
-            var categories = points[MatN].categories.split(/,[ ]*/g);
+            var categories = points[MatN].categories;
             for (var KeyN = 0; KeyN < categories.length; KeyN++) {
                 if (landmarkFreq[categories[KeyN]] != null) {
                     landmarkFreq[categories[KeyN]] += 1;
@@ -123,10 +123,10 @@ var landmarkClass = {
     /**
      * Get the random tag from the json object containing the key: tagName
      * and value: name frequency, based on a dice roll and it's distribution.
-     * @param {Object} json - Contains the key-values of the names and their 
+     * @param {Object} json - Contains the key-values of the names and their
      * frequency.
      * @returns {String} The chosen name.
-     */ 
+     */
     getName : function (json) {
         // create an array of key-values
         var ArrayOfCategories = [];
@@ -146,10 +146,10 @@ var landmarkClass = {
             }
         }
     },
-    
+
     /**
      * Shows/hides the landmarks on the landscape.
-     */ 
+     */
     toggleLandmarks : function () {
         var tick = $("#landmarks-check").is(':checked');
         var landmarks = d3.selectAll(".landmark");
@@ -163,9 +163,9 @@ var landmarkClass = {
 
     /**
      * Sets the visibility of the landmark tags. If two are covering
-     * each other, the younger one is hidden.    
-     * @param {object} _tags - The landmark tags. 
-     */ 
+     * each other, the younger one is hidden.
+     * @param {object} _tags - The landmark tags.
+     */
     landmarksVisibility : function (_tags) {
         // create additional cluster border control
         var addBorder = 10;
@@ -179,7 +179,7 @@ var landmarkClass = {
             for (var i = 0; i < visibles.length; i++) {
                 var visibleBox = visibles[i].getBoundingClientRect();
                 // if the bounding boxes cover each other
-                if (Math.abs(currentBox.left - visibleBox.left) - addBorder <= Math.max(currentBox.width, visibleBox.width) && 
+                if (Math.abs(currentBox.left - visibleBox.left) - addBorder <= Math.max(currentBox.width, visibleBox.width) &&
                         Math.abs(currentBox.top - visibleBox.top) - addBorder <= Math.max(currentBox.height, visibleBox.height)) {
                     $(currentClust).attr("class", $(currentClust).attr("class") + " hidden");
                     break;
@@ -192,8 +192,8 @@ var landmarkClass = {
 }
 
 /**
- * Adds the functionality of the landscape tickbox 
- */ 
+ * Adds the functionality of the landscape tickbox
+ */
 $("#landmarks-check").on('click', landmarkClass.toggleLandmarks);
 
 
@@ -210,4 +210,3 @@ var landscape = new landscapeGraph({
 var wait = new waitAnimation({
     containerName: "#wait-container"
 });
-

@@ -1,16 +1,16 @@
 ﻿/**
  * Contains the functions for formating the points gained
  * by Multidimensional Scaling.
- */ 
+ */
 var qm = require('qminer');
 
 /**
-  * Gets the minimum and maximum values of the vector. 
-  * @param {module:la.Vector} vec - The vector from which we 
+  * Gets the minimum and maximum values of the vector.
+  * @param {module:la.Vector} vec - The vector from which we
   * compute the minimum and maximum values.
   * @returns {object} The json objexct, where json.min is the
   * minimal value and json.max is the maximal value of vec.
-  */  
+  */
 function getMinMax (vec) {
     var sorted = vec.sort();
     var min = sorted.at(0);
@@ -25,7 +25,7 @@ function getMinMax (vec) {
  * @returns {function} The function, that takes the value t and
  * returns the value between 0 and 1, based on the minimal and
  * maximal value of the vector.
- */ 
+ */
 function createLinearFunction (vec) {
     var m = getMinMax(vec);
     if (m.min == m.max) {
@@ -39,6 +39,62 @@ function createLinearFunction (vec) {
 exports.createLinearFunction = createLinearFunction;
 
 /**
+ * Creates an array of points enriched with the lectures data.
+ * @param  {module:la.Matrix} pointsMatrix - The points coordinates from MDS.
+ * @param  {module:qm.RecordSet} query     - The query data.
+ * @return {Array.<object>} The object data used for the landscape.
+ */
+function fillPointsArray(pointsMatrix, query) {
+    var storage = [];
+
+    // create the propper point format and send it to client
+    // the functions that puts the points into a unit square
+    var xCoord = createLinearFunction(pointsMatrix.getCol(0));
+    var yCoord = createLinearFunction(pointsMatrix.getCol(1));
+    // generate an array of coordinates
+    for (var pointN = 0; pointN < pointsMatrix.rows; pointN++) {
+        var categories = [].concat.apply([], query[pointN].categories.map(function (rec) {
+            return rec.path.toArray()
+        }));
+        var presenters = null;
+        if (query[pointN].presenters.length != 0) {
+            presenters = query[pointN].presenters.map(function (rec) {
+                return rec.name
+            });
+        }
+        var organization = null;
+        if (query[pointN].presenters.length != 0) {
+            var workPlaces = [].concat.apply([], query[pointN].presenters.map(function (rec) {
+                return rec.worksAt.map(function (rec2) {
+                    return rec2.name;
+                })
+            }));
+            for (var WorkN = 0; WorkN < workPlaces.length; WorkN++) {
+                if (workPlaces[WorkN] != null) {
+                    organization = workPlaces[WorkN];
+                    break;
+                }
+            }
+        }
+        storage.push({
+            x: xCoord(pointsMatrix.at(pointN, 0)),
+            y: yCoord(pointsMatrix.at(pointN, 1)),
+            title:        query[pointN].title,
+            author:       presenters,
+            organization: organization,
+            language:     query[pointN].language,
+            categories:   query[pointN].categories != null ? categories : null,
+            published:    query[pointN].recorded,
+            duration:     query[pointN].duration,
+            views:        query[pointN].views,
+            description:  query[pointN].description
+        });
+    }
+    return storage;
+}
+exports.fillPointsArray = fillPointsArray;
+
+/**
  * Calculates the svd of the feature matrix using the async function.
  * @param {module:la.Matrix} matrix - The feature matrix.
  * @param {object} params - The parameters for calculation.
@@ -50,13 +106,13 @@ exports.getPoints = function (query, matrix, params) {
         denseMatrix = matrix.full();
         var numOfSingVal = Math.min(denseMatrix.rows, denseMatrix.cols);
         SVD = qm.la.svd(denseMatrix, numOfSingVal, { iter: params.iter });
-    } 
+    }
     // large matrices
     else {
         var numOfSingVal = Math.min(matrix.cols, params.clusterN);
         var KMeans = new qm.analytics.KMeans({
-            iter: params.iter, 
-            k: numOfSingVal, 
+            iter: params.iter,
+            k: numOfSingVal,
             distanceType: "Cos"
         });
         KMeans.fit(matrix);
@@ -64,7 +120,7 @@ exports.getPoints = function (query, matrix, params) {
         SVD = qm.la.svd(denseMatrix, params.clusterN, { iter: params.iter });
     }
     // calculating for mds
-    var singularValues = SVD.s, 
+    var singularValues = SVD.s,
         numberOfSingVal = 0;
     var singValSum = singularValues.sum();
     for (var partN = 0; partN < denseMatrix.cols; partN++) {
@@ -82,7 +138,7 @@ exports.getPoints = function (query, matrix, params) {
 
     // calculate the coordinates of the lectures
     var coordinateMatrix = MDS.fitTransform(V);
-    
+
     // calculating the points
     var pointStorage = new qm.la.Matrix({ rows: matrix.cols, cols: 2 });
     // get the original matrix and normalize it
@@ -96,7 +152,7 @@ exports.getPoints = function (query, matrix, params) {
         var sortedVector = columnVector.sortPerm(false);
         var distVector = sortedVector.vec.subVec(qm.la.rangeVec(0, convexNumber - 1));
         var indexVector = sortedVector.perm;
-        
+
         // create the article point coordinates
         var pt = new qm.la.Vector([0, 0]);
         var totalDistance = distVector.sum();
@@ -106,27 +162,6 @@ exports.getPoints = function (query, matrix, params) {
         }
         pointStorage.setRow(ColN, pt);
     }
-    
-    // create the propper point format and send it to client
-    // the functions that puts the points into a unit square
-    var xCoord = createLinearFunction(pointStorage.getCol(0));
-    var yCoord = createLinearFunction(pointStorage.getCol(1));
-    // generate an array of coordinates
-    var points = [];
-    for (var pointN = 0; pointN < pointStorage.rows; pointN++) {
-        points.push({
-            x: xCoord(pointStorage.at(pointN, 0)), 
-            y: yCoord(pointStorage.at(pointN, 1)), 
-            title:        query[pointN].title,
-            author:       query[pointN].author,
-            organization: query[pointN].organization,
-            language:     query[pointN].language,
-            categories:   query[pointN].categories != null ? query[pointN].categories.toString() : null,
-            published:    query[pointN].published,
-            duration:     query[pointN].duration,
-            views:        query[pointN].views,
-            description:  query[pointN].description
-        });
-    }
-    return points;
+
+    return fillPointsArray(pointStorage, query);
 }
