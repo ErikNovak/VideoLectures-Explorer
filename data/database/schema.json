@@ -1,6 +1,6 @@
 ﻿[
     {
-        "name": "Lectures",
+        "name": "Categories",
         "fields": [
             {
                 "name": "index",
@@ -12,45 +12,11 @@
                 "type": "string"
             },
             {
-                "name": "author",
-                "type": "string"
+                "name": "path",
+                "type": "string_v"
             },
             {
-                "name": "gender",
-                "type": "string"
-            },
-            {
-                "name": "organization",
-                "type": "string",
-                "null": true
-            },
-            {
-                "name": "language",
-                "type": "string",
-                "null": true
-            },
-            {
-                "name": "published",
-                "type": "datetime",
-                "null": true
-            },
-            {
-                "name": "duration",
-                "type": "int",
-                "null": true
-            },
-            {
-                "name": "views",
-                "type": "int",
-                "null": true
-            },
-            {
-                "name": "categories",
-                "type": "string_v",
-                "null": true
-            },
-            {
-                "name": "keywords",
+                "name": "wiki",
                 "type": "string",
                 "null": true
             },
@@ -60,38 +26,214 @@
                 "null": true
             }
         ],
-        "keys": [
+        "joins": [
             {
-                "field": "author",
-                "type": "value"
+                "name":    "lectures",
+                "type":    "index",
+                "store":   "Lectures",
+                "inverse": "categories"
             },
             {
-                "field": "organization",
-                "type": "value"
+                "name":    "parent",
+                "type":    "field",
+                "store":   "Categories"
+            }
+        ],
+        "keys": [
+            {
+                "field": "title",
+                "type":  "value"
+            }
+        ]
+    },
+
+
+
+    {
+        "name": "Authors",
+        "fields": [
+            {
+                "name": "index",
+                "type": "string"
+            },
+            {
+                "name": "name",
+                "type": "string",
+                "primary": true
+            },
+            {
+                "name": "title",
+                "type": "string",
+                "null": true
+            },
+            {
+                "name": "gender",
+                "type": "string",
+                "null": true
+            },
+            {
+                "name": "slug",
+                "type": "string",
+                "null": true
+            }
+        ],
+        "joins": [
+            {
+                "name":    "worksAt",
+                "type":    "index",
+                "store":   "Organizations",
+                "inverse": "hasWorkers"
+            },
+            {
+                "name":    "hasPresented",
+                "type":    "index",
+                "store":   "Lectures",
+                "inverse": "presenters"
+            }
+        ],
+        "keys": [
+            {
+                "field": "name",
+                "type":  "value"
+            }
+        ]
+    },
+
+
+
+    {
+        "name": "Organizations",
+        "fields": [
+            {
+                "name": "index",
+                "type": "string",
+                "primary": true
+            },
+            {
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "name": "city",
+                "type": "string",
+                "null": true
+            },
+            {
+                "name": "country",
+                "type": "string",
+                "null": true
+            }
+        ],
+        "joins": [
+            {
+                "name":    "hasWorkers",
+                "type":    "index",
+                "store":   "Authors",
+                "inverse": "worksAt"
+            }
+        ],
+        "keys": [
+            {
+                "field": "name",
+                "type":  "value"
+            },
+            {
+                "field": "city",
+                "type":  "value"
+            },
+            {
+                "field": "country",
+                "type":  "value"
+            }
+        ]
+    },
+
+
+
+    {
+        "name": "Lectures",
+        "fields": [
+            {
+                "name": "index",
+                "type": "string",
+                "primary": true
+            },
+            {
+                "name": "slug",
+                "type": "string"
+            },
+            {
+                "name": "recorded",
+                "type": "datetime",
+                "null": true
+            },
+            {
+                "name": "type",
+                "type": "string"
+            },
+            {
+                "name": "title",
+                "type": "string"
+            },
+            {
+                "name": "description",
+                "type": "string",
+                "null": true
+            },
+            {
+                "name": "language",
+                "type": "string"
+            },
+            {
+                "name": "duration",
+                "type": "float",
+                "null": true
+            },
+            {
+                "name": "views",
+                "type": "int",
+                "null": true
+            }
+        ],
+        "joins": [
+            {
+                "name":    "presenters",
+                "type":    "index",
+                "store":   "Authors",
+                "inverse": "hasPresented"
+            },
+            {
+                "name":    "categories",
+                "type":    "index",
+                "store":   "Categories",
+                "inverse": "lectures"
+            },
+            {
+                "name":    "parent",
+                "type":    "field",
+                "store":   "Lectures"
+            }
+        ],
+        "keys": [
+            {
+                "field": "type",
+                "type":  "value"
             },
             {
                 "field": "language",
-                "type": "value"
+                "type":  "value"
             },
             {
-                "field": "categories",
-                "type": "value"
-            },
-            {
-                "field": "views",
-                "type": "linear"
-            },
-            {
-                "field": "gender",
-                "type": "value"
+                "field": "recorded",
+                "type":  "value"
             },
             {
                 "field": "duration",
-                "type": "linear"
+                "type":  "linear"
             },
             {
-                "field": "published",
-                "type": "value"
+                "field": "views",
+                "type":  "linear"
             }
         ]
     }
