@@ -9,18 +9,18 @@
 var express     = require('express'),
     bodyParser  = require('body-parser'),
     favicon     = require('serve-favicon'),
-    path        = require('path')
+    path        = require('path');
 
 // logger dependancies
 var FileStreamRotator = require('file-stream-rotator'),
     morgan            = require('morgan'),
     fs                = require('fs');
 
-var app = express()
+var app = express();
 
 // logger
-var logDirectory = path.join(__dirname, 'log')
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+var logDirectory = path.join(__dirname, 'log');
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // create a rotating write stream
 var accessLogStream = FileStreamRotator.getStream({
@@ -28,16 +28,17 @@ var accessLogStream = FileStreamRotator.getStream({
     filename:    path.join(logDirectory, 'access-%DATE%.log'),
     frequency:   'daily',
     verbose:     false
-})
+});
 
-var morganFormat = ':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:http-version" :response-time[3]ms :status :res[content-length]'
-app.use(morgan(morganFormat, { stream: accessLogStream }))
+var morganFormat = ':remote-addr - :remote-user [:date[iso]] ":method :url ' +
+                   'HTTP/:http-version" :response-time[3]ms :status :res[content-length]';
+app.use(morgan(morganFormat, { stream: accessLogStream }));
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
-app.use(favicon(path.join(__dirname, 'data', 'favicon', 'favicon.ico')))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(favicon(path.join(__dirname, 'data', 'favicon', 'favicon.ico')));
 
-app.use('/public', express.static(__dirname + '/public'))
+app.use('/public', express.static(__dirname + '/public'));
 
 // send the main page
 app.get('/', function (req, res) {
@@ -58,13 +59,13 @@ app.listen(PORT, function () {
 
 app.get('/404', function (req, res, next) {
     next();
-})
+});
 
 app.get('/403', function (req, res, next) {
     var err = new Error('not allowed!');
     err.status = 403;
     next(err);
-})
+});
 
 app.use(function (req, res, next) {
     res.status(404);

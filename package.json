@@ -12,14 +12,15 @@
     "start": "node server.js"
   },
   "config": {
-        "webport":  5055
+    "webport": 5055
   },
   "dependencies": {
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
     "fs": "0.0.2",
     "path": "^0.12.7",
-    "qminer": "^4.10.0",
+    "promise": "^7.1.1",
+    "qminer": "^6.0.0",
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {

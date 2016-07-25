@@ -5,7 +5,7 @@
  */
 
 var fs = require('fs');
-var qm = require('qminer');
+var qm = require('../../../../qminer');
 
 console.log('Reading raw files...');
 // get all the raw data
@@ -25,7 +25,7 @@ console.log('Files read');
 var base = new qm.Base({
     mode:       "createClean",
     schemaPath: "schema.json",
-    dbPath:     "lecturesTest/"
+    dbPath:     "lectures/"
 });
 
 // 1. import organizations
@@ -35,8 +35,8 @@ for (var OrgN = 0; OrgN < organizations.length; OrgN++) {
     var record = {
         "index":   organization.id.toString(),
         "name":    organization.name,
-        "city":    organization.city    != "" ? organization.city    : null,
-        "country": organization.country != "" ? organization.country : null
+        "city":    organization.city    != "" ? organization.city    : "",
+        "country": organization.country != "" ? organization.country : ""
     };
     base.store('Organizations').push(record);
 }
@@ -45,19 +45,26 @@ console.log("Number of organizations", base.store('Organizations').length);
 
 // 2. import categories
 console.log('Import categories...');
+var catHt = new qm.ht.StrStrMap();
 var categoryKeys = Object.keys(categories);
 for (var CatN = 0; CatN < categoryKeys.length; CatN++) {
     var catKey   = categoryKeys[CatN];
     var category = categories[catKey];
 
+    console.log(category.text.title)
+
     var record = {
         "index":       catKey.slice(1),
         "title":       category.text.title,
         "path":        category.url.split('/'),
-        "wiki":        category.refs      ? category.refs.wiki : null,
-        "description": category.text.desc ? category.text.desc : null
+        "wiki":        category.refs      ? category.refs.wiki : "",
+        "description": category.text.desc ? category.text.desc : ""
     }
     base.store('Categories').push(record);
+
+    if (!catHt.hasKey(category.text.title)) {
+        catHt.put(category.text.title, catKey.slice(1));
+    }
 }
 console.log('Categories imported');
 console.log("Number of categories", base.store('Categories').length);
@@ -86,9 +93,9 @@ for(var AutN = 0; AutN < authors.length; AutN++) {
     var record = {
         "index":  author.id.toString(),
         "name":   author.name,
-        "title":  author.title  != '' ? author.title  : null,
-        "gender": author.gender != '' ? author.gender : null,
-        "slug":   author.slug   != '' ? author.slug   : null,
+        "title":  author.title  != '' ? author.title  : "",
+        "gender": author.gender != '' ? author.gender : "",
+        "slug":   author.slug   != '' ? author.slug   : "",
     }
     base.store('Authors').push(record);
 
@@ -107,13 +114,18 @@ console.log('Import Lectures...');
 for(var LectN = 0; LectN < lectures.length; LectN++) {
     var lecture = lectures[LectN];
     var time    = Date.parse(lecture.time) > 0 ? lecture.time.slice(0, 19) : null;
+    var description = '';
+    if (lecture.description) {
+        description = lecture.description;
+    }
+
     var record = {
         "index":       lecture.id.toString(),
         "slug":        lecture.slug,
         "recorded":    time,
         "type":        lecture.type,
         "title":       lecture.title,
-        "description": lecture.description != '' ? lecture.description : null,
+        "description": description,
         "language":    lecture.language,
         "duration":    lecture.duration,
         "views":       lecture.view_ctr
@@ -150,9 +162,18 @@ for (var EdgeN = 0; EdgeN < edgeKeys.length; EdgeN++) {
         for (var CatN = 0; CatN < lectCategoryKeys.length; CatN++) {
             var catId = lectCategoryKeys[CatN].slice(1);
             if (base.store('Categories').recordByName(catId)) {
-                base.store('Lectures').recordByName(lectureId).$addJoin('categories',
-                    base.store('Categories').recordByName(catId)
-                );
+                var category = base.store('Categories').recordByName(catId);
+                // TODO: get all parent categories and push them as joins
+                var categoryPath = category.path;
+                for (var CatPathN = 0; CatPathN < categoryPath.length; CatPathN++) {
+                    var catPathName = categoryPath[CatPathN].replace(/_/g, " ");
+                    var catPathId   = catHt.get(catPathName);
+                    if (catPathId) {
+                        base.store('Lectures').recordByName(lectureId).$addJoin('categories',
+                            base.store('Categories').recordByName(catPathId)
+                        );
+                    }
+                }
             }
         }
     }

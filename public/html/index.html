@@ -6,24 +6,16 @@
 
     <link rel="stylesheet" type="text/css" href="public/components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="public/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
-    
+
     <link rel="stylesheet" type="text/css" href="public/css/pages/index.css" />
     <link rel="stylesheet" type="text/css" href="public/css/pages/navbar.css" />
     <link rel="stylesheet" type="text/css" href="public/css/pages/landscape.css" />
     <link rel="stylesheet" type="text/css" href="public/css/pages/searchOptions.css" />
 
+    <script type="text/javascript" src="public/js/google-analytics.js"></script>
+
     <title>Videolectures Learning Analytics | Landscape</title>
 
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-77301722-4', 'auto');
-      ga('send', 'pageview');
-    </script>
 </head>
 <body>
 
@@ -97,7 +89,7 @@
                             <span id="basic-search"><input type="text" class="form-control" id="basic-search-input" /></span>
                             <span class="basic-search-button ">
                                 <!-- search button -->
-                                <button class="btn btn-default pull-right" type="button" onclick="search(fillLandscape);">Search</button>
+                                <button class="btn btn-default pull-right" type="button" onclick="search();">Search</button>
                             </span>
                             <!-- additional options button -->
                             <span class="basic-search-button">
@@ -187,50 +179,39 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- wait container -->
-                    <div class="row">
+                    <div class="row" id="landscape-body-container">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="container-fluid">
-                                <div id="wait-container" class="center-block"></div>
-                            </div>
+                            <div class="container-fluid center-block" id="wait-container"></div>
                         </div>
 
                         <!-- landscape info container -->
-                        <div class="col-xs-12 col-ms-12 col-md-12 col-lg-4">
-                            <div class="container-fluid">
-                                <div id="query-info-container">
-                                    <div class="query-info">
-                                        <h4>Searchwords</h4>
-                                        <p>
-                                            <b>Presenter: </b>      <span class="info presenter-info"></span>     <br />
-                                            <b>Organization: </b>   <span class="info organization-info"></span>  <br />
-                                            <b>Categories: </b>     <span class="info categories-info"></span>    <br />
-                                            <b>Number of views: </b><span class="info views-info"></span>         <br />
-                                            <b>Language: </b>       <span class="info language-info"></span>      <br />
-                                        </p>
-                                        <h4 class="information">Information</h4>
-                                        <p>
-                                            <b>Number of found lectures: </b>   <span class="info num-of-lectures-info"></span>       <br />
-                                            <b>Total number of views: </b>      <span class="info num-of-views-info"></span>         <br />
-                                            <b>Categories with number of occurrences: </b>  <br /><span class="info categories-frequency-info"></span> <br />
-                                        </p>
-                                    </div>
+                        <div class="col-xs-12 col-ms-4 col-md-4 col-lg-4">
+                            <div id="query-info-container" class="container-fluid">
+                                <div class="query-info">
+                                    <h4>Searchwords</h4>
+                                    <p>
+                                        <b>Presenter: </b>      <span class="info presenter-info"></span>     <br />
+                                        <b>Organization: </b>   <span class="info organization-info"></span>  <br />
+                                        <b>Categories: </b>     <span class="info categories-info"></span>    <br />
+                                        <b>Number of views: </b><span class="info views-info"></span>         <br />
+                                        <b>Language: </b>       <span class="info language-info"></span>      <br />
+                                    </p>
+                                    <h4 class="information">Information</h4>
+                                    <p>
+                                        <b>Number of found lectures: </b>   <span class="info num-of-lectures-info"></span>       <br />
+                                        <b>Total number of views: </b>      <span class="info num-of-views-info"></span>         <br />
+                                        <b>Categories with number of occurrences: </b>  <br /><span class="info categories-frequency-info"></span> <br />
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- landscape graph container -->
-                        <div class="col-xs-12 col-ms-12 col-md-12 col-lg-8">
+                        <div class="col-xs-12 col-ms-8 col-md-8 col-lg-8">
                             <div class="container-fluid">
-
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <!-- landscape content -->
-                                        <div id="landscape-graph-container"></div>
-                                    </div>
-                                </div>
-
+                                <div id="landscape-graph-container"></div>
                                 <div class="graph-options">
                                     <!-- Graph options title -->
                                     <div class="row">
@@ -248,7 +229,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <!-- Footer -->
@@ -299,12 +279,17 @@
 
     <script type="text/javascript" src="public/components/d3/d3.min.js"></script>
 
+    <script type="text/javascript" src="public/js/pages/formats.js"></script>
+    <script type="text/javascript" src="public/js/pages/utility.js"></script>
+    <script type="text/javascript" src="public/js/pages/autocomplete.js"></script>
+    <script type="text/javascript" src="public/js/pages/search.js"></script>
+    <script type="text/javascript" src="public/js/pages/searchInfo-options.js"></script>
+
     <script type="text/javascript" src="public/js/graphs/waitAnimation.js"></script>
     <script type="text/javascript" src="public/js/graphs/landscapeGraph.js"></script>
     <script type="text/javascript" src="public/js/graphs/landscapeConstruct.js"></script>
 
-    <script type="text/javascript" src="public/js/pages/initial-search-and-autocomplete.js"></script>
-    <script type="text/javascript" src="public/js/pages/search-utility.js"></script>
+
 
 </body>
 </html>

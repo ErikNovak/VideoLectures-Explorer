@@ -6,15 +6,16 @@
  * ction of the landscape graph.
  */
 
-var express    = require('express'),
-    bodyParser = require('body-parser'),
-    favicon    = require('serve-favicon'),
-    path       = require('path');
+var express    = require('express');
+var bodyParser = require('body-parser');
+var favicon    = require('serve-favicon');
+var path       = require('path');
+var Promise    = require('promise');
 
 // logger dependancies
-var FileStreamRotator = require('file-stream-rotator'),
-    morgan            = require('morgan'),
-    fs                = require('fs');
+var FileStreamRotator = require('file-stream-rotator');
+var morgan            = require('morgan');
+var fs                = require('fs');
 
 var app = express();
 
@@ -39,25 +40,21 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(favicon(path.join(__dirname, 'data', 'favicon', 'favicon.ico')));
 
 app.use(function (req, res, next) {
-    // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5055');
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type');
-    // Pass to next layer of middleware
     next();
 });
 
 /**
  * The qminer module for the videolecture dataset.
  */
-var qm = require('qminer');
-var helper = require('./server_utility/helper.js');
+var qm             = require('../../qminer');
+var pointsCreation = require('./server_utility/pointsCreation.js');
 
 var base = new qm.Base({
     mode:   'openReadOnly',
-    dbPath: './data/database/lecturesTest/'
+    dbPath: './data/database/lectures/'
 });
 
 // ---------------------------------------
@@ -84,21 +81,21 @@ function queryDatabase(data) {
     var query = {};
 
     // search for lectures with categories
-    if (data.category) {
-        if(!data.category.names) throw "category.name must be specified";
+    if (data.categories) {
+        if(!data.categories.names) throw "categories.name must be specified";
         var categoryQuery = {
             $name: "lectures",
             $query: {
                 $from: "Categories",
-                title: data.category.names
+                title: data.categories.names
             }
         }
         query["$join"] = [categoryQuery];
     }
     // search for lectures with authors
     if (data.authors) {
-        if(!data.author.names) throw "authors.name must be specified";
-        for (var AuthorN = 0; AuthorN < data.author.name.length; AuthorN++) {
+        if(!data.authors.names) throw "authors.name must be specified";
+        for (var AuthorN = 0; AuthorN < data.authors.names.length; AuthorN++) {
             var authorsQuery = {
                 $name: "hasPresented",
                 $query: {
@@ -115,7 +112,7 @@ function queryDatabase(data) {
         }
     }
     // search for lectures with organization
-    if (data.organization) {
+    if (data.organizations) {
         var organizationQuery = {
             $name: "hasPresented",
             $query: {
@@ -127,17 +124,17 @@ function queryDatabase(data) {
                 }
             }
         };
-        if(data.organization.names) {
-            organizationQuery["$query"]["join"]["$query"]["name"] =
-                data.organization.names;
+        if(data.organizations.names) {
+            organizationQuery["$query"]["$join"]["$query"]["name"] =
+                data.organizations.names;
         }
-        if(data.organization.cities) {
-            organizationQuery["$query"]["join"]["$query"]["city"] =
-                data.organization.cities;
+        if(data.organizations.cities) {
+            organizationQuery["$query"]["$join"]["$query"]["city"] =
+                data.organizations.cities;
         }
-        if(data.organization.countries) {
-            organizationQuery["$query"]["join"]["$query"]["country"] =
-                data.organization.countries;
+        if(data.organizations.countries) {
+            organizationQuery["$query"]["$join"]["$query"]["country"] =
+                data.organizations.countries;
         }
         // if $join already exists
         if (query["$join"]) {
@@ -147,32 +144,32 @@ function queryDatabase(data) {
         }
     }
     // search for lectures by it's attributes
-    if (data.lecture) {
+    if (data.lectures) {
         if (!query["$join"]) query["$from"] = "Lectures";
 
-        if (data.lecture.type) {
-            query["type"] = data.lecture.type;
+        if (data.lectures.type) {
+            query["type"] = data.lectures.type;
         }
-        if (data.lecture.language) {
-            query["language"] = data.lecture.language;
+        if (data.lectures.language) {
+            query["language"] = data.lectures.language;
         }
-        if (data.lecture.duration) {
+        if (data.lectures.duration) {
             var lectureDurationQuery = {};
-            if (data.lecture.duration.min) {
-                lectureDurationQuery["$gt"] = data.lecture.duration.min;
+            if (data.lectures.duration.min) {
+                lectureDurationQuery["$gt"] = parseInt(data.lectures.duration.min);
             }
-            if (data.lecture.duration.max) {
-                lectureDurationQuery["$lt"] = data.lecture.duration.max;
+            if (data.lectures.duration.max) {
+                lectureDurationQuery["$lt"] = parseInt(data.lectures.duration.max);
             }
             query["duration"] = lectureDurationQuery;
         }
-        if(data.lecture.views) {
+        if(data.lectures.views) {
             var lectureViewsQuery = {};
-            if (data.lecture.views.min) {
-                lectureViewsQuery["$gt"] = data.lecture.views.min;
+            if (data.lectures.views.min) {
+                lectureViewsQuery["$gt"] = parseInt(data.lectures.views.min);
             }
-            if (data.lecture.views.max) {
-                lectureViewsQuery["$lt"] = data.lecture.views.max;
+            if (data.lectures.views.max) {
+                lectureViewsQuery["$lt"] = parseInt(data.lectures.views.max);
             }
             query["views"] = lectureViewsQuery;
         }
@@ -182,15 +179,21 @@ function queryDatabase(data) {
 }
 
 // The feature space used for point generation
-var ftr = new qm.FeatureSpace(base, [
+var ftrLectures = new qm.FeatureSpace(base, [
     { type: "text", source: "Lectures", field: "title",       tokenizer: { type: "unicode", stopwords: "en" } },
-    { type: "text", source: "Lectures", field: "description", tokenizer: { type: "unicode", stopwords: "en" } }
+    { type: "text", source: "Lectures", field: "description", tokenizer: { type: "unicode", stopwords: "en" } },
+    { type: "text", source: { store: "Lectures", join: "categories" }, field: "title", mode: "tokenized" },
+    { type: "text", source: { store: "Lectures", join: "parent" }, field: "title", tokenizer: { type: "unicode", stopwords: "en" } }
+]);
+
+// The feature space used for point generation
+var ftrCategories = new qm.FeatureSpace(base, [
+    { type: "text", source: { store: "Lectures", join: "categories" }, field: "title", mode: "tokenized" }
 ]);
 
 // ---------------------------------------
 // Query Function
 // ---------------------------------------
-
 
 /**
  * Get the JSON containing the landscape points info.
@@ -204,39 +207,159 @@ app.post('/landscape-points', function (request, result) {
         result.send({ error: "No data found!" });
         return;
     }
+
+    // reset and update the feature space
+    ftrLectures.clear(); ftrLectures.updateRecords(search);
+    ftrCategories.clear(); ftrCategories.updateRecords(search);
+    // extract the features and generate the points
+    var featMat = ftrLectures.extractSparseMatrix(search);
+    // set the parameters and make the async functions roll out
+    var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
+
     // if there is only one point
     if (search.length == 1) {
-        var points = [];
-        points.push({
-            x: 0.5,
-            y: 0.5,
-            title:        search[0].title,
-            author:       search[0].author,
-            organization: search[0].organization,
-            language:     search[0].language,
-            categories:   search[0].categories != null ? search[0].categories.toString() : null,
-            published:    search[0].published,
-            duration:     search[0].duration,
-            views:        search[0].views,
-            description:  search[0].description
-        });
+        var mat    = new qm.la.Matrix([[0.5, 0.5]]);
+        var points = pointsCreation.fillPointsArray(mat, search, ftrCategories);
         result.send({ "searchwords": sentData.data, "points": points });
         return;
     }
+    // TODO: Make the Promises work
 
-    // reset and update the feature space
-    ftr.clear(); ftr.updateRecords(search);
-    // extract the features and generate the points
-    var featureMatrix = ftr.extractSparseMatrix(search);
-    // set the parameters and make the async functions roll out
-    var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
+    // ---------------------------------------------
+    // Part of the promise
+    // ---------------------------------------------
+
+    // // makes the promises for the functions
+    //
+    // // the common variables
+    // let denseMat;
+    // function calculatingKMeans(mat, params) {
+    //     return new Promise(function (resolve, reject) {
+    //         console.log("Calculating KMeans");
+    //         let singVal = Math.min(mat.cols, params.clusterN);
+    //         let kmeans = new qm.analytics.KMeans({
+    //             iter:         params.iter,
+    //             k:            singVal,
+    //             distanceType: "Cos"
+    //         });
+    //         kmeans.fitAsync(mat, function (err) {
+    //             if (err) reject(err);
+    //             else resolve(kmeans);
+    //         });
+    //     });
+    // }
+    //
+    // function calculateSVD(mat, params) {
+    //     return new Promise(function (resolve, reject) {
+    //         console.log("Calculating SVD");
+    //         // small queries
+    //         if (mat.cols <= params.docTresh) {
+    //             denseMat = mat.full();
+    //             let singVal = Math.min(denseMat.rows, denseMat.cols);
+    //             console.log("Inside SVD promise")
+    //             qm.la.svdAsync(denseMat, singVal, { iter: params.iter }, function (err, svd) {
+    //                 console.log("Calculated SVD")
+    //                 if (err) reject(err);
+    //                 else resolve(svd);
+    //             });
+    //         }
+    //         // large queries
+    //         else {
+    //             calculatingKMeans(mat, params).then(function (kmeans) {
+    //                 denseMat = kmeans.getModel().C;
+    //                 // return the promise
+    //                 console.log("Inside SVD promise")
+    //                 qm.la.svdAsync(denseMat, params.clusterN, { iter: params.iter }, function (err, svd) {
+    //                     console.log("Calculated SVD")
+    //                     if (err) reject(err);
+    //                     else resolve(svd);
+    //                 });
+    //             });
+    //         }
+    //     });
+    // }
+    //
+    // function calculateMDS(svd) {
+    //     return new Promise(function (resolve, reject) {
+    //         console.log("Calculating MDS");
+    //         let singVal    = svd.s,
+    //             numSingVal = singVal.length;
+    //         let singValSum = singVal.sum();
+    //         for (let singN = 0; singN < denseMat.cols; singN++) {
+    //             // the sum of the first singN singular values
+    //             let partSum = singVal.subVec(qm.la.rangeVec(0, singN)).sum();
+    //             // the percentage of the info must be greater than 80%
+    //             if (partSum / singValSum > 0.8) {
+    //                 numSingVal = singN;
+    //                 break;
+    //             }
+    //         }
+    //         V = svd.V.getColSubmatrix(qm.la.rangeVec(0, numSingVal - 1)).transpose();
+    //         let mdsParams = { maxStep: 3000, maxSecs: 2, minDiff: 1e-4, distType: 'Euclid' };
+    //         let mds = new qm.analytics.MDS(mdsParams);
+    //         // calculate the coordinates of the lectures
+    //         console.log("Inside MDS promise")
+    //         mds.fitTransformAsync(V, function (err, mdsMat) {
+    //             console.log("Calculated MDS")
+    //             if (err) reject(err);
+    //             else resolve(mdsMat);
+    //         });
+    //     });
+    // }
+    //
+    // function calculateAndSendPoints(mds) {
+    //     console.log("Calculating Points");
+    //     let pntStorage = new qm.la.Matrix({ rows: featMat.cols, cols: 2 });
+    //     // get the original matrix and normalize it
+    //     let normMat = featMat; normMat.normalizeCols();
+    //     // for each lecture get the distance to the clusters
+    //     let distMat = denseMat.multiplyT(normMat);
+    //     let conNum  = distMat.cols < params.convexN ? distMat.cols : params.convexN;
+    //     // get coordinates for each lecture
+    //     for (let ColN = 0; ColN < normMat.cols; ColN++) {
+    //         let colVec  = distMat.getCol(ColN);
+    //         let sortVec = colVec.sortPerm(false);
+    //         let distVec = sortVec.vec.subVec(qm.la.rangeVec(0, conNum - 1));
+    //         let idxVec  = sortVec.perm;
+    //         // create the article point coordinates
+    //         let pnt = new qm.la.Vector([0, 0]);
+    //         let totalDist = distVec.sum();
+    //         for (let ClustN = 0; ClustN < conNum; ClustN++) {
+    //             let cluster = mds.getRow(idxVec.at(ClustN));
+    //             pnt = pnt.plus(cluster.multiply(distVec.at(ClustN) / totalDist));
+    //         }
+    //         pntStorage.setRow(ColN, pnt);
+    //     }
+    //
+    //     let points = pointsCreation.fillPointsArray(pntStorage, search);
+    //     console.log("Sending points");
+    //     result.send({ "searchwords": sentData.data, "points": points });
+    // }
+
+
+
+
+
+    // ---------------------------------------------
+    // Part of the promise
+    // ---------------------------------------------
+
+    // // calculate and send the points
+    // calculateSVD(featMat, params).then(calculateMDS)
+    //                              .then(calculateAndSendPoints)
+    //                              .catch(function (reason) {
+    //         console.log(reason);
+    //         result.send({ error: "An error occur when calculating the points." });
+    //     }
+    // );
+    // // calculateAndSendPoints(featMat, params);
 
     /**
      * Calculates and sends the points to the client.
      * The function sequence:
      * SVD -> runMDS -> Coordinates
      */
-    SendPoints(featureMatrix, params);
+    SendPoints(featMat, params);
 
     /**
      * Calculates the svd of the feature matrix using the async function.
@@ -244,19 +367,19 @@ app.post('/landscape-points', function (request, result) {
      * @param {object} params - The parameters for calculation.
      */
     function SendPoints(matrix, params) {
-        var denseMatrix;
+        var denseMat;
         // small matrices
         if (matrix.cols <= params.docTresh) {
-            denseMatrix = matrix.full();
-            var numOfSingVal = Math.min(denseMatrix.rows, denseMatrix.cols);
-            qm.la.svdAsync(denseMatrix, numOfSingVal, { iter: params.iter }, runMDS);
+            denseMat = matrix.full();
+            var singVal = Math.min(denseMat.rows, denseMat.cols);
+            qm.la.svdAsync(denseMat, singVal, { iter: params.iter }, runMDS);
         }
         // large matrices
         else {
-            var numOfSingVal = Math.min(matrix.cols, params.clusterN);
+            var singVal = Math.min(matrix.cols, params.clusterN);
             var kmeans = new qm.analytics.KMeans({
-                iter: params.iter,
-                k: numOfSingVal,
+                iter:         params.iter,
+                k:            singVal,
                 distanceType: "Cos"
             });
             kmeans.fitAsync(matrix, function (err) {
@@ -265,8 +388,8 @@ app.post('/landscape-points', function (request, result) {
                     result.send({ error: "Error on the server side!" });
                     return;
                 }
-                denseMatrix = kmeans.getModel().C;
-                qm.la.svdAsync(denseMatrix, params.clusterN, { iter: params.iter }, runMDS);
+                denseMat = kmeans.getModel().C;
+                qm.la.svdAsync(denseMat, params.clusterN, { iter: params.iter }, runMDS);
             });
 
         }
@@ -284,19 +407,19 @@ app.post('/landscape-points', function (request, result) {
                 return;
             }
 
-            var singularValues = SVD.s,
-                numberOfSingVal = 0;
-            var singValSum = singularValues.sum();
-            for (var partN = 0; partN < denseMatrix.cols; partN++) {
+            var singVal    = SVD.s,
+                numSingVal = singVal.length;
+            var singValSum = singVal.sum();
+            for (var partN = 0; partN < denseMat.cols; partN++) {
                 // the sum of the first N singular values
-                var partSum = singularValues.subVec(qm.la.rangeVec(0, partN)).sum();
+                var partSum = singVal.subVec(qm.la.rangeVec(0, partN)).sum();
                 // if the info is greater than 80%
                 if (partSum / singValSum > 0.8) {
-                    numberOfSingVal = partN;
+                    numSingVal = partN;
                     break;
                 }
             }
-            V = SVD.V.getColSubmatrix(qm.la.rangeVec(0, numberOfSingVal - 1)).transpose();
+            V = SVD.V.getColSubmatrix(qm.la.rangeVec(0, numSingVal - 1)).transpose();
             var mdsParams = { maxStep: 3000, maxSecs: 2, minDiff: 1e-3, distType: 'Cos' };
             var MDS = new qm.analytics.MDS(mdsParams);
             // calculate the coordinates of the lectures
@@ -316,53 +439,57 @@ app.post('/landscape-points', function (request, result) {
                 result.send({ error: "Error on the server side!" });
                 return;
             }
-            var pointStorage = new qm.la.Matrix({ rows: matrix.cols, cols: 2 });
+            var pntStorage = new qm.la.Matrix({ rows: matrix.cols, cols: 2 });
             // get the original matrix and normalize it
-            var normalizedMatrix = matrix; normalizedMatrix.normalizeCols();
+            var normMat = matrix; normMat.normalizeCols();
             // for each lecture get the distance to the clusters
-            var distMatrix = denseMatrix.multiplyT(normalizedMatrix);
-            var convexNumber = distMatrix.cols < params.convexN ? distMatrix.cols : params.convexN;
+            var distMat   = denseMat.multiplyT(normMat);
+            var convexNum = distMat.cols < params.convexN ? distMat.cols : params.convexN;
             // get coordinates for each lecture
             for (var ColN = 0; ColN < matrix.cols; ColN++) {
-                var columnVector = distMatrix.getCol(ColN);
-                var sortedVector = columnVector.sortPerm(false);
-                var distVector   = sortedVector.vec.subVec(qm.la.rangeVec(0, convexNumber - 1));
-                var indexVector  = sortedVector.perm;
+                var colVec  = distMat.getCol(ColN);
+                var sortVec = colVec.sortPerm(false);
+                var distVec = sortVec.vec.subVec(qm.la.rangeVec(0, convexNum - 1));
+                var idxVec  = sortVec.perm;
 
                 // create the article point coordinates
-                var pt = new qm.la.Vector([0, 0]);
-                var totalDistance = distVector.sum();
-                for (var ClusterN = 0; ClusterN < convexNumber; ClusterN++) {
-                    var cluster = coordinateMatrix.getRow(indexVector.at(ClusterN));
-                    pt = pt.plus(cluster.multiply(distVector.at(ClusterN) / totalDistance));
+                var pnt = new qm.la.Vector([0, 0]);
+                var totalDist = distVec.sum();
+                for (var ClusterN = 0; ClusterN < convexNum; ClusterN++) {
+                    var cluster = coordinateMatrix.getRow(idxVec.at(ClusterN));
+                    pnt = pnt.plus(cluster.multiply(distVec.at(ClusterN) / totalDist));
                 }
-                pointStorage.setRow(ColN, pt);
+                pntStorage.setRow(ColN, pnt);
             }
 
-            var points = helper.fillPointsArray(pointStorage, search);
+            var points = pointsCreation.fillPointsArray(pntStorage, search, ftrCategories);
             result.send({ "searchwords": sentData.data, "points": points });
         }
-    }
+    };
+
 });
 
-
-
+/**
+ * Calculates the initial landscape points.
+ * @return {Array.<Object>} The objects used for the landscape visualization.
+ */
 function initialData() {
     var query = queryDatabase({
-        category: {
+        categories: {
             names: ["Artificial Intelligence"]
         }
     });
     // reset and update the feature space
-    ftr.clear(); ftr.updateRecords(query);
+    ftrLectures.clear();   ftrLectures.updateRecords(query);
+    ftrCategories.clear(); ftrCategories.updateRecords(query);
     // extract the features and generate the points
-    var featureMatrix = ftr.extractSparseMatrix(query);
+    var featureMatrix = ftrLectures.extractSparseMatrix(query);
+
     // set the parameters and make the async functions roll out
-    var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
-    var points = helper.getPoints(query, featureMatrix, params);
+    var params = { iter: 2, convexN: 3, clusterN: 400, docTresh: 200 };
+    var points = pointsCreation.getPoints(query, featureMatrix, params, ftrCategories);
     return points;
 }
-
 var initialPoints = initialData();
 
 // ---------------------------------------
@@ -375,18 +502,19 @@ var initialPoints = initialData();
 app.get('/initial-landscape-points', function (request, response) {
     response.send({
         searchwords: {
-            type: "category",
-            data: ["Artificial Intelligence"]
+            categories : {
+                names: ["Big Data"]
+            }
         },
         points: initialPoints
     });
 })
 
-
-/**
- * Sends the data for the input autocompletion.
- */
-app.get('/autocomplete', function (req, res) {
+// ----------------------------------------------
+// Autocomplete GET
+// ----------------------------------------------
+// TODO: add additional autocompletes EVENT, COUNTRY, CITY
+function createAutocompleteList() {
     // get all categories
     var categoriesFile = qm.fs.openRead('./data/autocomplete/categories.aut');
     var categories = [];
@@ -427,21 +555,28 @@ app.get('/autocomplete', function (req, res) {
         });
     }
 
-    // send the data to client
-    res.send({
+    return {
         authors:       authors,
         categories:    categories,
         organizations: organizations,
         languages:     languages
-    });
-});
+    };
+}
+var autocompleteLists = createAutocompleteList();
 
+/**
+ * Sends the data for the input autocompletion.
+ */
+app.get('/autocomplete', function (req, res) {
+    // send the data to client
+    res.send(autocompleteLists);
+});
 
 
 /**
  * Initialize the data server.
  */
-var PORT = 6052;
+const PORT = 6052;
 app.listen(PORT, function () {
     console.log('Videolectures Explorer | Data server on port ' + PORT);
 });

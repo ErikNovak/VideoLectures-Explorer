@@ -2,7 +2,7 @@
  * Contains the functions for formating the points gained
  * by Multidimensional Scaling.
  */
-var qm = require('qminer');
+var qm = require('../../../qminer');
 
 /**
   * Gets the minimum and maximum values of the vector.
@@ -44,18 +44,31 @@ exports.createLinearFunction = createLinearFunction;
  * @param  {module:qm.RecordSet} query     - The query data.
  * @return {Array.<object>} The object data used for the landscape.
  */
-function fillPointsArray(pointsMatrix, query) {
+function fillPointsArray(pointsMatrix, query, ftr) {
+    var featCategories = [];
+    for(var FeatN = 0; FeatN < ftr.dim; FeatN++) {
+        featCategories.push(ftr.getFeature(FeatN));
+    }
     var storage = [];
-
     // create the propper point format and send it to client
     // the functions that puts the points into a unit square
     var xCoord = createLinearFunction(pointsMatrix.getCol(0));
     var yCoord = createLinearFunction(pointsMatrix.getCol(1));
     // generate an array of coordinates
     for (var pointN = 0; pointN < pointsMatrix.rows; pointN++) {
-        var categories = [].concat.apply([], query[pointN].categories.map(function (rec) {
-            return rec.path.toArray()
-        }));
+        var uniqueCategories = null;
+        if (query[pointN].categories) {
+            var categories = [].concat.apply([], query[pointN].categories.map(function (rec) {
+                return rec.path.toArray()
+            }));
+            uniqueCategories = [];
+            for (var CatN = 0; CatN < categories.length; CatN++) {
+                categories[CatN] = categories[CatN].replace(/_/g, " ");
+                if (uniqueCategories.indexOf(categories[CatN]) === -1) {
+                    uniqueCategories.push(categories[CatN]);
+                }
+            };
+        }
         var presenters = null;
         if (query[pointN].presenters.length != 0) {
             presenters = query[pointN].presenters.map(function (rec) {
@@ -76,6 +89,11 @@ function fillPointsArray(pointsMatrix, query) {
                 }
             }
         }
+        var landmarkTags = [];
+        var landTfIdf = ftr.extractVector(query[pointN]);
+        for(var LandN = 1; LandN < ftr.dim; LandN++) {
+            landmarkTags.push([featCategories[LandN], landTfIdf[LandN]]);
+        }
         storage.push({
             x: xCoord(pointsMatrix.at(pointN, 0)),
             y: yCoord(pointsMatrix.at(pointN, 1)),
@@ -83,11 +101,12 @@ function fillPointsArray(pointsMatrix, query) {
             author:       presenters,
             organization: organization,
             language:     query[pointN].language,
-            categories:   query[pointN].categories != null ? categories : null,
+            categories:   query[pointN].categories != null ? uniqueCategories : null,
             published:    query[pointN].recorded,
             duration:     query[pointN].duration,
             views:        query[pointN].views,
-            description:  query[pointN].description
+            description:  query[pointN].description,
+            landmarkTags: landmarkTags
         });
     }
     return storage;
@@ -99,69 +118,69 @@ exports.fillPointsArray = fillPointsArray;
  * @param {module:la.Matrix} matrix - The feature matrix.
  * @param {object} params - The parameters for calculation.
  */
-exports.getPoints = function (query, matrix, params) {
-    var denseMatrix, SVD;
+exports.getPoints = function (query, matrix, params, ftr) {
+    var denseMat,
+        SVD;
     // small matrices
     if (matrix.cols <= params.docTresh) {
-        denseMatrix = matrix.full();
-        var numOfSingVal = Math.min(denseMatrix.rows, denseMatrix.cols);
-        SVD = qm.la.svd(denseMatrix, numOfSingVal, { iter: params.iter });
+        denseMat = matrix.full();
+        var singVal = Math.min(denseMat.rows, denseMat.cols);
+        SVD = qm.la.svd(denseMat, singVal, { iter: params.iter });
     }
     // large matrices
     else {
-        var numOfSingVal = Math.min(matrix.cols, params.clusterN);
-        var KMeans = new qm.analytics.KMeans({
-            iter: params.iter,
-            k: numOfSingVal,
-            distanceType: "Cos"
+        var singVal = Math.min(matrix.cols, params.clusterN);
+        var kmeans = new qm.analytics.KMeans({
+            iter:         params.iter,
+            k:            singVal,
+            distanceType: 'Cos'
         });
-        KMeans.fit(matrix);
-        denseMatrix = KMeans.getModel().C;
-        SVD = qm.la.svd(denseMatrix, params.clusterN, { iter: params.iter });
+        kmeans.fit(matrix);
+        denseMat = kmeans.getModel().C;
+        SVD = qm.la.svd(denseMat, params.clusterN, { iter: params.iter });
     }
     // calculating for mds
-    var singularValues = SVD.s,
-        numberOfSingVal = 0;
-    var singValSum = singularValues.sum();
-    for (var partN = 0; partN < denseMatrix.cols; partN++) {
+    var singVal    = SVD.s,
+        numSingVal = singVal.length;
+    var singValSum = singVal.sum();
+    for (var partN = 0; partN < denseMat.cols; partN++) {
         // the sum of the first N singular values
-        var partSum = singularValues.subVec(qm.la.rangeVec(0, partN)).sum();
+        var partSum = singVal.subVec(qm.la.rangeVec(0, partN)).sum();
         // if the info is greater than 80%
         if (partSum / singValSum > 0.8) {
-            numberOfSingVal = partN;
+            numSingVal = partN;
             break;
         }
     }
-    V = SVD.V.getColSubmatrix(qm.la.rangeVec(0, numberOfSingVal - 1)).transpose();
+    V = SVD.V.getColSubmatrix(qm.la.rangeVec(0, numSingVal - 1)).transpose();
     var mdsParams = { maxStep: 3000, maxSecs: 2, minDiff: 1e-3, distType: 'Cos' };
     var MDS = new qm.analytics.MDS(mdsParams);
 
     // calculate the coordinates of the lectures
-    var coordinateMatrix = MDS.fitTransform(V);
+    var coordMat = MDS.fitTransform(V);
 
     // calculating the points
-    var pointStorage = new qm.la.Matrix({ rows: matrix.cols, cols: 2 });
+    var pntStorage = new qm.la.Matrix({ rows: matrix.cols, cols: 2 });
     // get the original matrix and normalize it
-    var normalizedMatrix = matrix; normalizedMatrix.normalizeCols();
+    var normMat = matrix; normMat.normalizeCols();
     // for each lecture get the distance to the clusters
-    var distMatrix = denseMatrix.multiplyT(normalizedMatrix);
-    var convexNumber = distMatrix.cols < params.convexN ? distMatrix.cols : params.convexN;
+    var distMatrix = denseMat.multiplyT(normMat);
+    var convexNum  = distMatrix.cols < params.convexN ? distMatrix.cols : params.convexN;
     // get coordinates for each lecture
     for (var ColN = 0; ColN < matrix.cols; ColN++) {
-        var columnVector = distMatrix.getCol(ColN);
-        var sortedVector = columnVector.sortPerm(false);
-        var distVector = sortedVector.vec.subVec(qm.la.rangeVec(0, convexNumber - 1));
-        var indexVector = sortedVector.perm;
+        var colVec     = distMatrix.getCol(ColN);
+        var sortVec    = colVec.sortPerm(false);
+        var distVector = sortVec.vec.subVec(qm.la.rangeVec(0, convexNum - 1));
+        var idxVector  = sortVec.perm;
 
         // create the article point coordinates
-        var pt = new qm.la.Vector([0, 0]);
+        var pnt = new qm.la.Vector([0, 0]);
         var totalDistance = distVector.sum();
-        for (var ClusterN = 0; ClusterN < convexNumber; ClusterN++) {
-            var cluster = coordinateMatrix.getRow(indexVector.at(ClusterN));
-            pt = pt.plus(cluster.multiply(distVector.at(ClusterN) / totalDistance));
+        for (var ClusterN = 0; ClusterN < convexNum; ClusterN++) {
+            var cluster = coordMat.getRow(idxVector.at(ClusterN));
+            pnt = pnt.plus(cluster.multiply(distVector.at(ClusterN) / totalDistance));
         }
-        pointStorage.setRow(ColN, pt);
+        pntStorage.setRow(ColN, pnt);
     }
-
-    return fillPointsArray(pointStorage, query);
+    return fillPointsArray(pntStorage, query, ftr);
 }

@@ -220,10 +220,6 @@
                 "type":  "value"
             },
             {
-                "field": "language",
-                "type":  "value"
-            },
-            {
                 "field": "recorded",
                 "type":  "value"
             },

@@ -1,4 +1,11 @@
-﻿
+/**
+ * This file contains the function(s) for input autocompletion. 
+ */
+
+/**
+ * Gets the autocomplete lists and creates the autocomplete functionality
+ * for the inputs.
+ */
 function fillAutocomplete() {
     // get the autocomplete data
     $.ajax({
@@ -10,18 +17,17 @@ function fillAutocomplete() {
             var presenters = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: data.authors
+                local:          data.authors
             }); presenters.initialize();
 
             $("#author-search-input").tagsinput({
-                maxTags: 1,
                 itemValue: function (item) {
                     return item.name;
                 },
                 typeaheadjs: {
-                    name: "authors",
+                    name:       "authors",
                     displayKey: 'name',
-                    source: presenters.ttAdapter()
+                    source:     presenters.ttAdapter()
                 }
             });
 
@@ -29,7 +35,7 @@ function fillAutocomplete() {
             var categories = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: data.categories
+                local:          data.categories
             }); categories.initialize();
 
             $("#category-search-input").tagsinput({
@@ -37,9 +43,9 @@ function fillAutocomplete() {
                     return item.name
                 },
                 typeaheadjs: {
-                    name: "categories",
+                    name:       "categories",
                     displayKey: 'name',
-                    source: categories.ttAdapter()
+                    source:     categories.ttAdapter()
                 }
             });
 
@@ -47,7 +53,7 @@ function fillAutocomplete() {
             var organizations = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: data.organizations
+                local:          data.organizations
             }); organizations.initialize();
 
             $("#organization-search-input").tagsinput({
@@ -57,9 +63,9 @@ function fillAutocomplete() {
                     return item.name
                 },
                 typeaheadjs: {
-                    name: "organizations",
+                    name:       "organizations",
                     displayKey: 'name',
-                    source: organizations.ttAdapter()
+                    source:     organizations.ttAdapter()
                 }
             });
 
@@ -73,7 +79,7 @@ function fillAutocomplete() {
             var basic = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: all
+                local:          all
             }); basic.initialize();
 
             $('#basic-search-input').tagsinput({
@@ -82,17 +88,17 @@ function fillAutocomplete() {
                     return item.name
                 },
                 typeaheadjs: {
-                    name: "all",
+                    name:       "all",
                     displayKey: 'name',
-                    highlight: true,
-                    source: basic.ttAdapter()
+                    highlight:  true,
+                    source:     basic.ttAdapter()
                 }
             });
 
             // filling the language search dropdown
             var languages = data.languages;
             for (var langN = 0; langN < languages.length; langN++) {
-                $('.dropdown > ul').append('<li><a>' + languageFormat.abbrToFull[languages[langN].name] + '</a></li>');
+                $('.dropdown > ul').append('<li><a>' + formats.languages.abbrToFull[languages[langN].name] + '</a></li>');
             }
 
             /**
@@ -103,28 +109,6 @@ function fillAutocomplete() {
                     $('#language-search-dropdown').html($(this).text() + ' <span class="caret"></span>');
                 });
             });
-        }
-    });
-}
-
-function initialSearch() {
-    // run the wait animation
-    wait.displayAnimation();
-
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:6052/initial-landscape-points',
-        success: function (responseData) {
-            // if there is no query
-            if (responseData.error != null) {
-                $("#error-trigger").trigger("click");
-            } else {
-                searchInfo(responseData);
-                landscape.setData(responseData);
-                landmarkClass.toggleLandmarks();
-            }
-            // stop the wait animation
-            wait.stopAnimation();
         }
     });
 }
