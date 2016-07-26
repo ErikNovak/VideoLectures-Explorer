@@ -62,10 +62,11 @@
     opacity: 0.9;
 }
 
-#query-info-container {
+#query-info-container,
+#lecture-info-container {
     width:    100%;
     overflow: auto;
-    max-height: 700px;
+    max-height: 500px;
     position:   relative;
     margin:        auto;
     margin-top:    20px;
@@ -74,6 +75,10 @@
     border:       1px solid;
     border-color: lightgrey;
     background-color: white;
+}
+
+#lecture-info-container {
+    max-height: 180px;
 }
 
 .query-info h4 {

@@ -39,6 +39,8 @@ function queryCategory(category) {
     $("#author-search-input").tagsinput("removeAll");
     $("#category-search-input").tagsinput("removeAll");
     $("#organization-search-input").tagsinput("removeAll");
+    $("#city-search-input").tagsinput("removeAll");
+    $("#country-search-input").tagsinput("removeAll");
     $("#views-min-search").val("");
     $("#views-max-search").val("");
 
@@ -80,7 +82,15 @@ function search() {
     categories   = categories.concat($.map($('#category-search-input').tagsinput('items'), function (tag) { return tag.name; }));
     organization = organization.concat($.map($('#organization-search-input').tagsinput('items'), function (tag) { return tag.name; }));
 
-    var language = $('#language-search-dropdown').text().replace(/[\s]+/g, '');
+    var city = $('#city-search-input').tagsinput('items').map(function (tag) {
+        return tag.name;
+    });
+
+    var country = $('#country-search-input').tagsinput('items').map(function (tag) {
+        return formats.countries.fullToAbbr[tag.name.replace(/[\s,\-]+/g, '_')];
+    });
+
+    var language = $('#selected-language').text().replace(/[\s]+/g, '');
 
     var minViews = $("#views-min-search-input").val();
     var maxViews = $("#views-max-search-input").val();
@@ -101,8 +111,22 @@ function search() {
         data["organizations"] = {};
         data["organizations"]["names"] = organization;
     }
+    // city
+    if (city.length != 0) {
+        if (!data["organizations"]) {
+            data["organizations"] = {};
+        }
+        data["organizations"]["cities"] = city;
+    }
+    // country
+    if (country.length != 0) {
+        if (!data["organizations"]) {
+            data["organizations"] = {};
+        }
+        data["organizations"]["countries"] = country;
+    }
     // language
-    if (language != 'all') {
+    if (language != 'All') {
         data["lectures"] = {};
         data["lectures"]["language"] = formats.languages.fullToAbbr[language];
     }
@@ -122,7 +146,6 @@ function search() {
         }
         data["lectures"]["views"]["max"] = maxViews;
     }
-
     // call the search function
     if ($.isEmptyObject(data)) { return; }
     else {

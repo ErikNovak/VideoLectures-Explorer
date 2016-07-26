@@ -50,6 +50,14 @@ function searchInfo(obj) {
             var organizationsNames = organizations.names;
             $(".organization-info").append(organizationsNames.join(', '));
         }
+        if (organizations.cities) {
+            var organizationsCities = organizations.cities;
+            $(".city-info").append(organizationsCities);
+        }
+        if (organizations.countries) {
+            var organizationsCountries = organizations.countries;
+            $(".country-info").append(formats.countries.abbrToFull[organizationsCountries]);
+        }
     }
     if(searchwords.lectures) {
         var lectures = searchwords.lectures;
@@ -80,7 +88,6 @@ function searchInfo(obj) {
         if (lecture.categories) {
             var categories = lecture.categories;
             for (catN = 0; catN < categories.length; catN++) {
-                if (categories[catN] == "Top") { continue; }
                 if (cat[categories[catN]]) {
                     cat[categories[catN]] += 1;
                 } else {

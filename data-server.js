@@ -20,7 +20,7 @@ var fs                = require('fs');
 var app = express();
 
 // logger
-var logDirectory = path.join(__dirname, 'log');
+var logDirectory = path.join(__dirname, 'log', 'data-request');
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // create a rotating write stream
@@ -182,6 +182,7 @@ function queryDatabase(data) {
 var ftrLectures = new qm.FeatureSpace(base, [
     { type: "text", source: "Lectures", field: "title",       tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: "Lectures", field: "description", tokenizer: { type: "unicode", stopwords: "en" } },
+    { type: "text", source: "Lectures", field: "slug",        tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: { store: "Lectures", join: "categories" }, field: "title", mode: "tokenized" },
     { type: "text", source: { store: "Lectures", join: "parent" }, field: "title", tokenizer: { type: "unicode", stopwords: "en" } }
 ]);
@@ -555,11 +556,33 @@ function createAutocompleteList() {
         });
     }
 
+    // get all cities
+    var citiesFile = qm.fs.openRead('./data/autocomplete/cities.aut');
+    var cities = [];
+    while (!citiesFile.eof) {
+        cities.push({
+            "type": "city",
+            "name": citiesFile.readLine()
+        });
+    }
+
+    // get all countries
+    var countriesFile = qm.fs.openRead('./data/autocomplete/countries.aut');
+    var countries = [];
+    while (!countriesFile.eof) {
+        countries.push({
+            "type": "country",
+            "name": countriesFile.readLine()
+        });
+    }
+
     return {
         authors:       authors,
         categories:    categories,
         organizations: organizations,
-        languages:     languages
+        languages:     languages,
+        cities:        cities,
+        countries:     countries
     };
 }
 var autocompleteLists = createAutocompleteList();

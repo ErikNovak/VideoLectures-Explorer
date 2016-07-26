@@ -19,7 +19,7 @@ var FileStreamRotator = require('file-stream-rotator'),
 var app = express();
 
 // logger
-var logDirectory = path.join(__dirname, 'log');
+var logDirectory = path.join(__dirname, 'log', 'page-request');
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // create a rotating write stream
@@ -46,11 +46,6 @@ app.get('/', function (req, res) {
         root: __dirname + '/public/html/'
     };
     res.sendFile('index.html', options);
-});
-
-var PORT = process.env.npm_package_config_webport;
-app.listen(PORT, function () {
-    console.log('Videolectures Dashboard | Landscape on port ' + PORT);
 });
 
 /******************************************
@@ -81,4 +76,9 @@ app.use(function (req, res, next) {
 
     // default to plain-text
     res.type('txt').send('Not found');
+});
+
+var PORT = process.env.npm_package_config_webport;
+app.listen(PORT, function () {
+    console.log('Videolectures Dashboard | Landscape on port ' + PORT);
 });

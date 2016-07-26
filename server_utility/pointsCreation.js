@@ -45,10 +45,6 @@ exports.createLinearFunction = createLinearFunction;
  * @return {Array.<object>} The object data used for the landscape.
  */
 function fillPointsArray(pointsMatrix, query, ftr) {
-    var featCategories = [];
-    for(var FeatN = 0; FeatN < ftr.dim; FeatN++) {
-        featCategories.push(ftr.getFeature(FeatN));
-    }
     var storage = [];
     // create the propper point format and send it to client
     // the functions that puts the points into a unit square
@@ -89,15 +85,24 @@ function fillPointsArray(pointsMatrix, query, ftr) {
                 }
             }
         }
+
+        var featCategories = [];
+        for(var FeatN = 0; FeatN < ftr.dim; FeatN++) {
+            featCategories.push(ftr.getFeature(FeatN));
+        }
         var landmarkTags = [];
         var landTfIdf = ftr.extractVector(query[pointN]);
         for(var LandN = 1; LandN < ftr.dim; LandN++) {
-            landmarkTags.push([featCategories[LandN], landTfIdf[LandN]]);
+            if (landTfIdf[LandN] != 0 && featCategories[LandN] != 'Top') {
+                landmarkTags.push([featCategories[LandN], landTfIdf[LandN]]);
+            }
         }
         storage.push({
             x: xCoord(pointsMatrix.at(pointN, 0)),
             y: yCoord(pointsMatrix.at(pointN, 1)),
             title:        query[pointN].title,
+            slug:         query[pointN].slug,
+            type:         query[pointN].type,
             author:       presenters,
             organization: organization,
             language:     query[pointN].language,

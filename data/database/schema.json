@@ -224,6 +224,10 @@
                 "type":  "value"
             },
             {
+                "field": "language",
+                "type":  "value"
+            },
+            {
                 "field": "duration",
                 "type":  "linear"
             },

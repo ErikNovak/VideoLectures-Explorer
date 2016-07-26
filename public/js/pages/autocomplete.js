@@ -1,5 +1,5 @@
 /**
- * This file contains the function(s) for input autocompletion. 
+ * This file contains the function(s) for input autocompletion.
  */
 
 /**
@@ -17,10 +17,11 @@ function fillAutocomplete() {
             var presenters = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local:          data.authors
+                local: data.authors
             }); presenters.initialize();
 
             $("#author-search-input").tagsinput({
+                freeInput: false,
                 itemValue: function (item) {
                     return item.name;
                 },
@@ -35,10 +36,11 @@ function fillAutocomplete() {
             var categories = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local:          data.categories
+                local: data.categories
             }); categories.initialize();
 
             $("#category-search-input").tagsinput({
+                freeInput: false,
                 itemValue: function (item) {
                     return item.name
                 },
@@ -53,12 +55,13 @@ function fillAutocomplete() {
             var organizations = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local:          data.organizations
+                local: data.organizations
             }); organizations.initialize();
 
             $("#organization-search-input").tagsinput({
                 maxTags: 1,
                 splitOn: null,
+                freeInput: false,
                 itemValue: function (item) {
                     return item.name
                 },
@@ -66,6 +69,53 @@ function fillAutocomplete() {
                     name:       "organizations",
                     displayKey: 'name',
                     source:     organizations.ttAdapter()
+                }
+            });
+
+            // cities typeahead and tags
+            var cities = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: data.cities
+            }); cities.initialize();
+
+            $("#city-search-input").tagsinput({
+                maxTags: 1,
+                splitOn: null,
+                freeInput: false,
+                itemValue: function (item) {
+                    return item.name
+                },
+                typeaheadjs: {
+                    name:       "cities",
+                    displayKey: 'name',
+                    source:     cities.ttAdapter()
+                }
+            });
+
+            // countries typeahead and tags
+            var countries = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: $.map(data.countries, function (country) {
+                        return {
+                            type: 'country',
+                            name: formats.countries.abbrToFull[country.name]
+                        };
+                    })
+            }); countries.initialize();
+
+            $("#country-search-input").tagsinput({
+                maxTags: 1,
+                splitOn: null,
+                freeInput: false,
+                itemValue: function (item) {
+                    return item.name;
+                },
+                typeaheadjs: {
+                    name:       "country",
+                    displayKey: 'name',
+                    source:     countries.ttAdapter()
                 }
             });
 
@@ -84,6 +134,7 @@ function fillAutocomplete() {
 
             $('#basic-search-input').tagsinput({
                 splitOn: null,
+                freeInput: false,
                 itemValue: function (item) {
                     return item.name
                 },
@@ -98,15 +149,14 @@ function fillAutocomplete() {
             // filling the language search dropdown
             var languages = data.languages;
             for (var langN = 0; langN < languages.length; langN++) {
-                $('.dropdown > ul').append('<li><a>' + formats.languages.abbrToFull[languages[langN].name] + '</a></li>');
+                $('#language-dropdown').append('<li><a>' + formats.languages.abbrToFull[languages[langN].name] + '</a></li>');
             }
-
             /**
              * Changes the selected language.
              */
             $(function () {
-                $('.dropdown-menu > li').on('click', function () {
-                    $('#language-search-dropdown').html($(this).text() + ' <span class="caret"></span>');
+                $('#language-dropdown > li').on('click', function () {
+                    $('#selected-language').html($(this).text());
                 });
             });
         }

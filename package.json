@@ -9,7 +9,7 @@
     "email": "novak.erik@ijs.si"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node web-server.js"
   },
   "config": {
     "webport": 5055

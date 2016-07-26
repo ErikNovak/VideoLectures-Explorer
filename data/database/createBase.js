@@ -32,11 +32,16 @@ var base = new qm.Base({
 console.log('Importing organizations...');
 for (var OrgN = 0; OrgN < organizations.length; OrgN++) {
     var organization = organizations[OrgN];
+    var city = "";
+    if (organization.city) {
+        city = organization.city[0].toUpperCase() + organization.city.slice(1);
+    }
+
     var record = {
         "index":   organization.id.toString(),
         "name":    organization.name,
-        "city":    organization.city    != "" ? organization.city    : "",
-        "country": organization.country != "" ? organization.country : ""
+        "city":    city,
+        "country": organization.country != "" ? organization.country.toUpperCase() : ""
     };
     base.store('Organizations').push(record);
 }
@@ -50,8 +55,6 @@ var categoryKeys = Object.keys(categories);
 for (var CatN = 0; CatN < categoryKeys.length; CatN++) {
     var catKey   = categoryKeys[CatN];
     var category = categories[catKey];
-
-    console.log(category.text.title)
 
     var record = {
         "index":       catKey.slice(1),
@@ -123,7 +126,7 @@ for(var LectN = 0; LectN < lectures.length; LectN++) {
         "index":       lecture.id.toString(),
         "slug":        lecture.slug,
         "recorded":    time,
-        "type":        lecture.type,
+        "type":        lecture.type.toLowerCase(),
         "title":       lecture.title,
         "description": description,
         "language":    lecture.language,
@@ -163,7 +166,6 @@ for (var EdgeN = 0; EdgeN < edgeKeys.length; EdgeN++) {
             var catId = lectCategoryKeys[CatN].slice(1);
             if (base.store('Categories').recordByName(catId)) {
                 var category = base.store('Categories').recordByName(catId);
-                // TODO: get all parent categories and push them as joins
                 var categoryPath = category.path;
                 for (var CatPathN = 0; CatPathN < categoryPath.length; CatPathN++) {
                     var catPathName = categoryPath[CatPathN].replace(/_/g, " ");

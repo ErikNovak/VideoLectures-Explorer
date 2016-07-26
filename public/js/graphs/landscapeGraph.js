@@ -1,39 +1,40 @@
 ﻿/**
- * LANDSCAPE GRAPH 
+ * LANDSCAPE GRAPH
  * Creates a landscape using d3.js (https://d3js.org/)
- */ 
+ */
 function landscapeGraph(_options) {
-    // options settings 
+    // options settings
     var options = $.extend({
         containerName: null,
         tooltipClass:  null,
         landmarkClass: null,
         margin: { top: 20, left: 20, bottom: 20, right: 20 },
         color: {
-            points:     "#A289FE", 
+            points:     "#A289FE",
             background: "#FFFFFF"
         }
     }, _options);
-    
+
     /**
      * Object pointer
-     */ 
+     */
     var self = this;
 
     /**
      * Object variables
-     */ 
+     */
     var svg = null,
         zoom = null,
         xScale = null,
         yScale = null,
         rScale = null,
+        zoomScale = 1,
         landmarks = null,
         landscapeBody = null;
-    
+
     /**
      * If the landscape is already active
-     */ 
+     */
     var active = false,
         newData = false;
 
@@ -41,7 +42,7 @@ function landscapeGraph(_options) {
      * Database container.
      * @property {Array.<Object>} points - The landscape points.
      * @property {Array.<Object>} landmarks - The landmark tags. Constructed dynamically.
-     */ 
+     */
     var landscapeData = {
         points:    null,
         landmarks: null
@@ -50,16 +51,16 @@ function landscapeGraph(_options) {
     /**
      * Get the landscape data.
      * @returns {Object} A JSON object containing the landscape data.
-     */ 
-    this.getData = function () { 
+     */
+    this.getData = function () {
         return landscapeData;
     }
 
     /**
      * Set the landscape data.
      * @param {Object} _data - Contains the landscape data.
-     * @param {Array.<Object>} _data.points - Contains the points. 
-     */ 
+     * @param {Array.<Object>} _data.points - Contains the points.
+     */
     this.setData = function (_data) {
         // if the points data is not contained
         if (!_data.points) {
@@ -69,10 +70,10 @@ function landscapeGraph(_options) {
         newData = true;
         self.drawLandscape();
     }
-    
+
     /**
      * Draws the landscape.
-     */ 
+     */
     this.drawLandscape = function () {
         if (!landscapeData.points) {
             throw "landscapeGraph.drawLandscape: points must be specified!";
@@ -85,23 +86,23 @@ function landscapeGraph(_options) {
 
     /**
      * Prepare the landscape graph display.
-     */ 
+     */
     function prepareLandscapeDisplay() {
 
         if (!options.containerName) {
             throw "landscapeGraph: must set containerName before preparing the display!";
         }
-        // set the active flag 
+        // set the active flag
         active = true;
 
         var totalWidth = $(options.containerName).width(),
             totalHeight = $(options.containerName).height(),
             width = totalWidth - options.margin.left - options.margin.right,
             height = totalHeight - options.margin.top - options.margin.bottom;
-        
+
         // remove the previous SVG contained elements
         d3.select(options.containerName + " svg").remove();
-        
+
         // zoom object
         zoom = d3.behavior.zoom();
 
@@ -114,13 +115,13 @@ function landscapeGraph(_options) {
                     .append("g")
                     .attr("transform", "translate(" + options.margin.left + "," + options.margin.top + ")")
                     .call(zoom);
-        
+
         svg.append("rect")
            .attr("id", "background-rect")
            .attr("fill", options.color.background)
            .attr("width", width)
            .attr("height", height);
-        
+
         // area clip
         svg.append("clipPath")
            .attr("id", "area-clip")
@@ -130,53 +131,55 @@ function landscapeGraph(_options) {
            .attr("y", 0)
            .attr("width", width)
            .attr("height", height);
-        
+
         landscapeBody = svg.append("g")
                            .attr("clip-path", "url(#area-clip)");
-        
-        
+
+
         xScale = d3.scale.linear();
         yScale = d3.scale.linear();
 
         function onZoom() {
             landscapeBody.selectAll(".point")
-                         .attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+                         .attr("cx", function (d) { return xScale(d.x); })
+                         .attr("cy", function (d) { return yScale(d.y); });
             if (options.landmarkClass) {
                 landmarks = landscapeBody.selectAll(".landmark")
                                          .attr("x", function (d) { return xScale(d.x) - d.width / 2; })
                                          .attr("y", function (d) { return yScale(d.y); });
                 // if there is a hide/show function for landmarks
-                if (options.landmarkClass.toggleLandmarks) {
-                    landmarks.classed("hidden", false);
-                    options.landmarkClass.toggleLandmarks(landmarks[0]);
-                }
+                // TODO: Think about landmarks: performance vs visualization
+                // if (options.landmarkClass.toggleLandmarks) {
+                //     landmarks.classed("hidden", false);
+                //      options.landmarkClass.toggleLandmarks(landmarks[0]);
+                // }
             }
         }
-        
+
         // zoom configure
         zoom.x(xScale)
             .y(yScale)
-            .scaleExtent([1, 5])
+            .scaleExtent([1, 7])
             .on("zoom", onZoom);
-        
+
         // prepare the tooltip container
         if (options.tooltipClass) {
             // remove previous tooltip and construct a new one
             $("#landscape-tooltip").remove();
             $(options.containerName).append("<div id=\"landscape-tooltip\" class=\"notvisible\"></div>");
         }
-        
+
     }
-    
+
     /**
      * Updates the landscape container (in case of window resizing)
-     */ 
+     */
     function updateLandscapeDisplay() {
         var totalWidth = $(options.containerName).width(),
             totalHeight = $(options.containerName).height(),
             width = totalWidth - options.margin.left - options.margin.right,
             height = totalHeight - options.margin.top - options.margin.bottom;
-        
+
         // update the landscape container
         d3.select("#landscape-graph")
           .attr("width", totalWidth)
@@ -197,7 +200,7 @@ function landscapeGraph(_options) {
 
     /**
      * Redraws the landscape.
-     */ 
+     */
     function redraw() {
         var totalWidth = $(options.containerName).width(),
             totalHeight = $(options.containerName).height(),
@@ -207,13 +210,13 @@ function landscapeGraph(_options) {
         // prepare the 'padding' for the points
         // this will make sure that points are not cut off in half
         var padding = { left: 30, right: 30, top: 30, bottom: 30 };
-        
+
         // calulate the minimum and maximum range for the x, y scales
         // based on the number of data points
         var minX, maxX, minY, maxY;
         var minXY = Math.abs(width - height) / 2,
             maxXY = Math.abs(width + height) / 2;
-        
+
         if (landscapeData.points.length < 10) {
             if (width <= height) {
                 minX =     width / 3 + padding.left;
@@ -251,22 +254,22 @@ function landscapeGraph(_options) {
 
         // get the maximum number of views
         var maxView = Math.max.apply(null, $.map(landscapeData.points, function (pt) { return pt["views"] }));
-        
+
         rScale = d3.scale.linear()
                    .domain([0, maxView])
-                   .range([2, 10]);
-        
+                   .range([2.5, 10]);
+
         landscapeBody.selectAll(".point")
                          .attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
-        
+
         var LSPoints = landscapeBody.selectAll(".point")
                                     .data(landscapeData.points);
-        
+
         LSPoints.transition().duration(1000)
-        .attr("cx", function (d) { return xScale(d.x); })
+                .attr("cx", function (d) { return xScale(d.x); })
                 .attr("cy", function (d) { return yScale(d.y); })
-                .attr("r", function (d) { return rScale(d["views"]); });
-        
+                .attr("r", function (d) { return rScale(d["views"] + 1); });
+
         LSPoints.exit().transition().duration(1000).attr("r", 0).remove();
 
         LSPoints.enter().append("circle")
@@ -276,9 +279,9 @@ function landscapeGraph(_options) {
                 .attr("r", 0)
                 .attr("fill", options.color.points)
                 .transition().duration(1000)
-                .attr("r", function (d) { return rScale(d["views"]); })
+                .attr("r", function (d) { return rScale(d["views"] + 1); })
 
-        
+
         // Construct tooltip
         landscapeBody.selectAll(".point")
                      .on("mouseover", function (d, idx) {
@@ -302,8 +305,11 @@ function landscapeGraph(_options) {
                          if (options.tooltipClass) {
                              $("#landscape-tooltip").addClass("notvisible");
                          }
+                     }).on("click", function (d, idx) {
+
+                         options.tooltipClass.fillLectureInformation(d);
                      });
-         
+
         // Create the landmarks
         if (options.landmarkClass) {
             // initialize landmarks array
@@ -319,7 +325,7 @@ function landscapeGraph(_options) {
                 landscapeBody.selectAll(".landmark").remove();
                 landmarks = landscapeBody.selectAll(".landmark")
                                          .data(landscapeData.landmarks);
-            
+
                 landmarks.each(function (d) { d.width = this.getBoundingClientRect().width; })
                          .attr("opacity", 0)
                          .attr("x", function (d) {
@@ -341,7 +347,7 @@ function landscapeGraph(_options) {
                          .attr("id", function (d, i) { "landmark-number-" + i })
                          .text(function (d, i) {
                             closestPoints = $.grep(landscapeData.points, function (pt) {
-                                return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 25;
+                                return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 20;
                             });
                             if (closestPoints.length == 0) { $(this).remove(); return; }
                                 return options.landmarkClass.setText(closestPoints);
@@ -351,23 +357,23 @@ function landscapeGraph(_options) {
                          .attr("font-family", "Helvetica, Arial, sans-serif")
                          .attr("pointer-events", "none")
                          .each(function (d) { d.width = this.getBoundingClientRect().width; })
-                         .attr("x", function (d) { 
+                         .attr("x", function (d) {
                               return xScale(d.x) - d.width / 2;
                           })
-                         .attr("y", function (d) { 
+                         .attr("y", function (d) {
                              return yScale(d.y);
                          })
                          .attr("opacity", 0)
                          .transition().duration(1000)
                          .attr("opacity", 1);
-            
+
                 // remove those with no points in the vicinity
-                landmarks.each(function (d, i) { 
+                landmarks.each(function (d, i) {
                     closestPoints = $.grep(landscapeData.points, function (pt) {
                         return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 25;
                     });
                     if (closestPoints.length == 0) { $(this).remove(); return; }
-                })
+                });
                 // if there is a hide/show function for landmarks
                 if (options.landmarkClass.toggleLandmarks) {
                     landmarks.classed("hidden", false);
@@ -402,7 +408,7 @@ function landscapeGraph(_options) {
     $(window).resize(function () {
         if (active) {
             clearTimeout(resizeLandscape);
-            resizeLandscape = setTimeout(function () { 
+            resizeLandscape = setTimeout(function () {
                 updateLandscapeDisplay();
                 redraw();
                 }, 100);

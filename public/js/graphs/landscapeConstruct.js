@@ -20,8 +20,8 @@ var tooltipClass = {
      */
     CreateText : function (data) {
         var title        = data.title;
-        var author       = data.author ? data.author.join(", ") : "not-found";
-        var organization = data.organization ? data.organization : "not-found";
+        var author       = data.author ? data.author.join(", ")  : "N/A";
+        var organization = data.organization ? data.organization : "N/A";
 
         var text = "<b>Lecture title:</b> " + title + "<br>";
         text    += "<b>Presenter:</b> "     + author + "<br>";
@@ -33,23 +33,28 @@ var tooltipClass = {
         }
 
         // lecture language
-        var language = formats.languages.abbrToFull[data.language];
-        text += "The lecture is in " + language + ". ";
+        if (data.language) {
+            var language = formats.languages.abbrToFull[data.language];
+            text += "The lecture is in " + language + ". ";
+        }
         // category
-        if (data.categories) {
+        if (data.categories && data.categories.length != 0) {
             var num        = data.categories.length === 1;
             var categories = num ? "category" : "categories";
             var timeWas    = num ? "was" : "were";
             text += "The main " + categories + " of the lecture " +
-                    timeWas + " <b>" + data.categories.slice(1).join(", ") + "</b>. ";
+                    timeWas + " <b>" + data.categories.join(", ") + "</b>. ";
         }
         // published and duration
-        var date = data.published.split('T')[0].split('-').reverse().join('.');
-        var time = tooltipClass.getTime(data.duration);
-        text += "It was published in " + date + " and it's duration is " +
-        time + ". There have been <b>" + data.views +
-        "</b> views until " + tooltipClass.databaseDate + ". ";
-
+        if (data.published) {
+            var date = data.published.split('T')[0].split('-').reverse().join('.');
+        }
+        if (data.duration) {
+            var time = tooltipClass.getTime(data.duration);
+            text += "It was published in " + date + " and it's duration is " +
+            time + ". There have been <b>" + data.views +
+            "</b> views until " + tooltipClass.databaseDate + ". ";
+        }
         return text;
     },
 
@@ -96,6 +101,23 @@ var tooltipClass = {
         var getDot = str.indexOf('.', 300);
         var desc   = getDot != -1 ? str.substr(0, getDot + 1) + '...' : str;
         return desc;
+    },
+
+    /**
+     * Fills the Lecture information box
+     */
+    fillLectureInformation: function (data) {
+        var title      = data.title;
+        var author     = data.author                                    ? data.author.join(", ")     : "N/A";
+        var categories = data.categories && data.categories.length != 0 ? data.categories.join(", ") : "N/A";
+        var slug       = data.slug;
+
+
+        $(".lecture-info").empty();
+        $(".lecture-title-info").append(title);
+        $(".lecture-presenter-info").append(author);
+        $(".lecture-categories-info").append(categories);
+        $(".lecture-slug-info").append("<a href=http://videolectures.net/" + slug + ">" + slug + "</a>");
     }
 }
 
@@ -113,29 +135,42 @@ var landmarkClass = {
     setText: function (points) {
         // get the frequency of the categories
         var landmarks = [];
-        for (var MatN = 0; MatN < points.length; MatN++) {
-            if (!points[MatN].landmarkTags) { continue; }
-            var categories = points[MatN].landmarkTags;
-            for (var KeyN = 0; KeyN < categories.length; KeyN++) {
-                if (landmarks[categories[KeyN][0]] != null) {
-                    landmarks[categories[KeyN][0]] += categories[KeyN][1];
-                } else {
-                    landmarks[categories[KeyN][0]] = categories[KeyN][1];
+        if (points.length == 1) {
+            var categories = points[0].categories.slice(1);
+            var diceRoll   = Math.floor(categories.length * Math.random());
+            return categories[diceRoll];
+        } else {
+            for (var MatN = 0; MatN < points.length; MatN++) {
+                if (!points[MatN].landmarkTags) { continue; }
+                var categories = points[MatN].landmarkTags;
+                for (var KeyN = 0; KeyN < categories.length; KeyN++) {
+                    if (landmarks[categories[KeyN][0]] != null) {
+                        landmarks[categories[KeyN][0]] += categories[KeyN][1];
+                    } else {
+                        landmarks[categories[KeyN][0]] = categories[KeyN][1];
+                    }
                 }
             }
+            if (Object.keys(landmarks).length == 0) {
+                return;
+            }
+            // create an array of key-values
+            var ArrayOfCategories = [];
+            for (key in landmarks) {
+                if (landmarks[key] != 0) {
+                    ArrayOfCategories.push([key, landmarks[key]]);
+                }
+            }
+            if (ArrayOfCategories.length == 0) {
+                return "";
+            } else {
+                ArrayOfCategories.sort(function (a, b) { return b[1] - a[1]; });
+                var upperBound = ArrayOfCategories.length >= 3 ? 3 : ArrayOfCategories.length;
+                var categories = ArrayOfCategories.slice(0, 3);
+                var diceRoll   = Math.floor(upperBound * Math.random());
+                return categories[diceRoll][0];
+            }
         }
-        if (Object.keys(landmarks).length == 0) {
-            return;
-        }
-        // create an array of key-values
-        var ArrayOfCategories = [];
-        for (key in landmarks) {
-            ArrayOfCategories.push([key, landmarks[key]]);
-        }
-        ArrayOfCategories.sort(function (a, b) { return b[1] - a[1]; });
-        categories   = ArrayOfCategories.slice(0, 3);
-        var diceRoll = Math.floor(3 * Math.random());
-        return categories[diceRoll][0];
     },
 
     /**
