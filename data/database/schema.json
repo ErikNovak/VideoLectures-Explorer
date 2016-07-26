@@ -176,6 +176,14 @@
                 "type": "string"
             },
             {
+                "name": "public",
+                "type": "bool"
+            },
+            {
+                "name": "enabled",
+                "type": "bool"
+            },
+            {
                 "name": "description",
                 "type": "string",
                 "null": true

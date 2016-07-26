@@ -110,14 +110,17 @@ var tooltipClass = {
         var title      = data.title;
         var author     = data.author                                    ? data.author.join(", ")     : "N/A";
         var categories = data.categories && data.categories.length != 0 ? data.categories.join(", ") : "N/A";
-        var slug       = data.slug;
+        var isEnabled  = data.enabled ? "Yes" : "No";
+        var isPublic   = data.public  ? "Yes" : "No";
+        var slug       = "<a href=http://videolectures.net/" + data.slug + ">" + data.slug + "</a>";
 
 
         $(".lecture-info").empty();
         $(".lecture-title-info").append(title);
         $(".lecture-presenter-info").append(author);
-        $(".lecture-categories-info").append(categories);
-        $(".lecture-slug-info").append("<a href=http://videolectures.net/" + slug + ">" + slug + "</a>");
+        $(".lecture-public-info").append(isPublic);
+        $(".lecture-enabled-info").append(isEnabled);
+        $(".lecture-slug-info").append(slug);
     }
 }
 

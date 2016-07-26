@@ -129,6 +129,8 @@ for(var LectN = 0; LectN < lectures.length; LectN++) {
         "type":        lecture.type.toLowerCase(),
         "title":       lecture.title,
         "description": description,
+        "public":      lecture.public,
+        "enabled":     lecture.enabled,
         "language":    lecture.language,
         "duration":    lecture.duration,
         "views":       lecture.view_ctr

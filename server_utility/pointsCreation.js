@@ -109,6 +109,8 @@ function fillPointsArray(pointsMatrix, query, ftr) {
             categories:   query[pointN].categories != null ? uniqueCategories : null,
             published:    query[pointN].recorded,
             duration:     query[pointN].duration,
+            public:       query[pointN].public,
+            enabled:       query[pointN].enabled,
             views:        query[pointN].views,
             description:  query[pointN].description,
             landmarkTags: landmarkTags
