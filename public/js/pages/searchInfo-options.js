@@ -113,7 +113,20 @@ function searchInfo(obj) {
  * Typeahead:            http://twitter.github.io/typeahead.js/
  * Bootstrap Tags Input: http://bootstrap-tagsinput.github.io/bootstrap-tagsinput/examples/
  */
-$(document).ready(function () {
+$(window).on("load", function () {
     fillAutocomplete();
     landscapeAJAXCall('initial-landscape-points', 'GET');
+
+    // initialize scrollbars
+    $("#query-info-container").mCustomScrollbar({
+        theme: "minimal-dark",
+        axis:  "y"
+    });
+
+    // initialize scrollbars
+    $("#lecture-info-container").mCustomScrollbar({
+        theme: "minimal-dark",
+        axis:  "y"
+    });
+
 });

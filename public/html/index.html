@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
     <meta name="author" content="Erik Novak (erik.novak@ijs.si)">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="public/components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="public/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
     <link rel="stylesheet" type="text/css" href="public/components/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="public/components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css">
 
     <link rel="stylesheet" type="text/css" href="public/css/dropdown-enhancement.css">
 
@@ -15,11 +17,22 @@
     <link rel="stylesheet" type="text/css" href="public/css/pages/landscape.css" />
     <link rel="stylesheet" type="text/css" href="public/css/pages/searchOptions.css" />
 
+    <script type="text/javascript" src="public/components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="public/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="public/components/typeahead.js/dist/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="public/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
+    <script type="text/javascript" src="public/js/dropdown-enhancement.js"></script>
+
+    <script type="text/javascript" src="public/components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+
     <script type="text/javascript" src="public/js/google-analytics.js"></script>
+
+
 
     <title>Videolectures Learning Analytics | Landscape</title>
 
 </head>
+
 <body>
 
     <!-- navbar -->
@@ -54,20 +67,14 @@
                 <div class="project-info-text">
                     <h4>About Videolectures</h4>
                     <p>
-                        VideoLectures.NET is an award-winning free and open access educational video lectures repository.
-                        The lectures are given by distinguished scholars and scientists at the most important and prominent
-                        events like conferences, summer schools, workshops and science promotional events from many fields
-                        of Science. The portal is aimed at promoting science, exchanging ideas and fostering knowledge sharing
-                        by providing high quality didactic contents not only to the scientific community but also to the general
-                        public. All lectures, accompanying documents, information and links are systematically selected and
-                        classified through the editorial process taking into account also users' comments.
+                        VideoLectures.NET is an award-winning free and open access educational video lectures repository. The lectures are given by distinguished scholars and scientists at the most important and prominent events like conferences, summer schools, workshops and
+                        science promotional events from many fields of Science. The portal is aimed at promoting science, exchanging ideas and fostering knowledge sharing by providing high quality didactic contents not only to the scientific community
+                        but also to the general public. All lectures, accompanying documents, information and links are systematically selected and classified through the editorial process taking into account also users' comments.
                     </p>
                     <h4 class="about-edsa">About EDSA</h4>
                     <p>
-                        The European Data Science Academy (EDSA) will establish a virtuous learning production cycle whereby
-                        we: a) analyse the required sector specific skillsets for data analysts across the main industrial
-                        sectors in Europe; b) develop modular and adaptable data science curricula to meet these needs; and
-                        c) deliver training supported by multi-platform and multilingual learning resources based on our curricula.
+                        The European Data Science Academy (EDSA) will establish a virtuous learning production cycle whereby we: a) analyse the required sector specific skillsets for data analysts across the main industrial sectors in Europe; b) develop modular and adaptable
+                        data science curricula to meet these needs; and c) deliver training supported by multi-platform and multilingual learning resources based on our curricula.
                     </p>
                 </div>
             </div>
@@ -98,8 +105,8 @@
                             <span class="basic-search-button">
                                 <button class="btn btn-default pull-right" id="toggle-advanced-search-button" data-open="close" type="button" onclick="toggleAdvancedOptions();">
                                     <span class="fa fa-cogs" aria-hidden="true"></span>
-                                    <span id="open-close-arrow" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                </button>
+                            <span id="open-close-arrow" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            </button>
                             </span>
                         </div>
                     </div>
@@ -195,7 +202,7 @@
                                                     <span id="selected-language">All</span>
                                                     <span class="fa fa-chevron-down"></span>
                                                 </button>
-                                                <ul id= "language-dropdown" class="dropdown-menu bullet pull-center" aria-labelledby="language-search-dropdown">
+                                                <ul id="language-dropdown" class="dropdown-menu bullet pull-center" aria-labelledby="language-search-dropdown">
                                                     <li><a>All</a></li>
                                                 </ul>
                                             </div>
@@ -230,23 +237,70 @@
 
                         <!-- landscape info container -->
                         <div class="col-xs-12 col-ms-4 col-md-4 col-lg-4">
-                            <div id="query-info-container" class="container-fluid">
+                            <div id="query-info-container">
                                 <div class="query-info">
                                     <h4>Searchwords</h4>
-                                    <p>
-                                        <b>Presenter: </b>      <span class="info presenter-info"></span>     <br />
-                                        <b>Organization: </b>   <span class="info organization-info"></span>  <br />
-                                        <b>Categories: </b>     <span class="info categories-info"></span>    <br />
-                                        <b>City: </b>           <span class="info city-info"></span>          <br />
-                                        <b>Country: </b>        <span class="info country-info"></span>       <br />
-                                        <b>Number of views: </b><span class="info views-info"></span>         <br />
-                                        <b>Language: </b>       <span class="info language-info"></span>      <br />
-                                    </p>
+                                    <table cellspacing="10">
+                                        <tr>
+                                            <th valign="top"> Presenter: </th>
+                                            <td>
+                                                <span class="info presenter-info"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="top"> Organization: </th>
+                                            <td>
+                                                <span class="info organization-info"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="top"> Categories: </th>
+                                            <td>
+                                                <span class="info categories-info"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="top"> City: </th>
+                                            <td>
+                                                <span class="info city-info"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="top"> Country: </th>
+                                            <td>
+                                                <span class="info country-info"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="top"> # of views:</th>
+                                            <td>
+                                                <span class="info views-info"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="top"> Language:</th>
+                                            <td>
+                                                <span class="info language-info"></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+
                                     <h4 class="information">Information</h4>
-                                    <p>
-                                        <b>Number of found lectures: </b>   <span class="info num-of-lectures-info"></span>  <br />
-                                        <b>Total number of views: </b>      <span class="info num-of-views-info"></span>     <br />
-                                    </p>
+                                    <table>
+                                        <tr>
+                                            <th valign="top"> Number of found lectures: </th>
+                                            <td>
+                                                <span class="info num-of-lectures-info"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="top"> Total number of views: </th>
+                                            <td>
+                                                <span class="info num-of-views-info"></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+
                                     <dl>
                                         <dt> Categories with number of occurrences: </dt>
                                         <dd>
@@ -256,15 +310,40 @@
                                 </div>
                             </div>
 
-                            <div id="lecture-info-container" class="container-fluid">
+                            <div id="lecture-info-container">
                                 <h4> Lecture Information </h4>
-                                <p>
-                                    <b>Title:</b>       <span class="lecture-info lecture-title-info"></span>     <br />
-                                    <b>Presenter:</b>   <span class="lecture-info lecture-presenter-info"></span> <br />
-                                    <b>Public: </b>     <span class="lecture-info lecture-public-info"></span>    <br />
-                                    <b>Enabled: </b>    <span class="lecture-info lecture-enabled-info"></span>   <br />
-                                    <b>Link:</b>        <span class="lecture-info lecture-slug-info"></span>      <br />
-                                </p>
+                                <table>
+                                    <tr>
+                                        <th valign="top"> Title: </th>
+                                        <td>
+                                            <span class="lecture-info lecture-title-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Presenter: </th>
+                                        <td>
+                                            <span class="lecture-info lecture-presenter-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Public: </th>
+                                        <td>
+                                            <span class="lecture-info lecture-public-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Enabled: </th>
+                                        <td>
+                                            <span class="lecture-info lecture-enabled-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Link: </th>
+                                        <td>
+                                            <span class="lecture-info lecture-slug-info"></span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
 
@@ -320,9 +399,8 @@
                 </div>
 
                 <div class="modal-body">
-                    No data was found using the requested keywords. Try using different searchwords or
-                    help yourself with the advance options marked with the
-                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> icon.
+                    No data was found using the requested keywords. Try using different searchwords or help yourself with the advance options marked with the
+                    <span class="fa fa-cogs" aria-hidden="true"></span> icon.
                 </div>
 
                 <div class="modal-footer">
@@ -332,13 +410,9 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="public/components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="public/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="public/components/typeahead.js/dist/typeahead.bundle.js"></script>
-    <script type="text/javascript" src="public/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
-    <script type="text/javascript" src="public/js/dropdown-enhancement.js"></script>
-
     <script type="text/javascript" src="public/components/d3/d3.min.js"></script>
+
+
 
     <script type="text/javascript" src="public/js/pages/formats.js"></script>
     <script type="text/javascript" src="public/js/pages/utility.js"></script>
@@ -352,5 +426,7 @@
 
 
 
+
 </body>
+
 </html>

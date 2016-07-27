@@ -83,14 +83,20 @@ function queryDatabase(data) {
     // search for lectures with categories
     if (data.categories) {
         if(!data.categories.names) throw "categories.name must be specified";
-        var categoryQuery = {
-            $name: "lectures",
-            $query: {
-                $from: "Categories",
-                title: data.categories.names
+        for (var CatN = 0; CatN < data.categories.names.length; CatN++) {
+            var categoryQuery = {
+                $name: "lectures",
+                $query: {
+                    $from: "Categories",
+                    title: data.categories.names[CatN]
+                }
+            };
+            if (query["$join"]) {
+                query["$join"].push(categoryQuery);
+            } else {
+                query["$join"] = [categoryQuery];
             }
         }
-        query["$join"] = [categoryQuery];
     }
     // search for lectures with authors
     if (data.authors) {
@@ -184,7 +190,7 @@ var ftrLectures = new qm.FeatureSpace(base, [
     { type: "text", source: "Lectures", field: "description", tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: "Lectures", field: "slug",        tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: { store: "Lectures", join: "categories" }, field: "title", mode: "tokenized" },
-    { type: "text", source: { store: "Lectures", join: "parent" }, field: "title", tokenizer: { type: "unicode", stopwords: "en" } }
+    { type: "text", source: { store: "Lectures", join: "parent" },     field: "title", tokenizer: { type: "unicode", stopwords: "en" } }
 ]);
 
 // The feature space used for point generation
@@ -477,7 +483,7 @@ app.post('/landscape-points', function (request, result) {
 function initialData() {
     var query = queryDatabase({
         categories: {
-            names: ["Artificial Intelligence"]
+            names: ["Big Data"]
         }
     });
     // reset and update the feature space
@@ -487,7 +493,7 @@ function initialData() {
     var featureMatrix = ftrLectures.extractSparseMatrix(query);
 
     // set the parameters and make the async functions roll out
-    var params = { iter: 2, convexN: 3, clusterN: 400, docTresh: 200 };
+    var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
     var points = pointsCreation.getPoints(query, featureMatrix, params, ftrCategories);
     return points;
 }

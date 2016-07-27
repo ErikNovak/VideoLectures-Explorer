@@ -60,7 +60,7 @@ function fillPointsArray(pointsMatrix, query, ftr) {
             uniqueCategories = [];
             for (var CatN = 0; CatN < categories.length; CatN++) {
                 categories[CatN] = categories[CatN].replace(/_/g, " ");
-                if (uniqueCategories.indexOf(categories[CatN]) === -1) {
+                if (uniqueCategories.indexOf(categories[CatN]) === -1 && categories[CatN] != 'Top') {
                     uniqueCategories.push(categories[CatN]);
                 }
             };

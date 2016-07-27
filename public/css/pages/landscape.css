@@ -20,7 +20,7 @@
     left: 2px;
     width: calc(100% - 2px);
     display: none;
-    z-index: 200;
+    z-index: 100;
     margin-top:    40px;
     margin-bottom: 40px;
     background-color: #F2F6F8;
@@ -81,6 +81,15 @@
     max-height: 180px;
 }
 
+#query-info-container table,
+#query-info-container th,
+#query-info-container td,
+#lecture-info-container table,
+#lecture-info-container th,
+#lecture-info-container td {
+    padding-right: 5px;
+}
+
 .query-info h4 {
     margin-bottom: 5px;
 }
@@ -88,6 +97,11 @@
 .query-info h4.information {
     margin-top:   20px;
     margin-bottom: 5px;
+}
+
+.categories-frequency-info a {
+    cursor: pointer;
+    cursor: hand;
 }
 
 /* Universal mini stylz */

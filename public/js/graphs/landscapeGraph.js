@@ -28,7 +28,6 @@ function landscapeGraph(_options) {
         xScale = null,
         yScale = null,
         rScale = null,
-        zoomScale = 1,
         landmarks = null,
         landscapeBody = null;
 
@@ -95,10 +94,10 @@ function landscapeGraph(_options) {
         // set the active flag
         active = true;
 
-        var totalWidth = $(options.containerName).width(),
+        var totalWidth  = $(options.containerName).width(),
             totalHeight = $(options.containerName).height(),
-            width = totalWidth - options.margin.left - options.margin.right,
-            height = totalHeight - options.margin.top - options.margin.bottom;
+            width       = totalWidth - options.margin.left - options.margin.right,
+            height      = totalHeight - options.margin.top - options.margin.bottom;
 
         // remove the previous SVG contained elements
         d3.select(options.containerName + " svg").remove();
@@ -147,19 +146,13 @@ function landscapeGraph(_options) {
                 landmarks = landscapeBody.selectAll(".landmark")
                                          .attr("x", function (d) { return xScale(d.x) - d.width / 2; })
                                          .attr("y", function (d) { return yScale(d.y); });
-                // if there is a hide/show function for landmarks
-                // TODO: Think about landmarks: performance vs visualization
-                // if (options.landmarkClass.toggleLandmarks) {
-                //     landmarks.classed("hidden", false);
-                //      options.landmarkClass.toggleLandmarks(landmarks[0]);
-                // }
             }
         }
 
         // zoom configure
         zoom.x(xScale)
             .y(yScale)
-            .scaleExtent([1, 7])
+            .scaleExtent([1, 10])
             .on("zoom", onZoom);
 
         // prepare the tooltip container
