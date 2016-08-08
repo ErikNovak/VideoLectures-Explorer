@@ -41,8 +41,8 @@ function searchInfo(obj) {
         $(".presenter-info").append(authors.join(', '));
     }
     if(searchwords.categories) {
-        var categories = searchwords.categories.names;
-        $(".categories-info").append(categories.join(', '));
+        var categoriesNames = searchwords.categories.names;
+        $(".categories-info").append(categoriesNames.join(', '));
     }
     if(searchwords.organizations) {
         var organizations = searchwords.organizations;

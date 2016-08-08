@@ -1,7 +1,4 @@
-﻿/**
-﻿ * Creates the files used for input autocompletion.
- */
-
+﻿// Creates the files used for input autocompletion
 var qm = require('../../../../qminer');
 var fs = require('fs');
 
@@ -26,7 +23,7 @@ console.log('Writing authors...');
 var authors = base.store("Authors").allRecords;
 for (var AuthorN = 0; AuthorN < authors.length; AuthorN++) {
     var name = authors[AuthorN].name;
-    if (name && name.length != 0) {
+    if (name && name.length !== 0) {
         authorsFs.write(name + '\n');
     }
 }
@@ -37,7 +34,7 @@ console.log('Writing categories...');
 var categories = base.store("Categories").allRecords;
 for (var CatN = 0; CatN < categories.length; CatN++) {
     var title = categories[CatN].title;
-    if (title && title.length != 0) {
+    if (title && title.length !== 0) {
         categoriesFs.write(title + '\n');
     }
 }
@@ -51,7 +48,7 @@ var typeHt     = new qm.ht.StrIntMap();
 for (var LectureN = 0; LectureN < lectures.length; LectureN++) {
 
     var language = lectures[LectureN].language;
-    if (language && language.length != 0) {
+    if (language && language.length !== 0) {
         if (!languageHt.hasKey(language)) {
             languagesFs.write(language + '\n');
             languageHt.put(language, 1);
@@ -59,7 +56,7 @@ for (var LectureN = 0; LectureN < lectures.length; LectureN++) {
     }
 
     var type = lectures[LectureN].type;
-    if (type && type.length != 0) {
+    if (type && type.length !== 0) {
         if (!typeHt.hasKey(type)) {
             typesFs.write(type + '\n');
             typeHt.put(type, 1);
@@ -77,7 +74,7 @@ for (var OrgN = 0; OrgN < organizations.length; OrgN++) {
     organizationsFs.write(organizations[OrgN].name + '\n');
 
     var city = organizations[OrgN].city.trim();
-    if (city && city.length != 0) {
+    if (city && city.length !== 0) {
         if (!cityHt.hasKey(city)) {
             citiesFs.write(city + '\n');
             cityHt.put(city, 1);
@@ -85,7 +82,7 @@ for (var OrgN = 0; OrgN < organizations.length; OrgN++) {
     }
 
     var country = organizations[OrgN].country.trim().toUpperCase();
-    if (country && country.length != 0) {
+    if (country && country.length !== 0) {
         if (!countriesHt.hasKey(country)) {
             countriesFs.write(country + '\n');
             countriesHt.put(country, 1);

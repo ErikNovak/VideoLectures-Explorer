@@ -42,7 +42,7 @@ function fillAutocomplete() {
             $("#category-search-input").tagsinput({
                 freeInput: false,
                 itemValue: function (item) {
-                    return item.name
+                    return item.name;
                 },
                 typeaheadjs: {
                     name:       "categories",
@@ -63,7 +63,7 @@ function fillAutocomplete() {
                 splitOn: null,
                 freeInput: false,
                 itemValue: function (item) {
-                    return item.name
+                    return item.name;
                 },
                 typeaheadjs: {
                     name:       "organizations",
@@ -84,7 +84,7 @@ function fillAutocomplete() {
                 splitOn: null,
                 freeInput: false,
                 itemValue: function (item) {
-                    return item.name
+                    return item.name;
                 },
                 typeaheadjs: {
                     name:       "cities",
@@ -136,7 +136,7 @@ function fillAutocomplete() {
                 splitOn: null,
                 freeInput: false,
                 itemValue: function (item) {
-                    return item.name
+                    return item.name;
                 },
                 typeaheadjs: {
                     name:       "all",

@@ -16,7 +16,7 @@ function landscapeAJAXCall(callPath, callType, value) {
         data: { data: value },
         success: function (res) {
             // if there is no query
-            if (res.error != null) {
+            if (res.error) {
                 $("#error-trigger").trigger("click");
             } else {
                 searchInfo(res);
@@ -97,54 +97,54 @@ function search() {
 
     var data = {};
     // authors
-    if (author.length != 0) {
-        data["authors"] = {};
-        data["authors"]["names"] = author;
+    if (author.length !== 0) {
+        data.authors = {};
+        data.authors.names = author;
     }
     // categories
-    if (categories.length != 0) {
-        data["categories"] = {};
-        data["categories"]["names"] = categories;
+    if (categories.length !== 0) {
+        data.categories = {};
+        data.categories.names = categories;
     }
     // organization
-    if (organization.length != 0) {
-        data["organizations"] = {};
-        data["organizations"]["names"] = organization;
+    if (organization.length !== 0) {
+        data.organizations = {};
+        data.organizations.names = organization;
     }
     // city
-    if (city.length != 0) {
-        if (!data["organizations"]) {
-            data["organizations"] = {};
+    if (city.length !== 0) {
+        if (!data.organizations) {
+            data.organizations = {};
         }
-        data["organizations"]["cities"] = city;
+        data.organizations.cities = city;
     }
     // country
-    if (country.length != 0) {
-        if (!data["organizations"]) {
-            data["organizations"] = {};
+    if (country.length !== 0) {
+        if (!data.organizations) {
+            data.organizations = {};
         }
-        data["organizations"]["countries"] = country;
+        data.organizations.countries = country;
     }
     // language
-    if (language != 'All') {
-        data["lectures"] = {};
-        data["lectures"]["language"] = formats.languages.fullToAbbr[language];
+    if (language !== 'All') {
+        data.lectures = {};
+        data.lectures.language = formats.languages.fullToAbbr[language];
     }
     // min views
-    if (minViews != '') {
-        if (!data["lectures"]) data["lectures"] = {};
-        data["lectures"]["views"] = {};
-        data["lectures"]["views"]["min"] = minViews;
+    if (minViews !== '') {
+        if (!data.lectures) data.lectures = {};
+        data.lectures.views = {};
+        data.lectures.views.min = minViews;
     }
     // max views
-    if (maxViews != '') {
-        if (!data["lectures"]) {
-            data["lectures"] = {};
+    if (maxViews !== '') {
+        if (!data.lectures) {
+            data.lectures = {};
         }
-        if (!data["lectures"]["views"]) {
-            data["lectures"]["views"] = {};
+        if (!data.lectures.views) {
+            data.lectures.views = {};
         }
-        data["lectures"]["views"]["max"] = maxViews;
+        data.lectures.views.max = maxViews;
     }
     // call the search function
     if ($.isEmptyObject(data)) { return; }

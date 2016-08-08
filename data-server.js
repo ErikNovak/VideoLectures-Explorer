@@ -21,7 +21,9 @@ var app = express();
 
 // logger
 var logDirectory = path.join(__dirname, 'log', 'data-request');
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+if(!fs.existsSync(logDirectory)) {
+    fs.mkdirSync(logDirectory);
+}
 
 // create a rotating write stream
 var accessLogStream = FileStreamRotator.getStream({
@@ -91,10 +93,10 @@ function queryDatabase(data) {
                     title: data.categories.names[CatN]
                 }
             };
-            if (query["$join"]) {
-                query["$join"].push(categoryQuery);
+            if (query.$join) {
+                query.$join.push(categoryQuery);
             } else {
-                query["$join"] = [categoryQuery];
+                query.$join = [categoryQuery];
             }
         }
     }
@@ -110,10 +112,10 @@ function queryDatabase(data) {
                 }
             };
             // if $join already exists
-            if (query["$join"]) {
-                query["$join"].push(authorsQuery);
+            if (query.$join) {
+                query.$join.push(authorsQuery);
             } else {
-                query["$join"] = [authorsQuery];
+                query.$join = [authorsQuery];
             }
         }
     }
@@ -131,53 +133,53 @@ function queryDatabase(data) {
             }
         };
         if(data.organizations.names) {
-            organizationQuery["$query"]["$join"]["$query"]["name"] =
+            organizationQuery.$query.$join.$query.name =
                 data.organizations.names;
         }
         if(data.organizations.cities) {
-            organizationQuery["$query"]["$join"]["$query"]["city"] =
+            organizationQuery.$query.$join.$query.city =
                 data.organizations.cities;
         }
         if(data.organizations.countries) {
-            organizationQuery["$query"]["$join"]["$query"]["country"] =
+            organizationQuery.$query.$join.$query.country =
                 data.organizations.countries;
         }
         // if $join already exists
-        if (query["$join"]) {
-            query["$join"].push(organizationQuery);
+        if (query.$join) {
+            query.$join.push(organizationQuery);
         } else {
-            query["$join"] = [organizationQuery];
+            query.$join = [organizationQuery];
         }
     }
     // search for lectures by it's attributes
     if (data.lectures) {
-        if (!query["$join"]) query["$from"] = "Lectures";
+        if (!query.$join) query.$from = "Lectures";
 
         if (data.lectures.type) {
-            query["type"] = data.lectures.type;
+            query.type = data.lectures.type;
         }
         if (data.lectures.language) {
-            query["language"] = data.lectures.language;
+            query.language = data.lectures.language;
         }
         if (data.lectures.duration) {
             var lectureDurationQuery = {};
             if (data.lectures.duration.min) {
-                lectureDurationQuery["$gt"] = parseInt(data.lectures.duration.min);
+                lectureDurationQuery.$gt = parseInt(data.lectures.duration.min);
             }
             if (data.lectures.duration.max) {
-                lectureDurationQuery["$lt"] = parseInt(data.lectures.duration.max);
+                lectureDurationQuery.$lt = parseInt(data.lectures.duration.max);
             }
-            query["duration"] = lectureDurationQuery;
+            query.duration = lectureDurationQuery;
         }
         if(data.lectures.views) {
             var lectureViewsQuery = {};
             if (data.lectures.views.min) {
-                lectureViewsQuery["$gt"] = parseInt(data.lectures.views.min);
+                lectureViewsQuery.$gt = parseInt(data.lectures.views.min);
             }
             if (data.lectures.views.max) {
-                lectureViewsQuery["$lt"] = parseInt(data.lectures.views.max);
+                lectureViewsQuery.$lt = parseInt(data.lectures.views.max);
             }
-            query["views"] = lectureViewsQuery;
+            query.views = lectureViewsQuery;
         }
     }
     var result = base.search(query);
@@ -210,7 +212,7 @@ app.post('/landscape-points', function (request, result) {
     var search = queryDatabase(sentData.data);
 
     // if search query is empty
-    if (search.length == 0) {
+    if (search.length === 0) {
         result.send({ error: "No data found!" });
         return;
     }
@@ -375,15 +377,16 @@ app.post('/landscape-points', function (request, result) {
      */
     function SendPoints(matrix, params) {
         var denseMat;
+        var singVal;
         // small matrices
         if (matrix.cols <= params.docTresh) {
             denseMat = matrix.full();
-            var singVal = Math.min(denseMat.rows, denseMat.cols);
+            singVal = Math.min(denseMat.rows, denseMat.cols);
             qm.la.svdAsync(denseMat, singVal, { iter: params.iter }, runMDS);
         }
         // large matrices
         else {
-            var singVal = Math.min(matrix.cols, params.clusterN);
+            singVal = Math.min(matrix.cols, params.clusterN);
             var kmeans = new qm.analytics.KMeans({
                 iter:         params.iter,
                 k:            singVal,
@@ -472,7 +475,7 @@ app.post('/landscape-points', function (request, result) {
             var points = pointsCreation.fillPointsArray(pntStorage, search, ftrCategories);
             result.send({ "searchwords": sentData.data, "points": points });
         }
-    };
+    }
 
 });
 
@@ -515,7 +518,7 @@ app.get('/initial-landscape-points', function (request, response) {
         },
         points: initialPoints
     });
-})
+});
 
 // ----------------------------------------------
 // Autocomplete GET
@@ -605,7 +608,7 @@ app.get('/autocomplete', function (req, res) {
 /**
  * Initialize the data server.
  */
-const PORT = 6052;
+var PORT = 6052;
 app.listen(PORT, function () {
     console.log('Videolectures Explorer | Data server on port ' + PORT);
 });

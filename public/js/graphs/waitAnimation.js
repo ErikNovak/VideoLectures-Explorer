@@ -145,7 +145,7 @@ function waitAnimation(_options) {
              * The helper function, which creates the transition of the
              * wait animation.
              */
-            function arcTweenOut(transition, startAngle, endAngle) {
+            var arcTweenOut = function (transition, startAngle, endAngle) {
                 transition.attrTween("d", function (d) {
                     var interpolateStart = d3.interpolate(d.startAngle, startAngle);
                     var interpolateEnd   = d3.interpolate(d.endAngle, endAngle);
@@ -153,11 +153,11 @@ function waitAnimation(_options) {
                         d.startAngle = interpolateStart(t);
                         d.endAngle   = interpolateEnd(t);
                         return arc(d);
-                    }
+                    };
                 });
-            }
+            };
 
-            function arcTweenIn(transition, startAngle, endAngle) {
+            var arcTweenIn = function (transition, startAngle, endAngle) {
                 transition.attrTween("d", function (d) {
                     var interpolateStart = d3.interpolate(d.startAngle, startAngle);
                     var interpolateEnd   = d3.interpolate(d.endAngle, endAngle);
@@ -165,11 +165,11 @@ function waitAnimation(_options) {
                         d.startAngle = interpolateStart(t);
                         d.endAngle   = interpolateEnd(t);
                         return arcInner(d);
-                    }
+                    };
                 });
-            }
+            };
         }
-    }
+    };
 
     /**
      * Stops and hides the animation
@@ -181,11 +181,11 @@ function waitAnimation(_options) {
         // remove the previous SVG contained elements
         d3.select(options.containerName + " svg").remove();
         $(options.containerName).hide();
-    }
+    };
 
     $(window).resize(function () {
         if (isRunning) {
 
         }
-    })
+    });
 }

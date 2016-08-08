@@ -41,7 +41,7 @@ for (var OrgN = 0; OrgN < organizations.length; OrgN++) {
         "index":   organization.id.toString(),
         "name":    organization.name,
         "city":    city,
-        "country": organization.country != "" ? organization.country.toUpperCase() : ""
+        "country": organization.country !== "" ? organization.country.toUpperCase() : ""
     };
     base.store('Organizations').push(record);
 }
@@ -62,7 +62,7 @@ for (var CatN = 0; CatN < categoryKeys.length; CatN++) {
         "path":        category.url.split('/'),
         "wiki":        category.refs      ? category.refs.wiki : "",
         "description": category.text.desc ? category.text.desc : ""
-    }
+    };
     base.store('Categories').push(record);
 
     if (!catHt.hasKey(category.text.title)) {
@@ -96,10 +96,10 @@ for(var AutN = 0; AutN < authors.length; AutN++) {
     var record = {
         "index":  author.id.toString(),
         "name":   author.name,
-        "title":  author.title  != '' ? author.title  : "",
-        "gender": author.gender != '' ? author.gender : "",
-        "slug":   author.slug   != '' ? author.slug   : "",
-    }
+        "title":  author.title  !== '' ? author.title  : "",
+        "gender": author.gender !=+ '' ? author.gender : "",
+        "slug":   author.slug   !=+ '' ? author.slug   : "",
+    };
     base.store('Authors').push(record);
 
     var orgRef = author.organization;
@@ -134,7 +134,7 @@ for(var LectN = 0; LectN < lectures.length; LectN++) {
         "language":    lecture.language,
         "duration":    lecture.duration,
         "views":       lecture.view_ctr
-    }
+    };
     base.store('Lectures').push(record);
 
     // join the presenters
@@ -145,7 +145,7 @@ for(var LectN = 0; LectN < lectures.length; LectN++) {
             if (base.store('Authors').recordByName(presenter)) {
                 base.store('Lectures').recordByName(lecture.id.toString()).$addJoin(
                     'presenters', base.store('Authors').recordByName(presenter)
-                )
+                );
             }
         }
     }
@@ -195,7 +195,7 @@ for(var LectN = 0; LectN < lectures.length; LectN++) {
         if (base.store('Lectures').recordByName(parentId)) {
             base.store('Lectures').recordByName(lecture.id.toString()).$addJoin(
                 'parent', base.store('Lectures').recordByName(parentId)
-            )
+            );
         }
     }
 }

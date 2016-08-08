@@ -229,4 +229,4 @@ var formats = {
             Bangladesh                                  : "BD"
         }
     }
-}
+};

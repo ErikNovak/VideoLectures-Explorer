@@ -53,7 +53,7 @@ function landscapeGraph(_options) {
      */
     this.getData = function () {
         return landscapeData;
-    }
+    };
 
     /**
      * Set the landscape data.
@@ -68,7 +68,7 @@ function landscapeGraph(_options) {
         landscapeData.points = _data.points;
         newData = true;
         self.drawLandscape();
-    }
+    };
 
     /**
      * Draws the landscape.
@@ -81,7 +81,7 @@ function landscapeGraph(_options) {
             prepareLandscapeDisplay();
         }
         redraw();
-    }
+    };
 
     /**
      * Prepare the landscape graph display.
@@ -246,7 +246,7 @@ function landscapeGraph(_options) {
             .y(yScale);
 
         // get the maximum number of views
-        var maxView = Math.max.apply(null, $.map(landscapeData.points, function (pt) { return pt["views"] }));
+        var maxView = Math.max.apply(null, $.map(landscapeData.points, function (pt) { return pt.views; }));
 
         rScale = d3.scale.linear()
                    .domain([0, maxView])
@@ -261,7 +261,7 @@ function landscapeGraph(_options) {
         LSPoints.transition().duration(1000)
                 .attr("cx", function (d) { return xScale(d.x); })
                 .attr("cy", function (d) { return yScale(d.y); })
-                .attr("r", function (d) { return rScale(d["views"] + 1); });
+                .attr("r", function (d) { return rScale(d.views + 1); });
 
         LSPoints.exit().transition().duration(1000).attr("r", 0).remove();
 
@@ -272,7 +272,7 @@ function landscapeGraph(_options) {
                 .attr("r", 0)
                 .attr("fill", options.color.points)
                 .transition().duration(1000)
-                .attr("r", function (d) { return rScale(d["views"] + 1); })
+                .attr("r", function (d) { return rScale(d.views + 1); });
 
 
         // Construct tooltip
@@ -286,7 +286,7 @@ function landscapeGraph(_options) {
                              tooltipDiv.html(options.tooltipClass.CreateText(d));
                              var x = coords[0] + options.margin.left;
                              var y = coords[1] + options.margin.top;
-                             var scale = rScale(d["views"]) * zoom.scale();
+                             var scale = rScale(d.views) * zoom.scale();
                              var xOffset = (coords[0] > ($(options.containerName).width() / 2)) ? (-tooltipDiv.outerWidth() - scale) : scale;
                              var yOffset = (coords[1] > ($(options.containerName).height() / 2)) ? (-tooltipDiv.outerHeight() + 60) : -60;
                              tooltipDiv.css({ left: (x + xOffset) + "px", top: (y + yOffset) + "px" })
@@ -309,7 +309,7 @@ function landscapeGraph(_options) {
             if (newData) {
                 landscapeData.landmarks = [];
                 if (landscapeData.points.length < 50) {
-                    landscapeData.landmarks = $.map(landscapeData.points, function (pt) { return { x: pt.x, y: pt.y } });
+                    landscapeData.landmarks = $.map(landscapeData.points, function (pt) { return { x: pt.x, y: pt.y }; });
                 } else {
                     for (var n = 0; n < options.landmarkClass.numberOfLandmarks; n++) {
                         landscapeData.landmarks.push({ x: Math.random(), y: Math.random() });
@@ -337,12 +337,12 @@ function landscapeGraph(_options) {
 
                 landmarks.enter().append("text")
                          .attr("class", "landmark")
-                         .attr("id", function (d, i) { "landmark-number-" + i })
+                         .attr("id", function (d, i) { return "landmark-number-" + i; })
                          .text(function (d, i) {
                             closestPoints = $.grep(landscapeData.points, function (pt) {
                                 return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 20;
                             });
-                            if (closestPoints.length == 0) { $(this).remove(); return; }
+                            if (closestPoints.length === 0) { $(this).remove(); return; }
                                 return options.landmarkClass.setText(closestPoints);
                          })
                          .attr("font-size", "12px")
@@ -365,7 +365,7 @@ function landscapeGraph(_options) {
                     closestPoints = $.grep(landscapeData.points, function (pt) {
                         return Math.sqrt(Math.pow(xScale(d.x) - xScale(pt.x), 2) + Math.pow(yScale(d.y) - yScale(pt.y), 2)) < 25;
                     });
-                    if (closestPoints.length == 0) { $(this).remove(); return; }
+                    if (closestPoints.length === 0) { $(this).remove(); return; }
                 });
                 // if there is a hide/show function for landmarks
                 if (options.landmarkClass.toggleLandmarks) {
@@ -407,6 +407,6 @@ function landscapeGraph(_options) {
                 }, 100);
         }
         windowResize = false;
-    })
+    });
 
 }

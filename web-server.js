@@ -20,8 +20,9 @@ var app = express();
 
 // logger
 var logDirectory = path.join(__dirname, 'log', 'page-request');
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
-
+if(!fs.existsSync(logDirectory)) {
+    fs.mkdirSync(logDirectory);
+}
 // create a rotating write stream
 var accessLogStream = FileStreamRotator.getStream({
     date_format: 'YYYY-MM-DD',
