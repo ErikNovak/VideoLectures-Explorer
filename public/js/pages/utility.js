@@ -21,7 +21,7 @@ var utility = {
         var text = "";
         for (var catN = 0; catN < array.length; catN++) {
             var pair = array[catN];
-            text += "<a onclick='queryCategory(\"" + pair.category + "\")'>" + pair.category + "</a>" + " (" + pair.frequency + ")";
+            text += "<a onclick='queryCategory(\"" + pair.category + "\")'>" + pair.category + "</a>" + "(" + pair.frequency + ")";
             if (catN != array.length - 1) {
                 text += ", ";
             }
