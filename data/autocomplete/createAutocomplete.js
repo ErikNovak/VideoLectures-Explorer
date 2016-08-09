@@ -1,5 +1,5 @@
 ﻿// Creates the files used for input autocompletion
-var qm = require('../../../../qminer');
+var qm = require('qminer');
 var fs = require('fs');
 
 console.log('Building base...');

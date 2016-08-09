@@ -140,10 +140,12 @@ var landmarkClass = {
     setText: function(points) {
         // get the frequency of the categories
         var landmarks = [];
-        if (points.length == 1) {
-            var categories = points[0].categories.slice(1);
-            var diceRoll = Math.floor(categories.length * Math.random());
-            return categories[diceRoll];
+        if (points.length === 1) {
+            if (points[0].categories) {
+                var categories = points[0].categories.slice(1);
+                var diceRoll = Math.floor(categories.length * Math.random());
+                return categories[diceRoll];
+            }
         } else {
             for (var MatN = 0; MatN < points.length; MatN++) {
                 if (!points[MatN].landmarkTags) {

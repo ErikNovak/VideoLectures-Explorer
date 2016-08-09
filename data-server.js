@@ -51,8 +51,9 @@ app.use(function (req, res, next) {
 /**
  * The qminer module for the videolecture dataset.
  */
-var qm             = require('../../qminer');
+var qm             = require('qminer');
 var pointsCreation = require('./server_utility/pointsCreation.js');
+
 
 var base = new qm.Base({
     mode:   'openReadOnly',
@@ -185,7 +186,6 @@ function queryDatabase(data) {
     var result = base.search(query);
     return result;
 }
-
 // The feature space used for point generation
 var ftrLectures = new qm.FeatureSpace(base, [
     { type: "text", source: "Lectures", field: "title",       tokenizer: { type: "unicode", stopwords: "en" } },
@@ -203,7 +203,6 @@ var ftrCategories = new qm.FeatureSpace(base, [
 // ---------------------------------------
 // Query Function
 // ---------------------------------------
-
 /**
  * Get the JSON containing the landscape points info.
  */
@@ -478,7 +477,6 @@ app.post('/api/getLandscapePoints', function (req, res) {
 
 });
 
-
 var initialQuery = {
     categories: {
         names: ["Big Data"]
@@ -502,7 +500,6 @@ function initialData() {
     return points;
 }
 var initialPoints = initialData();
-
 // ---------------------------------------
 // Get and Post
 // ---------------------------------------
@@ -516,7 +513,6 @@ app.get('/api/getInitLandscapePoints', function (req, res) {
         points: initialPoints
     });
 });
-
 // ----------------------------------------------
 // Autocomplete GET
 // ----------------------------------------------
@@ -591,7 +587,6 @@ function createAutocompleteList() {
     };
 }
 var autocompleteList = createAutocompleteList();
-
 /**
  * Sends the data for the input autocompletion.
  */

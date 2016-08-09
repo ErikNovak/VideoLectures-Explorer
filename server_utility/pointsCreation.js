@@ -2,7 +2,7 @@
  * Contains the functions for formating the points gained
  * by Multidimensional Scaling.
  */
-var qm = require('../../../qminer');
+var qm = require('qminer');
 
 /**
   * Gets the minimum and maximum values of the vector.
@@ -29,7 +29,7 @@ function getMinMax (vec) {
 function createLinearFunction (vec) {
     var m = getMinMax(vec);
     if (m.min == m.max) {
-        return function (t) { return 0.5; }
+        return function (t) { return 0.5; };
     } else {
         return function (t) {
             return 1 / (m.max - m.min) * t - m.min / (m.max - m.min);
@@ -55,7 +55,7 @@ function fillPointsArray(pointsMatrix, query, ftr) {
         var uniqueCategories = null;
         if (query[pointN].categories) {
             var categories = [].concat.apply([], query[pointN].categories.map(function (rec) {
-                return rec.path.toArray()
+                return rec.path.toArray();
             }));
             uniqueCategories = [];
             for (var CatN = 0; CatN < categories.length; CatN++) {
@@ -63,23 +63,23 @@ function fillPointsArray(pointsMatrix, query, ftr) {
                 if (uniqueCategories.indexOf(categories[CatN]) === -1 && categories[CatN] != 'Top') {
                     uniqueCategories.push(categories[CatN]);
                 }
-            };
+            }
         }
         var presenters = null;
-        if (query[pointN].presenters.length != 0) {
+        if (query[pointN].presenters.length !== 0) {
             presenters = query[pointN].presenters.map(function (rec) {
-                return rec.name
+                return rec.name;
             });
         }
         var organization = null;
-        if (query[pointN].presenters.length != 0) {
+        if (query[pointN].presenters.length !== 0) {
             var workPlaces = [].concat.apply([], query[pointN].presenters.map(function (rec) {
                 return rec.worksAt.map(function (rec2) {
                     return rec2.name;
-                })
+                });
             }));
             for (var WorkN = 0; WorkN < workPlaces.length; WorkN++) {
-                if (workPlaces[WorkN] != null) {
+                if (!workPlaces[WorkN]) {
                     organization = workPlaces[WorkN];
                     break;
                 }
@@ -93,7 +93,7 @@ function fillPointsArray(pointsMatrix, query, ftr) {
         var landmarkTags = [];
         var landTfIdf = ftr.extractVector(query[pointN]);
         for(var LandN = 1; LandN < ftr.dim; LandN++) {
-            if (landTfIdf[LandN] != 0 && featCategories[LandN] != 'Top') {
+            if (landTfIdf[LandN] !== 0 && featCategories[LandN] !== 'Top') {
                 landmarkTags.push([featCategories[LandN], landTfIdf[LandN]]);
             }
         }
@@ -106,7 +106,7 @@ function fillPointsArray(pointsMatrix, query, ftr) {
             author:       presenters,
             organization: organization,
             language:     query[pointN].language,
-            categories:   query[pointN].categories != null ? uniqueCategories : null,
+            categories:   query[pointN].categories !== null ? uniqueCategories : null,
             published:    query[pointN].recorded,
             duration:     query[pointN].duration,
             public:       query[pointN].public,
@@ -190,4 +190,4 @@ exports.getPoints = function (query, matrix, params, ftr) {
         pntStorage.setRow(ColN, pnt);
     }
     return fillPointsArray(pntStorage, query, ftr);
-}
+};
