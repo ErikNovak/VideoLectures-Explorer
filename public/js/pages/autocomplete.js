@@ -10,9 +10,9 @@ function fillAutocomplete() {
     // get the autocomplete data
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:6052/autocomplete',
+        url: '/api/getAutocomplete',
         success: function (data) {
-
+            data = JSON.parse(data);
             // author typeahead and tags
             var presenters = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
@@ -124,7 +124,6 @@ function fillAutocomplete() {
             for (var ValN = 0; ValN < Object.keys(data).length; ValN++) {
                 all = all.concat(data[Object.keys(data)[ValN]]);
             }
-
             // basic search typeahead and tags
             var basic = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),

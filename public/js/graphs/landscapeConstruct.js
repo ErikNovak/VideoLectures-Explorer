@@ -1,4 +1,5 @@
-﻿/**
+﻿
+/**
  * Initializes the landscape graph and the wait
  * container.
  */
@@ -10,7 +11,7 @@ var tooltipClass = {
     /**
      * Additional data, the date of the latest/used database.
      */
-    databaseDate : "24.07.2016",
+    databaseDate: "24.07.2016",
 
     /**
      * Creates a string from the point information.
@@ -18,14 +19,14 @@ var tooltipClass = {
      * @returns {string} The html string containing the info of the data. It
      * is used for the toolbox info, when hovering over a point.
      */
-    CreateText : function (data) {
-        var title        = data.title;
-        var author       = data.author ? data.author.join(", ")  : "N/A";
+    CreateText: function(data) {
+        var title = data.title;
+        var author = data.author ? data.author.join(", ") : "N/A";
         var organization = data.organization ? data.organization : "N/A";
 
         var text = "<b>Lecture title:</b> " + title + "<br>";
-        text    += "<b>Presenter:</b> "     + author + "<br>";
-        text    += "<b>Organization:</b> "  + organization + "<br><br>";
+        text += "<b>Presenter:</b> " + author + "<br>";
+        text += "<b>Organization:</b> " + organization + "<br><br>";
 
         if (data.description) {
             var description = tooltipClass.getDescription(data.description);
@@ -38,23 +39,24 @@ var tooltipClass = {
             text += "The lecture is in " + language + ". ";
         }
         // category
-        if (data.categories && data.categories.length != 0) {
-            var num        = data.categories.length === 1;
+        if (data.categories && data.categories.length !== 0) {
+            var num = data.categories.length === 1;
             var categories = num ? "category" : "categories";
-            var timeWas    = num ? "was" : "were";
+            var timeWas = num ? "was" : "were";
             text += "The main " + categories + " of the lecture " +
-                    timeWas + " <b>" + data.categories.join(", ") + "</b>. ";
+                timeWas + " <b>" + data.categories.join(", ") + "</b>. ";
         }
         // published and duration
         if (data.published) {
             var date = data.published.split('T')[0].split('-').reverse().join('.');
+            text += "It was published in " + date;
         }
         if (data.duration) {
             var time = tooltipClass.getTime(data.duration);
-            text += "It was published in " + date + " and it's duration is " +
-            time + ". There have been <b>" + data.views +
-            "</b> views until " + tooltipClass.databaseDate + ". ";
+            text += " and it's duration is " + time;
         }
+        text += ". There have been <b>" + data.views +
+        "</b> views until " + tooltipClass.databaseDate + ". ";
         return text;
     },
 
@@ -63,9 +65,9 @@ var tooltipClass = {
      * @param {string} duration - The duration in miliseconds.
      * @returns {string} The representation hh:mm:ss of duration.
      */
-    getTime: function (duration) {
+    getTime: function(duration) {
         // get the duration
-        var time    = '',
+        var time = '',
             seconds = parseInt(duration);
         // get hours
         var hours = Math.floor(seconds / 3600);
@@ -97,22 +99,22 @@ var tooltipClass = {
      *  It cuts the description if it's too long. It finds the next dot
      *  after the first 200 characters and returns everything in between.
      */
-    getDescription : function (str) {
+    getDescription: function(str) {
         var getDot = str.indexOf('.', 300);
-        var desc   = getDot != -1 ? str.substr(0, getDot + 1) + '...' : str;
+        var desc = getDot != -1 ? str.substr(0, getDot + 1) + '...' : str;
         return desc;
     },
 
     /**
      * Fills the Lecture information box
      */
-    fillLectureInformation: function (data) {
-        var title      = data.title;
-        var author     = data.author                                    ? data.author.join(", ")     : "N/A";
-        var categories = data.categories && data.categories.length != 0 ? data.categories.join(", ") : "N/A";
-        var isEnabled  = data.enabled ? "Yes" : "No";
-        var isPublic   = data.public  ? "Yes" : "No";
-        var slug       = "<a href=http://videolectures.net/" + data.slug + ">" + data.slug + "</a>";
+    fillLectureInformation: function(data) {
+        var title = data.title;
+        var author = data.author ? data.author.join(", ") : "N/A";
+        var categories = data.categories && data.categories.length !== 0 ? data.categories.join(", ") : "N/A";
+        var isEnabled = data.enabled ? "Yes" : "No";
+        var isPublic = data.public ? "Yes" : "No";
+        var slug = "<a href=http://videolectures.net/" + data.slug + ">" + data.slug + "</a>";
 
 
         $(".lecture-info").empty();
@@ -122,7 +124,7 @@ var tooltipClass = {
         $(".lecture-enabled-info").append(isEnabled);
         $(".lecture-slug-info").append(slug);
     }
-}
+};
 
 //-------------------------------------
 // Landmark class
@@ -135,42 +137,46 @@ var landmarkClass = {
      * @param {Array.<Objects>} points - The objects representing the lectures.
      * @returns {String} The chosen name.
      */
-    setText: function (points) {
+    setText: function(points) {
         // get the frequency of the categories
         var landmarks = [];
         if (points.length == 1) {
             var categories = points[0].categories.slice(1);
-            var diceRoll   = Math.floor(categories.length * Math.random());
+            var diceRoll = Math.floor(categories.length * Math.random());
             return categories[diceRoll];
         } else {
             for (var MatN = 0; MatN < points.length; MatN++) {
-                if (!points[MatN].landmarkTags) { continue; }
-                var categories = points[MatN].landmarkTags;
-                for (var KeyN = 0; KeyN < categories.length; KeyN++) {
-                    if (landmarks[categories[KeyN][0]] != null) {
-                        landmarks[categories[KeyN][0]] += categories[KeyN][1];
+                if (!points[MatN].landmarkTags) {
+                    continue;
+                }
+                var landmarkTags = points[MatN].landmarkTags;
+                for (var KeyN = 0; KeyN < landmarkTags.length; KeyN++) {
+                    if (landmarks[landmarkTags[KeyN][0]]) {
+                        landmarks[landmarkTags[KeyN][0]] += landmarkTags[KeyN][1];
                     } else {
-                        landmarks[categories[KeyN][0]] = categories[KeyN][1];
+                        landmarks[landmarkTags[KeyN][0]] = landmarkTags[KeyN][1];
                     }
                 }
             }
-            if (Object.keys(landmarks).length == 0) {
+            if (Object.keys(landmarks).length === 0) {
                 return;
             }
             // create an array of key-values
             var ArrayOfCategories = [];
-            for (key in landmarks) {
-                if (landmarks[key] != 0) {
+            for (var key in landmarks) {
+                if (landmarks[key] !== 0) {
                     ArrayOfCategories.push([key, landmarks[key]]);
                 }
             }
-            if (ArrayOfCategories.length == 0) {
+            if (ArrayOfCategories.length === 0) {
                 return "";
             } else {
-                ArrayOfCategories.sort(function (a, b) { return b[1] - a[1]; });
+                ArrayOfCategories.sort(function(a, b) {
+                    return b[1] - a[1];
+                });
                 var upperBound = ArrayOfCategories.length >= 3 ? 3 : ArrayOfCategories.length;
                 var categories = ArrayOfCategories.slice(0, 3);
-                var diceRoll   = Math.floor(upperBound * Math.random());
+                var diceRoll = Math.floor(upperBound * Math.random());
                 return categories[diceRoll][0];
             }
         }
@@ -179,7 +185,7 @@ var landmarkClass = {
     /**
      * Shows/hides the landmarks on the landscape.
      */
-    toggleLandmarks : function () {
+    toggleLandmarks: function() {
         var tick = $("#landmarks-check").is(':checked');
         var landmarks = d3.selectAll(".landmark");
         if (!tick) {
@@ -195,7 +201,7 @@ var landmarkClass = {
      * each other, the younger one is hidden.
      * @param {object} _tags - The landmark tags.
      */
-    landmarksVisibility : function (_tags) {
+    landmarksVisibility: function(_tags) {
         // create additional cluster border control
         var addBorder = 10;
         // saves the visible clusters
@@ -218,7 +224,7 @@ var landmarkClass = {
             visibles.push(currentClust);
         }
     }
-}
+};
 
 /**
  * Adds the functionality of the landscape tickbox
@@ -232,7 +238,7 @@ $("#landmarks-check").on('click', landmarkClass.toggleLandmarks);
 
 var landscape = new landscapeGraph({
     containerName: '#landscape-graph-container',
-    tooltipClass:  tooltipClass,
+    tooltipClass: tooltipClass,
     landmarkClass: landmarkClass
 });
 

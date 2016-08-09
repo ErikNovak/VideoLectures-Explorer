@@ -14,7 +14,7 @@ var authorsFs       = fs.createWriteStream('authors.aut', 'utf8');
 var categoriesFs    = fs.createWriteStream('categories.aut', 'utf8');
 var languagesFs     = fs.createWriteStream('languages.aut', 'utf8');
 var citiesFs        = fs.createWriteStream('cities.aut', 'utf8');
-var typesFs         = fs.createWriteStream('types.aut', 'utf8');
+// var typesFs         = fs.createWriteStream('types.aut', 'utf8');
 var countriesFs     = fs.createWriteStream('countries.aut', 'utf8');
 var organizationsFs = fs.createWriteStream('organizations.aut', 'utf8');
 
@@ -56,12 +56,12 @@ for (var LectureN = 0; LectureN < lectures.length; LectureN++) {
     }
 
     var type = lectures[LectureN].type;
-    if (type && type.length !== 0) {
-        if (!typeHt.hasKey(type)) {
-            typesFs.write(type + '\n');
-            typeHt.put(type, 1);
-        }
-    }
+    // if (type && type.length !== 0) {
+    //     if (!typeHt.hasKey(type)) {
+    //         typesFs.write(type + '\n');
+    //         typeHt.put(type, 1);
+    //     }
+    // }
 }
 languagesFs.end();
 

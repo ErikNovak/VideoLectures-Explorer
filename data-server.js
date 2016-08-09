@@ -207,13 +207,12 @@ var ftrCategories = new qm.FeatureSpace(base, [
 /**
  * Get the JSON containing the landscape points info.
  */
-app.post('/landscape-points', function (request, result) {
-    var sentData = request.body;
+app.post('/api/getLandscapePoints', function (req, res) {
+    var sentData = req.body;
     var search = queryDatabase(sentData.data);
-
     // if search query is empty
     if (search.length === 0) {
-        result.send({ error: "No data found!" });
+        res.send({ error: "No data found!" });
         return;
     }
 
@@ -229,7 +228,7 @@ app.post('/landscape-points', function (request, result) {
     if (search.length == 1) {
         var mat    = new qm.la.Matrix([[0.5, 0.5]]);
         var points = pointsCreation.fillPointsArray(mat, search, ftrCategories);
-        result.send({ "searchwords": sentData.data, "points": points });
+        res.send({ "searchwords": sentData.data, "points": points });
         return;
     }
     // TODO: Make the Promises work
@@ -342,7 +341,7 @@ app.post('/landscape-points', function (request, result) {
     //
     //     let points = pointsCreation.fillPointsArray(pntStorage, search);
     //     console.log("Sending points");
-    //     result.send({ "searchwords": sentData.data, "points": points });
+    //     res.send({ "searchwords": sentData.data, "points": points });
     // }
 
 
@@ -358,7 +357,7 @@ app.post('/landscape-points', function (request, result) {
     //                              .then(calculateAndSendPoints)
     //                              .catch(function (reason) {
     //         console.log(reason);
-    //         result.send({ error: "An error occur when calculating the points." });
+    //         res.send({ error: "An error occur when calculating the points." });
     //     }
     // );
     // // calculateAndSendPoints(featMat, params);
@@ -395,7 +394,7 @@ app.post('/landscape-points', function (request, result) {
             kmeans.fitAsync(matrix, function (err) {
                 if (err) {
                     console.log(err);
-                    result.send({ error: "Error on the server side!" });
+                    res.send({ error: "Error on the server side!" });
                     return;
                 }
                 denseMat = kmeans.getModel().C;
@@ -413,7 +412,7 @@ app.post('/landscape-points', function (request, result) {
         function runMDS(err, SVD) {
             if (err) {
                 console.log(err);
-                result.send({ error: "Error on the server side!" });
+                res.send({ error: "Error on the server side!" });
                 return;
             }
 
@@ -446,7 +445,7 @@ app.post('/landscape-points', function (request, result) {
         function createCoordinates(err, coordinateMatrix) {
             if (err) {
                 console.log(err);
-                result.send({ error: "Error on the server side!" });
+                res.send({ error: "Error on the server side!" });
                 return;
             }
             var pntStorage = new qm.la.Matrix({ rows: matrix.cols, cols: 2 });
@@ -473,22 +472,24 @@ app.post('/landscape-points', function (request, result) {
             }
 
             var points = pointsCreation.fillPointsArray(pntStorage, search, ftrCategories);
-            result.send({ "searchwords": sentData.data, "points": points });
+            res.send({ "searchwords": sentData.data, "points": points });
         }
     }
 
 });
 
+
+var initialQuery = {
+    categories: {
+        names: ["Big Data"]
+    }
+};
 /**
  * Calculates the initial landscape points.
  * @return {Array.<Object>} The objects used for the landscape visualization.
  */
 function initialData() {
-    var query = queryDatabase({
-        categories: {
-            names: ["Big Data"]
-        }
-    });
+    var query = queryDatabase(initialQuery);
     // reset and update the feature space
     ftrLectures.clear();   ftrLectures.updateRecords(query);
     ftrCategories.clear(); ftrCategories.updateRecords(query);
@@ -509,13 +510,9 @@ var initialPoints = initialData();
 /**
  * Returns the initial points used for the visualization.
  */
-app.get('/initial-landscape-points', function (request, response) {
-    response.send({
-        searchwords: {
-            categories : {
-                names: ["Big Data"]
-            }
-        },
+app.get('/api/getInitLandscapePoints', function (req, res) {
+    res.send({
+        searchwords: initialQuery,
         points: initialPoints
     });
 });
@@ -523,7 +520,7 @@ app.get('/initial-landscape-points', function (request, response) {
 // ----------------------------------------------
 // Autocomplete GET
 // ----------------------------------------------
-// TODO: add additional autocompletes EVENT, COUNTRY, CITY
+// TODO: add additional autocompletes EVENT
 function createAutocompleteList() {
     // get all categories
     var categoriesFile = qm.fs.openRead('./data/autocomplete/categories.aut');
@@ -584,7 +581,6 @@ function createAutocompleteList() {
             "name": countriesFile.readLine()
         });
     }
-
     return {
         authors:       authors,
         categories:    categories,
@@ -594,14 +590,14 @@ function createAutocompleteList() {
         countries:     countries
     };
 }
-var autocompleteLists = createAutocompleteList();
+var autocompleteList = createAutocompleteList();
 
 /**
  * Sends the data for the input autocompletion.
  */
-app.get('/autocomplete', function (req, res) {
+app.get('/api/getAutocomplete', function (req, res) {
     // send the data to client
-    res.send(autocompleteLists);
+    res.send(autocompleteList);
 });
 
 

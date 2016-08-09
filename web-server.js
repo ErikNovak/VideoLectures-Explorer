@@ -9,7 +9,8 @@
 var express     = require('express'),
     bodyParser  = require('body-parser'),
     favicon     = require('serve-favicon'),
-    path        = require('path');
+    path        = require('path'),
+    request     = require('request');
 
 // logger dependancies
 var FileStreamRotator = require('file-stream-rotator'),
@@ -47,6 +48,31 @@ app.get('/', function (req, res) {
         root: __dirname + '/public/html/'
     };
     res.sendFile('index.html', options);
+});
+
+
+var DATAPORT = process.env.npm_package_config_dataport;
+app.get('/api/getAutocomplete', function (req, res) {
+    request('http://'+ DATAPORT +'/api/getAutocomplete', function (err, response, body) {
+        res.send(body);
+    });
+});
+
+app.get('/api/getInitLandscapePoints', function(req, res) {
+    request('http://'+ DATAPORT +'/api/getInitLandscapePoints', function (err, response, body) {
+        res.send(body);
+    });
+});
+
+app.post('/api/getLandscapePoints', function (req, res) {
+    var data = req.body;
+    request({
+        uri: 'http://'+ DATAPORT +'/api/getLandscapePoints',
+        method: 'POST',
+        form: data
+    }, function (err, response, body) {
+        res.send(body);
+    });
 });
 
 /******************************************

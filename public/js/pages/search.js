@@ -12,9 +12,10 @@ function landscapeAJAXCall(callPath, callType, value) {
 
     $.ajax({
         type: callType,
-        url: 'http://localhost:6052/' + callPath,
+        url: '/api/' + callPath,
         data: { data: value },
         success: function (res) {
+            res = JSON.parse(res);
             // if there is no query
             if (res.error) {
                 $("#error-trigger").trigger("click");
@@ -149,6 +150,6 @@ function search() {
     // call the search function
     if ($.isEmptyObject(data)) { return; }
     else {
-        landscapeAJAXCall('landscape-points', 'POST', data);
+        landscapeAJAXCall('getLandscapePoints', 'POST', data);
     }
 }

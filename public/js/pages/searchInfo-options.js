@@ -115,8 +115,7 @@ function searchInfo(obj) {
  */
 $(window).on("load", function () {
     fillAutocomplete();
-    landscapeAJAXCall('initial-landscape-points', 'GET');
-
+    landscapeAJAXCall('getInitLandscapePoints', 'GET');
     // initialize scrollbars
     $("#query-info-container").mCustomScrollbar({
         theme: "minimal-dark",
@@ -128,5 +127,4 @@ $(window).on("load", function () {
         theme: "minimal-dark",
         axis:  "y"
     });
-
 });

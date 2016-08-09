@@ -5,7 +5,7 @@
  */
 
 var fs = require('fs');
-var qm = require('../../../../qminer');
+var qm = require('qminer');
 
 console.log('Reading raw files...');
 // get all the raw data
@@ -16,8 +16,8 @@ var organizations = JSON.parse(fs.readFileSync('rawdata/organizations.json', 'ut
 
 // these are json objects
 // TODO: when API allows, use API to get the data
-var categories = JSON.parse(fs.readFileSync('rawdata/categories.json', 'utf8'))[0];
-var edges      = JSON.parse(fs.readFileSync('rawdata/edges.json', 'utf8'))[0];
+var categories = JSON.parse(fs.readFileSync('rawdata/categories.json', 'utf8'));
+var edges      = JSON.parse(fs.readFileSync('rawdata/edges.json', 'utf8'));
 
 console.log('Files read');
 
