@@ -192,7 +192,7 @@ var ftrLectures = new qm.FeatureSpace(base, [
     { type: "text", source: "Lectures", field: "description", tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: "Lectures", field: "slug",        tokenizer: { type: "unicode", stopwords: "en" } },
     { type: "text", source: { store: "Lectures", join: "categories" }, field: "title", mode: "tokenized" },
-    { type: "text", source: { store: "Lectures", join: "parent" },     field: "title", tokenizer: { type: "unicode", stopwords: "en" } }
+    { type: "text", source: { store: "Lectures", join: "parent" },     field: "title", mode: "tokenized" }
 ]);
 
 // The feature space used for point generation
