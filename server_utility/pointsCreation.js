@@ -79,13 +79,12 @@ function fillPointsArray(pointsMatrix, query, ftr) {
                 });
             }));
             for (var WorkN = 0; WorkN < workPlaces.length; WorkN++) {
-                if (!workPlaces[WorkN]) {
+                if (workPlaces[WorkN]) {
                     organization = workPlaces[WorkN];
                     break;
                 }
             }
         }
-
         var featCategories = [];
         for(var FeatN = 0; FeatN < ftr.dim; FeatN++) {
             featCategories.push(ftr.getFeature(FeatN));
