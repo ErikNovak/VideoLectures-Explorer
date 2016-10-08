@@ -6,7 +6,7 @@ VideoLectures Explorer is a exploratory tool for [VideoLectures.NET](http://vide
 
 ## How To Run the Application
 
-To run the application one must first run `npm install` to get all of the dependencies needed. After that run `node data-server.js` and `npm start` to start the data and website servers, respectively. 
+To run the application one must first run `npm install` to get all of the dependencies needed to start the servers. Then run `bower install` to get all of the website dependencies. Finally run `node data-server.js` and `npm start` to start the data and website servers, respectively. 
 
 Note: One must first create the database (video lectures data not included).
 
