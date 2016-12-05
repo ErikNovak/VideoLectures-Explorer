@@ -145,6 +145,9 @@ function fillAutocomplete() {
                 }
             });
 
+            // esthetics hack
+            $("#basic-search").css("top", "-12px");
+
             // filling the language search dropdown
             var languages = data.languages;
             for (var langN = 0; langN < languages.length; langN++) {

@@ -22,7 +22,7 @@ function landscapeAJAXCall(callPath, callType, value) {
             } else {
                 searchInfo(res);
                 landscape.setData(res);
-                landmarkClass.toggleLandmarks();
+                // landmarkClass.toggleLandmarks();
             }
             // stop the wait animation
             wait.stopAnimation();
@@ -79,13 +79,11 @@ function search() {
         }
     }
     // add the input values of the corresponding advanced search
-    author       = author.concat($.map($('#author-search-input').tagsinput('items'), function (tag) { return tag.name; }));
-    categories   = categories.concat($.map($('#category-search-input').tagsinput('items'), function (tag) { return tag.name; }));
+    author       = author.concat($.map($('#author-search-input').tagsinput('items'),             function (tag) { return tag.name; }));
+    categories   = categories.concat($.map($('#category-search-input').tagsinput('items'),       function (tag) { return tag.name; }));
     organization = organization.concat($.map($('#organization-search-input').tagsinput('items'), function (tag) { return tag.name; }));
 
-    var city = $('#city-search-input').tagsinput('items').map(function (tag) {
-        return tag.name;
-    });
+    var city = $('#city-search-input').tagsinput('items').map(function (tag) { return tag.name; });
 
     var country = $('#country-search-input').tagsinput('items').map(function (tag) {
         return formats.countries.fullToAbbr[tag.name.replace(/[\s,\-]+/g, '_')];

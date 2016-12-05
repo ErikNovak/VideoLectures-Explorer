@@ -188,14 +188,8 @@ var landmarkClass = {
      * Shows/hides the landmarks on the landscape.
      */
     toggleLandmarks: function() {
-        var tick = $("#landmarks-check").is(':checked');
         var landmarks = d3.selectAll(".landmark");
-        if (!tick) {
-            landmarks.classed('hidden', true);
-        } else {
-            landmarks.classed('hidden', false);
-            landmarkClass.landmarksVisibility(landmarks[0]);
-        }
+        landmarkClass.landmarksVisibility(landmarks[0]);
     },
 
     /**
@@ -231,7 +225,6 @@ var landmarkClass = {
 /**
  * Adds the functionality of the landscape tickbox
  */
-$("#landmarks-check").on('click', landmarkClass.toggleLandmarks);
 
 
 //-------------------------------------

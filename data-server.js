@@ -510,7 +510,7 @@ var initialPoints = initialData();
 app.get('/api/getInitLandscapePoints', function (req, res) {
     res.send({
         searchwords: initialQuery,
-        points: initialPoints
+        points:      initialPoints
     });
 });
 // ----------------------------------------------

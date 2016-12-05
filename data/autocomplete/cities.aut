@@ -17,6 +17,7 @@ Rome
 Turku
 Taipei
 Amsterdam
+San Francisco, CA
 Vienna
 Chisinau
 Wolfville
@@ -127,6 +128,7 @@ Roma
 Wattana
 Oakland
 Belluno
+Milano
 Birmingham
 Maribor
 Pasadena
@@ -137,6 +139,7 @@ Kyoto
 Florham Park
 Auburn
 Sydney
+Adelaide
 Canberra
 Breda
 Basking Ridge, NJ
@@ -175,6 +178,7 @@ Tallinn
 Ajdovščina
 Bremen
 Bielefeld
+Binghamton
 Oslo
 Trzin
 Ghent
@@ -184,6 +188,7 @@ San Francisco
 Huston, TX
 Atlanta
 Catanzaro
+Cambridge, MA
 Edinburgh
 Naklo
 Dresden
@@ -193,7 +198,6 @@ Sint-Denijs-Westrem
 Hamburg
 Munich
 Herford / Frankfurt
-Milano
 Chicago
 Missouri
 Boise
@@ -201,6 +205,8 @@ Golnik
 Bologna
 Bonn
 Sankt Augustin
+Talence Cedex
+Palo Alto, CA
 Kolkata
 Dorset
 Rochester
@@ -219,6 +225,7 @@ Lumbertubs
 Venice
 Brezovica pri Ljubljani
 Cairo
+LOS ANGELES, CA
 San Luis Obispo
 Long Beach, CA
 California
@@ -250,7 +257,6 @@ Marne-la-Vallée cedex 2
 Beaverton
 Princeton, NJ
 Stanford
-Cambridge, MA
 Baltimore
 Bitola
 Detroit
@@ -325,12 +331,15 @@ Christchurch
 Iowa City
 West Lafayette
 Milwaukee
+Berkeley, CA
 Amherst, MA
+University Park, PA
 Tallahassee
 Acton
 New Orleans
 Tucson
 Honolulu
+Williamsburg, VA
 Golden
 Fort Collins
 Broadway
@@ -345,7 +354,6 @@ Houston, TX
 Louisville
 Castelló de la Plana
 Munchen
-Santa Cruz
 Basel
 Princeton
 Kaiserslautern
@@ -376,6 +384,7 @@ Rennes
 Delft
 Frederiksberg
 Charlottesville
+Irvine, CA
 Cork
 Rovereto
 Santa Ana
@@ -389,12 +398,12 @@ Karlsruhe
 São Paulo
 Liège
 Halifax, Nova Scotia
+Dalian City, Liaoning Province
 Martigny
 Sainte-Foy
 Šentvid
 Darmstadt
 Hanover
-San Francisco, CA
 Kanagawa
 Szekesfehervar
 Burwood
@@ -415,6 +424,7 @@ Québec
 Noisy le Grand
 Sendai
 Ann Arbor, MI
+Stanford, CA
 Corfu
 Rijeka
 Padova
@@ -429,57 +439,59 @@ Cambride
 Jyväskylä
 Lancaster
 Linz
-Eugene
-Linköping
 Indianapolis
 Gainesville
 Kista
-Aberystwyth
-Middlebury
-San Diego
-Columbia
-Boulder
-Pokfulam Road
-Dortmund
-New Mexico
-Swansea
-Texas
+Utah
+Blacksburg
+Be'er Sheva
 Santa Barbara
+York
+Swansea
+Williamstown
 Minas Gerais
-Winston-Salem
-Worcester
-Auckland
+Columbia
+Pokfulam Road
+Liverpool
+Boulder
+New Mexico
+HsinChu, Taiwan
+San Juan
 Piscataway
 Magdeburg
-Be'er Sheva
 Ames
+Annapolis
+Vancouver
+Wolfenbuettel
+Albuquerque
 Ioannina
 Bath
 Bari
+Davis
 Medford
 Heverlee
 Maynooth, Co. Kildare
 Saskatoon
-Davis
+Santa Cruz
+Dortmund
+San Diego
 Raleigh
-Crete
+Middlebury
+Aberystwyth
+Auckland
 Bangalore
 Riverside, CA
 Columbus
-Mumbai
+College Station
 Buffalo
+Lleida
 Fukuoka
 Beaverton, OR
-East Lansing
-Shanghai
-Oulu
 Tampa
-Riverside
-College Station
-Gothenburg
-Lleida
-St. Louis
+Oulu
+Shanghai
 Brooklyn
+St. Louis
 Dayton, OH
 Tainan
 Nagoya
@@ -493,10 +505,12 @@ Albany
 College Station, TX
 Cagliari
 Girona
+Linköping
+Riverside
 Notre Dame, IN
 Nashville
-Lawrence
 Ann Arbor
+Lawrence
 Merced
 Kassel
 Udine
@@ -505,14 +519,16 @@ Bejing
 Roskilde
 Washington D.C.
 Wroclaw
+New York, NY
 Massachusetts
 Rio de Janeiro
-Piraeus
 Fribourg
 Thesssaloniki
 Garching
+Piraeus
 Lyngby
 Genova
+CHICAGO, IL
 Little Rock
 Turun yliopisto
 Uppsala
@@ -521,29 +537,27 @@ Warsaw
 Maastricht
 Tel Aviv
 Milan
+Gothenburg
 Kowloon
 Leuven
-Vancouver
-Turin
 Catania
-Munster
-Eindhoven
 Whitewater
-Napoli
+Eindhoven
+Munster
 Milton Keynes, Buckinghamshire
+Napoli
 Bayreuth
-Blacksburg
 TAMU
 Patras
 Leiden
 Warszawa
 Heidelberg
-Liverpool
 Houston, Texas
 San Francisco CA
+El Paso
+Saint Louis
 Lincoln
 Norman
-Saint Louis
 Fribourg.
 Syracuse
 Pisa
@@ -553,10 +567,10 @@ San Domenico di Fiesole
 Connecticut
 Matieland
 Braga
+Kelowna, BC
 Edmonton, Alberta
 Heslington
 Memphis
-Kelowna, BC
 Würzburg
 Hamilton Ontario
 Žilina
@@ -592,7 +606,7 @@ Rivignano
 Alsancak
 Železniki
 River Forest
-New York, NY
+LJUBLJANA
 Zeiningen
 Des Moines
 Bisamberg
@@ -607,6 +621,7 @@ Timisoara
 Suffolk
 Chatenay-Malabry
 Cachan cedex
+Lancashire
 Lecce
 San Michele all'Adige (TN)
 Sremska Kamenica
@@ -678,8 +693,8 @@ Victoria
 Verona
 Rehovot
 Groningen
-Iraklion
 Osijek
+Iraklion
 Edmonton , Alberta
 Varaždin
 Cluj
@@ -695,6 +710,7 @@ Recife - Pernambuco
 Porto Alegre
 Santa Catarina
 Brussel
+Mount Helen VIC
 Valparaíso
 Batavia
 Graz, Kapfenberg, Bad Gleichenberg
@@ -703,6 +719,7 @@ Venezia
 Florida
 Pensacola
 Walldorf
+Nieuwegein
 Colorado Springs
 Jülich
 Heraklion
@@ -773,6 +790,7 @@ Malibu
 Hong Kong Science Park, Shatin
 Palaiseau
 Fountain Valley
+Mexico City
 Armonk
 Markham
 Yorktown Heights
@@ -788,7 +806,9 @@ Tecumseh
 Gipuzkoa
 Bry-sur-Marne Cedex
 Douai
+Mumbai
 Kharagpur
+Bihta, Patna
 Gachibowli
 Chutung, Hsinchu
 Verneuil en Halatte
@@ -849,6 +869,7 @@ Nantes Cedex
 Vilnius
 Bucharest
 Weiz
+Turin
 St.Gallen
 Saclay
 Wessling
@@ -877,6 +898,7 @@ Ishikawa
 Buenos Aires
 Šempeter pri Gorici
 Rende, Cosenza (CS)
+Fredericksburg, VA
 ISSY-LES-MOULINEAUX
 St. Paul-lez-Durance
 Aberdeen
@@ -886,6 +908,7 @@ Vojnik
 Cesson-Sévigné
 Rockville
 Preddvor
+Boston MA
 Joensuu
 Greensboro
 Langhorne
@@ -896,6 +919,7 @@ El Cerrito
 Dol pri Ljubljani
 Julich
 Braunschweig
+Kagoshima
 Daejeon
 Odisha
 Komaba
@@ -904,6 +928,7 @@ Montville
 Spiringen
 Reykjanesbær
 Gambier
+Thuwal
 Springfield
 Dayton
 Gdynia
@@ -934,14 +959,13 @@ Sudbury, ON
 Livermore
 Paris Cedex
 Gif sur Yvette
+Philadelphia, PA
 Halle
 Alberta
 Teddington, Middlesex
 Geneve
-Mexico City
 Villeneuve d'Ascq Cédex
 Leicestershire
-Utah
 Mountain View
 Colorado
 VILLEURBANNE
@@ -950,6 +974,7 @@ Somerville
 Oliveira de Azeméis
 Limerick
 Grimstad
+Baden-Baden
 Los Alamos
 Selca
 Baton Rouge
@@ -961,7 +986,6 @@ New South Wales
 Jaipur
 Malmö
 Raanana
-Stanford, CA
 Ancona
 Heer
 North Shore City
@@ -1003,6 +1027,7 @@ Medvode
 Montclair
 Monterrey
 Montpellier
+Montreal, QC
 Betlehem
 South Hadley
 Žiri
@@ -1010,6 +1035,7 @@ Thermi-Thessaloniki
 Ledeberg-Ghent
 Miklavž na Dravskem polju
 Kortrijk
+Bengaluru
 Tekirdag
 Namur
 Nagano
@@ -1029,6 +1055,8 @@ Bethesda, Maryland
 Hsinchu, Taiwan
 Maynooth
 San Martín
+Raleigh, NC
+Menlo Park, CA
 Nuremberg
 Almere
 Los Gatos, CA
@@ -1036,11 +1064,14 @@ Hilversum
 Blacksburg, VA
 Newark, New Jersey
 West Broadway
+Saadiyat Island, Abu Dhabi
 Sandringham, Auckland
 Bergen
 Nottingham
 Bagsværd
 Chiyoda-ku
+Santa Clara, CA
+Oak Ridge, TN
 Šentrupert
 Dobrovnik
 Svendborg Sygehus
@@ -1053,6 +1084,7 @@ Chatillon
 Nidau
 Newton
 Newton, MA
+Redwood City, CA
 Mihama-ku, Chiba
 Cesson-Sevigne
 Sebastopol
@@ -1086,7 +1118,6 @@ Tel-aviv
 Pontedera
 Tauranga
 Ajdovscina
-Palo Alto, CA
 Koprivnica
 Pohang
 Saint Etienne
@@ -1097,6 +1128,7 @@ Issaquah
 Salamanca
 Shelburne
 Vantaa
+Ixelles
 Prescott
 Banská Štiavnica
 Cincinnati
@@ -1143,14 +1175,15 @@ Boca Raton, FL
 Turun
 St Andrews
 Windsor
-Adelaide
 Salt Lake City
 Canterbury, Kent
 Joensuu, Kuopio
+Pullman, Washington
 Peking
-Guelph, Ontario
 Storrs, CT
+Guelph, Ontario
 Wellington
+Bloomington, IN
 Uxbridge, Middlesex
 Straffordshire
 Nashville, TN
@@ -1160,6 +1193,7 @@ Ithaca, NY
 Nanyang Link
 Exeter
 Swindon
+Salt Lake City, UT
 Scottsdale, Arizona
 Uglich of Yaroslavl region
 Gorizia
@@ -1167,14 +1201,19 @@ Maidenhead
 Alpharetta
 Vista
 Alphen aan den Rijn
+Shenzhen, Guangdong
 Pathumthani
 Shrewsbury
+Chengdu
 Chasseneuil
 Petrovče
 Malvern
+San Mateo, CA
 Newcastle upon Tyne
+Ljubljana – Polje
 Easthampton
 Northampton
+Venice, CA
 Sobolev
 Saint-Aubin
 Ventura
@@ -1186,7 +1225,6 @@ Sprint Parkway
 Kensington
 Sacramento
 Campinas, São Paulo
-Binghamton
 Évry
 Stavanger
 Hrastnik
@@ -1207,15 +1245,19 @@ Taipei City
 Hsinchu
 Lang'ata, Nairobi
 Tarragona
+Crete
 Kgs. Lyngby
 Košice
 Issy les Moulineaux
 San Sebastián
 Fornebu
 Naples
+Izegem
 Arbon
 Podčetrtek
 Moravske Toplice
+Austin, Texas
+Texas
 Southborough
 Bagneux Cedex
 Neuilly-sur-Seine
@@ -1244,7 +1286,7 @@ Godovič
 Waterford
 Oxfordshire
 Essex
-Annapolis
+East Hartford, CT
 Montevideo
 León
 Leioa
@@ -1274,7 +1316,6 @@ Dijon
 Buenos Aires City
 Calgary
 Santander
-Lancashire
 Santiago de Chile
 Dar Es Salaam
 Norwich
@@ -1297,14 +1338,12 @@ Modena, Reggio Emilia
 Münster
 Murcia
 Neuchâtel
-Albuquerque
 Oregon
 Orléans cedex 2
 Dunedin
 Paisley
 Passau
 Rio Patras
-Philadelphia, PA
 Perugia
 Provence
 San Juan, PR
@@ -1328,6 +1367,7 @@ Perth WA
 La Crosse
 Wollongong, New South Wales
 Wolverhampton
+Worcester
 Zadar
 Zilina
 Ljubljana - Polje
@@ -1338,6 +1378,7 @@ Washingto
 MONTIGNY LE BRETONNEUX
 Reston
 Sogndal
+Donostia/San Sebastián
 Leinfelden-Echterdingen
 Blejska Dobrava
 Bagnolet
@@ -1350,12 +1391,16 @@ Wageningen
 Zug
 Stamford
 Guatemala City
+Parkville Victoria 3052
 North Charleston
+Chestertown, Maryland
+Pullman, WA
 Pordenone
 Wellesley
 Frederick
 Timis
-Williamstown
+Miramar, Wellington
+Winston-Salem
 Champaign
 Iksan Chonbuk
 Woods Hole
@@ -1379,3 +1424,4 @@ Dhaka
 Dnipropetrovsk
 Hasselt
 San Diego, CA
+Menlo Park, California

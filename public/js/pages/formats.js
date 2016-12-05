@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Contains the formats for handling search variables.
  *

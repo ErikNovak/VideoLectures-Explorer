@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="public/components/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="public/components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css">
 
+    <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
+
     <link rel="stylesheet" type="text/css" href="public/css/dropdown-enhancement.css">
 
     <link rel="stylesheet" type="text/css" href="public/css/pages/index.css" />
@@ -24,7 +26,6 @@
     <script type="text/javascript" src="public/js/dropdown-enhancement.js"></script>
 
     <script type="text/javascript" src="public/components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-
     <script type="text/javascript" src="public/js/google-analytics.js"></script>
 
     <title>Videolectures Learning Analytics | Landscape</title>
@@ -34,66 +35,49 @@
 
     <!-- navbar -->
     <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#analytics-links" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- <img src="http://edsa-project.eu/edsa-data/themes/edsa/images/edsa-logo.png" class="alignleft" alt="EDSA Project Logo"> -->
+            </div>
 
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#analytics-links" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-            <a class="navbar-brand" href="/">
-                <span class="main">Videolectures</span>
-                <span class="secondary">EX</span>
-            </a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="analytics-links">
-            <ul class="nav navbar-nav">
-                <li><a href="http://learninganalytics.videolectures.net">Analytics</a></li>
-            </ul>
+            <div class="collapse navbar-collapse" id="analytics-links">
+                <ul class="nav navbar-nav">
+                    <li><a href="http://learninganalytics.videolectures.net">Analytics</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="body-content">
-
-        <div class="container">
-            <!-- Contains the project information -->
-            <div class="project-info-content">
-                <div class="project-info-text">
-                    <h4>About Videolectures</h4>
-                    <p>
-                        VideoLectures.NET is an award-winning free and open access educational video lectures repository. The lectures are given by distinguished scholars and scientists at the most important and prominent events like conferences, summer schools, workshops and
-                        science promotional events from many fields of Science. The portal is aimed at promoting science, exchanging ideas and fostering knowledge sharing by providing high quality didactic contents not only to the scientific community
-                        but also to the general public. All lectures, accompanying documents, information and links are systematically selected and classified through the editorial process taking into account also users' comments.
-                    </p>
-                    <h4 class="about-edsa">About EDSA</h4>
-                    <p>
-                        The European Data Science Academy (EDSA) will establish a virtuous learning production cycle whereby we: a) analyse the required sector specific skillsets for data analysts across the main industrial sectors in Europe; b) develop modular and adaptable
-                        data science curricula to meet these needs; and c) deliver training supported by multi-platform and multilingual learning resources based on our curricula.
-                    </p>
+        <div class="explorer-body">
+            <!-- HEADER -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="header-title">
+                            <h3>VIDEOLECTURES EXPLORER</h3>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- SEARCH -->
+            <div class="search-options">
 
-            <!-- Contains the explorer components -->
-            <div class="explorer-body">
-                <div class="explorer-search-and-visual container-fluid">
-                    <div class="row">
-
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="explorer-header-title">
-                                <h3>VIDEOLECTURES LA DASHBOARD Version 0.2 | Landscape</h3>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="container-fluid">
                     <div class="row">
                         <!-- default search bar -->
-                        <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
-                            <h4>Search presenter, category or organization</h4>
-                            <span id="basic-search"><input type="text" class="form-control" id="basic-search-input" /></span>
+                        <div class="col-lg-12">
+                            <label class="control-label">Search presenter, category or organization:</label>
+                            <span id="basic-search">
+                                <input type="text" class="form-control" id="basic-search-input" />
+                            </span>
                             <span class="basic-search-button ">
                                 <!-- search button -->
                                 <button class="btn btn-default pull-right" type="button" onclick="search();">Search</button>
@@ -110,18 +94,18 @@
 
                     <!-- advance search bars -->
                     <div class="row">
-                        <div class="col-xs-12 col-ms-12 col-md-12 col-lg-12">
+                        <div class="col-lg-12">
                             <div class="form-horizontal" id="advanced-options">
 
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-lg-12">
+                                    <div class="col-lg-12">
                                         <h4>Advanced Options</h4>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <!-- category search -->
-                                    <div class="col-xs-12 col-md-12 col-lg-12">
+                                    <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="col-xs-3 col-sm-2 col-lg-1 control-label">Category:</label>
                                             <div class="col-xs-9 col-sm-10 col-lg-11">
@@ -205,182 +189,154 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- type search -->
-                                    <!-- <div class="col-xs-6 col-md-6 col-lg-3">
-                                        <div class="form-group">
-                                            <label class="col-xs-2 col-sm-2 col-lg-4 control-label">Type:</label>
-                                            <div class="dropdown col-xs-10 col-sm-10 col-lg-8">
-                                                <button class="btn btn-default btn-block dropdown-toggle" type="button" id="type-search-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span id="selected-type">All</span>
-                                                    <span class="fa fa-chevron-down"></span>
-                                                </button>
-                                                <ul class="dropdown-menu bullet pull-center" aria-labelledby="type-search-dropdown">
-                                                    <li><a>All</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- wait container -->
-                    <div class="row" id="landscape-body-container">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="container-fluid center-block" id="wait-container"></div>
-                        </div>
-
-                        <!-- landscape info container -->
-                        <div class="col-xs-12 col-ms-4 col-md-4 col-lg-4">
-                            <div id="query-info-container">
-                                <div class="query-info">
-                                    <h4>Searchwords</h4>
-                                    <table cellspacing="10">
-                                        <tr>
-                                            <th valign="top"> Presenter: </th>
-                                            <td>
-                                                <span class="info presenter-info"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="top"> Organization: </th>
-                                            <td>
-                                                <span class="info organization-info"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="top"> Categories: </th>
-                                            <td>
-                                                <span class="info categories-info"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="top"> City: </th>
-                                            <td>
-                                                <span class="info city-info"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="top"> Country: </th>
-                                            <td>
-                                                <span class="info country-info"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="top"> # of views:</th>
-                                            <td>
-                                                <span class="info views-info"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="top"> Language:</th>
-                                            <td>
-                                                <span class="info language-info"></span>
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <h4 class="information">Information</h4>
-                                    <table>
-                                        <tr>
-                                            <th valign="top"> Number of found lectures: </th>
-                                            <td>
-                                                <span class="info num-of-lectures-info"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="top"> Total number of views: </th>
-                                            <td>
-                                                <span class="info num-of-views-info"></span>
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <dl>
-                                        <dt> Categories with number of occurrences: </dt>
-                                        <dd>
-                                            <span class="info categories-frequency-info"></span>
-                                        </dd>
-                                    </dl>
-                                </div>
-                            </div>
-
-                            <div id="lecture-info-container">
-                                <h4> Lecture Information </h4>
-                                <table>
-                                    <tr>
-                                        <th valign="top"> Title: </th>
-                                        <td>
-                                            <span class="lecture-info lecture-title-info"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th valign="top"> Presenter: </th>
-                                        <td>
-                                            <span class="lecture-info lecture-presenter-info"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th valign="top"> Public: </th>
-                                        <td>
-                                            <span class="lecture-info lecture-public-info"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th valign="top"> Enabled: </th>
-                                        <td>
-                                            <span class="lecture-info lecture-enabled-info"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th valign="top"> Link: </th>
-                                        <td>
-                                            <span class="lecture-info lecture-slug-info"></span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- landscape graph container -->
-                        <div class="col-xs-12 col-ms-8 col-md-8 col-lg-8">
-                            <div class="container-fluid">
-                                <div id="landscape-graph-container"></div>
-                                <div class="graph-options">
-                                    <!-- Graph options title -->
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <div class="graph-options-title">
-                                                <h4>Graph options</h4>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox" id="landmarks-check" value="true" checked /> Landmarks
-                                            </label>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Footer -->
-                <div class="footer" role="contentinfo">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <span class="fa fa-copyright" aria-hidden="true"></span> 2016 <a href="http://ailab.ijs.si/si/">AILAB JSI</a>. All rights reserved. <span class="pull-right"><b>Version</b> 0.2</span>
+            </div>
+
+            <div class="container-fluid">
+
+                <!-- wait container -->
+                <div class="row" id="landscape-body-container">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="container-fluid center-block" id="wait-container"></div>
+                    </div>
+
+                    <!-- landscape info container -->
+                    <div class="col-xs-12 col-ms-4 col-md-4 col-lg-4">
+                        <div id="query-info-container">
+                            <div class="query-info">
+                                <h4>Searchwords</h4>
+                                <table cellspacing="10">
+                                    <tr>
+                                        <th valign="top"> Presenter: </th>
+                                        <td>
+                                            <span class="info presenter-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Organization: </th>
+                                        <td>
+                                            <span class="info organization-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Categories: </th>
+                                        <td>
+                                            <span class="info categories-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> City: </th>
+                                        <td>
+                                            <span class="info city-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Country: </th>
+                                        <td>
+                                            <span class="info country-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> # of views:</th>
+                                        <td>
+                                            <span class="info views-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Language:</th>
+                                        <td>
+                                            <span class="info language-info"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <h4 class="information">Information</h4>
+                                <table>
+                                    <tr>
+                                        <th valign="top"> Number of found lectures: </th>
+                                        <td>
+                                            <span class="info num-of-lectures-info"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th valign="top"> Total number of views: </th>
+                                        <td>
+                                            <span class="info num-of-views-info"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <dl>
+                                    <dt> Categories with number of occurrences: </dt>
+                                    <dd>
+                                        <span class="info categories-frequency-info"></span>
+                                    </dd>
+                                </dl>
                             </div>
+                        </div>
+
+                        <div id="lecture-info-container">
+                            <h4> Lecture Information </h4>
+                            <table>
+                                <tr>
+                                    <th valign="top"> Title: </th>
+                                    <td>
+                                        <span class="lecture-info lecture-title-info"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th valign="top"> Presenter: </th>
+                                    <td>
+                                        <span class="lecture-info lecture-presenter-info"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th valign="top"> Public: </th>
+                                    <td>
+                                        <span class="lecture-info lecture-public-info"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th valign="top"> Enabled: </th>
+                                    <td>
+                                        <span class="lecture-info lecture-enabled-info"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th valign="top"> Link: </th>
+                                    <td>
+                                        <span class="lecture-info lecture-slug-info"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- landscape graph container -->
+                    <div class="col-xs-12 col-ms-8 col-md-8 col-lg-8">
+                        <div class="container-fluid">
+                            <div id="landscape-graph-container"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    </div>
+    <!-- Footer -->
+    <div class="footer" role="contentinfo">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <span class="fa fa-copyright" aria-hidden="true"></span> 2016 <a href="http://ailab.ijs.si/si/">AILAB JSI</a>. All rights reserved. <span class="pull-right"><b>Version</b> 0.2</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary hidden" id="error-trigger" data-toggle="modal" data-target="#error-modal"></button>
 

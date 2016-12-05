@@ -4,26 +4,29 @@
 
 #basic-search {
     position: relative;
-    display:table-cell;
-    width: 100%;
-    top: -12px;
-}
-
-#basic-search-input,
-.bootstrap-tagsinput {
-    width: 100%;
-}
-
-.bootstrap-tagsinput input {
-    width: 100% !important;
-}
-
-.basic-search-button {
     display: table-cell;
+    width: 100%;
 }
+
+    #basic-search-input,
+    .bootstrap-tagsinput {
+        width: 100%;
+    }
+
+    .basic-search-button {
+        display: table-cell;
+    }
 
 #advanced-options {
-    display:none;
+    display: none;
+}
+
+.pull-right {
+    margin-left: 10px;
+}
+
+.search-options .control-label {
+    font-weight: 100;
 }
 
 /**************************************
@@ -82,18 +85,4 @@
 
 .dropdown-menu {
     min-width: 50px;
-}
-
-/**
- * Additional css class
- */
-
-.row {
-    margin-left:  0px;
-    margin-right: 0px;
-    width: 100%;
-}
-
-.pull-right {
-    margin-left: 10px;
 }
