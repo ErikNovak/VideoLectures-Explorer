@@ -23,7 +23,7 @@ var utility = {
             var pair = array[catN];
             text += "<a onclick='queryCategory(\"" + pair.category + "\")'>" + pair.category + "</a>" + "(" + pair.frequency + ")";
             if (catN != array.length - 1) {
-                text += ", ";
+                text += "<br>";
             }
         }
         return text;

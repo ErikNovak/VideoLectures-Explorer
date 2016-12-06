@@ -4,7 +4,7 @@
 
 @media screen and (min-width:1200px) {
     #wait-container {
-        height: 800px;
+        height: 750px;
     }
 }
 
@@ -32,22 +32,25 @@
 }
 
 #landscape-graph-container {
-    height: 670px;
+    height: 700px;
     position: relative;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    border-radius: 25px;
-    border: 2px solid;
-    border-color: #4086AB;
+    border-radius: 15px;
+    border: 2px solid #730100;
     background-color: #FFFFFF;
 }
 
 #landscape-graph {
     width: 100%;
-    border-radius: 25px;
+    border-radius: 15px;
     background-color: white;
 }
+
+    #landscape-graph circle.point {
+        cursor: pointer;
+    }
 
 #landscape-tooltip {
     position: absolute;
@@ -62,42 +65,34 @@
     opacity: 0.9;
 }
 
-#query-info-container,
-#lecture-info-container {
+#query-info-container {
     width:    100%;
     overflow: auto;
-    max-height: 500px;
+    max-height: 700px;
     position:   relative;
     margin:        auto;
     margin-top:    20px;
     margin-bottom: 20px;
     padding:       10px;
-    border:       1px solid;
-    border-color: lightgrey;
+    border: 1px solid #730100;
+    border-radius: 15px;
     background-color: white;
 }
 
-#lecture-info-container {
-    max-height: 180px;
-}
+    #query-info-container table,
+    #query-info-container th,
+    #query-info-container td {
+        padding-right: 5px;
+    }
 
-#query-info-container table,
-#query-info-container th,
-#query-info-container td,
-#lecture-info-container table,
-#lecture-info-container th,
-#lecture-info-container td {
-    padding-right: 5px;
-}
+    .query-info h4 {
+        margin-bottom: 5px;
+    }
 
-.query-info h4 {
-    margin-bottom: 5px;
-}
-
-.query-info h4.information {
-    margin-top:   20px;
-    margin-bottom: 5px;
-}
+    .query-info h4.information {
+        margin-top:   20px;
+        margin-bottom: 5px;
+    }
 
 .categories-frequency-info a {
     cursor: pointer;

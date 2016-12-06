@@ -103,26 +103,6 @@ var tooltipClass = {
         var getDot = str.indexOf('.', 300);
         var desc = getDot != -1 ? str.substr(0, getDot + 1) + '...' : str;
         return desc;
-    },
-
-    /**
-     * Fills the Lecture information box
-     */
-    fillLectureInformation: function(data) {
-        var title = data.title;
-        var author = data.author ? data.author.join(", ") : "N/A";
-        var categories = data.categories && data.categories.length !== 0 ? data.categories.join(", ") : "N/A";
-        var isEnabled = data.enabled ? "Yes" : "No";
-        var isPublic = data.public ? "Yes" : "No";
-        var slug = "<a href=http://videolectures.net/" + data.slug + ">" + data.slug + "</a>";
-
-
-        $(".lecture-info").empty();
-        $(".lecture-title-info").append(title);
-        $(".lecture-presenter-info").append(author);
-        $(".lecture-public-info").append(isPublic);
-        $(".lecture-enabled-info").append(isEnabled);
-        $(".lecture-slug-info").append(slug);
     }
 };
 

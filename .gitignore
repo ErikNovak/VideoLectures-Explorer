@@ -12,6 +12,8 @@ data/database/videolectures_*.js
 
 test/
 
+redis/*.rdb
+
 # Optional npm cache directory
 .npm
 

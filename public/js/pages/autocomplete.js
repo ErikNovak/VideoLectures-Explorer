@@ -28,7 +28,8 @@ function fillAutocomplete() {
                 typeaheadjs: {
                     name:       "authors",
                     displayKey: 'name',
-                    source:     presenters.ttAdapter()
+                    source:     presenters.ttAdapter(),
+                    limit: 10
                 }
             });
 
@@ -47,7 +48,8 @@ function fillAutocomplete() {
                 typeaheadjs: {
                     name:       "categories",
                     displayKey: 'name',
-                    source:     categories.ttAdapter()
+                    source:     categories.ttAdapter(),
+                    limit: 10
                 }
             });
 
@@ -68,7 +70,8 @@ function fillAutocomplete() {
                 typeaheadjs: {
                     name:       "organizations",
                     displayKey: 'name',
-                    source:     organizations.ttAdapter()
+                    source:     organizations.ttAdapter(),
+                    limit: 10
                 }
             });
 
@@ -89,7 +92,8 @@ function fillAutocomplete() {
                 typeaheadjs: {
                     name:       "cities",
                     displayKey: 'name',
-                    source:     cities.ttAdapter()
+                    source:     cities.ttAdapter(),
+                    limit: 10
                 }
             });
 
@@ -115,7 +119,8 @@ function fillAutocomplete() {
                 typeaheadjs: {
                     name:       "country",
                     displayKey: 'name',
-                    source:     countries.ttAdapter()
+                    source:     countries.ttAdapter(),
+                    limit: 10
                 }
             });
 
@@ -141,7 +146,8 @@ function fillAutocomplete() {
                     name:       "all",
                     displayKey: 'name',
                     highlight:  true,
-                    source:     basic.ttAdapter()
+                    source:     basic.ttAdapter(),
+                    limit: 10
                 }
             });
 

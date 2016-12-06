@@ -35,16 +35,6 @@ function landscapeAJAXCall(callPath, callType, value) {
  * @param  {string} category - The category to be queried for.
  */
 function queryCategory(category) {
-    // remove all tags
-    $("#basic-search-input").tagsinput("removeAll");
-    $("#author-search-input").tagsinput("removeAll");
-    $("#category-search-input").tagsinput("removeAll");
-    $("#organization-search-input").tagsinput("removeAll");
-    $("#city-search-input").tagsinput("removeAll");
-    $("#country-search-input").tagsinput("removeAll");
-    $("#views-min-search").val("");
-    $("#views-max-search").val("");
-
     // add the tag to the main basic input
     $("#basic-search-input").tagsinput("add", { name: category, type: "category" });
     search();
@@ -65,32 +55,22 @@ function search() {
 
     // get and sort the input values of the basic search window
     var basic = $('#basic-search-input').tagsinput('items');
-
     for (var tagN = 0; tagN < basic.length; tagN++) {
         var tag = basic[tagN];
-        if (tag.type == 'author') {
-            author.push(tag.name);
-        } else if (tag.type == 'category') {
-            categories.push(tag.name);
-        } else if (tag.type == 'organization') {
-            organization.push(tag.name);
-        } else {
-            throw "Not supported tag type: " + tag.type;
-        }
+        if (tag.type == 'author')            { author.push(tag.name);       }
+        else if (tag.type == 'category')     { categories.push(tag.name);   }
+        else if (tag.type == 'organization') { organization.push(tag.name); }
+        else { throw "Not supported tag type: " + tag.type; }
     }
     // add the input values of the corresponding advanced search
     author       = author.concat($.map($('#author-search-input').tagsinput('items'),             function (tag) { return tag.name; }));
     categories   = categories.concat($.map($('#category-search-input').tagsinput('items'),       function (tag) { return tag.name; }));
     organization = organization.concat($.map($('#organization-search-input').tagsinput('items'), function (tag) { return tag.name; }));
-
-    var city = $('#city-search-input').tagsinput('items').map(function (tag) { return tag.name; });
-
-    var country = $('#country-search-input').tagsinput('items').map(function (tag) {
+    var city     = $('#city-search-input').tagsinput('items').map(function (tag) { return tag.name; });
+    var country  = $('#country-search-input').tagsinput('items').map(function (tag) {
         return formats.countries.fullToAbbr[tag.name.replace(/[\s,\-]+/g, '_')];
     });
-
     var language = $('#selected-language').text().replace(/[\s]+/g, '');
-
     var minViews = $("#views-min-search-input").val();
     var maxViews = $("#views-max-search-input").val();
 

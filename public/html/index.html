@@ -28,49 +28,38 @@
     <script type="text/javascript" src="public/components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="public/js/google-analytics.js"></script>
 
-    <title>Videolectures Learning Analytics | Landscape</title>
+    <title>Videolectures Explorer</title>
 </head>
 
 <body>
+    <div class="body-content">
 
     <!-- navbar -->
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#analytics-links" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- <img src="http://edsa-project.eu/edsa-data/themes/edsa/images/edsa-logo.png" class="alignleft" alt="EDSA Project Logo"> -->
-            </div>
-
-            <div class="collapse navbar-collapse" id="analytics-links">
-                <ul class="nav navbar-nav">
-                    <li><a href="http://learninganalytics.videolectures.net">Analytics</a></li>
-                </ul>
+        <div class="container">
+            <div class="logo-header">
+                <div class="pull-left">
+                    <img src="http://edsa-project.eu/edsa-data/themes/edsa/images/edsa-logo.png" style="float:left;" alt="EDSA Project Logo">
+                    <h1>
+                        EUROPEAN
+                        <br>
+                        DATA SCIENCE
+                        <br>
+                        ACADEMY
+                    </h1>
+                </div>
+                <div class="pull-right">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/8/84/Videolectures_net_net_logo.jpg" height="100px" alt="EDSA Project Logo">
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="body-content">
         <div class="explorer-body">
-            <!-- HEADER -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="header-title">
-                            <h3>VIDEOLECTURES EXPLORER</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- SEARCH -->
-            <div class="search-options">
 
-                <div class="container-fluid">
+            <div class="container">
+                <div class="search-options">
                     <div class="row">
                         <!-- default search bar -->
                         <div class="col-lg-12">
@@ -175,10 +164,10 @@
                                     </div>
 
                                     <!-- language search -->
-                                    <div class="col-xs-6 col-md-6 col-lg-3">
+                                    <div class="col-xs-12 col-md-12 col-lg-3">
                                         <div class="form-group">
-                                            <label class="col-xs-4 col-sm-4 col-lg-4 control-label">Language:</label>
-                                            <div class="dropdown col-xs-8 col-sm-8 col-lg-8">
+                                            <label class="col-xs-3 col-lg-4 control-label">Language:</label>
+                                            <div class="dropdown col-xs-8 col-lg-8">
                                                 <button class="btn btn-default btn-block dropdown-toggle" type="button" id="language-search-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span id="selected-language">All</span>
                                                     <span class="fa fa-chevron-down"></span>
@@ -194,18 +183,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="container-fluid">
 
                 <!-- wait container -->
-                <div class="row" id="landscape-body-container">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="container-fluid center-block" id="wait-container"></div>
+                <div class="row" id="body-content">
+                    <div class="col-xs-12">
+                        <div class="center-block" id="wait-container"></div>
                     </div>
 
                     <!-- landscape info container -->
-                    <div class="col-xs-12 col-ms-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-ms-4 col-md-4">
                         <div id="query-info-container">
                             <div class="query-info">
                                 <h4>Searchwords</h4>
@@ -278,61 +264,24 @@
                                 </dl>
                             </div>
                         </div>
-
-                        <div id="lecture-info-container">
-                            <h4> Lecture Information </h4>
-                            <table>
-                                <tr>
-                                    <th valign="top"> Title: </th>
-                                    <td>
-                                        <span class="lecture-info lecture-title-info"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th valign="top"> Presenter: </th>
-                                    <td>
-                                        <span class="lecture-info lecture-presenter-info"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th valign="top"> Public: </th>
-                                    <td>
-                                        <span class="lecture-info lecture-public-info"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th valign="top"> Enabled: </th>
-                                    <td>
-                                        <span class="lecture-info lecture-enabled-info"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th valign="top"> Link: </th>
-                                    <td>
-                                        <span class="lecture-info lecture-slug-info"></span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
                     </div>
 
                     <!-- landscape graph container -->
-                    <div class="col-xs-12 col-ms-8 col-md-8 col-lg-8">
-                        <div class="container-fluid">
-                            <div id="landscape-graph-container"></div>
-                        </div>
+                    <div class="col-xs-12 col-ms-8 col-md-8">
+                        <div id="landscape-graph-container"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
+
     <!-- Footer -->
     <div class="footer" role="contentinfo">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <span class="fa fa-copyright" aria-hidden="true"></span> 2016 <a href="http://ailab.ijs.si/si/">AILAB JSI</a>. All rights reserved. <span class="pull-right"><b>Version</b> 0.2</span>
+                    <span class="fa fa-copyright" aria-hidden="true"></span> 2016 <a href="http://ailab.ijs.si/si/">AILAB JSI</a>.
+                    All rights reserved.
                 </div>
             </div>
         </div>
@@ -341,7 +290,7 @@
     <button type="button" class="btn btn-primary hidden" id="error-trigger" data-toggle="modal" data-target="#error-modal"></button>
 
     <!-- Popup Modal -->
-    <div class="modal fade" id="error-modal" role="dialog">
+    <div class="modal fade" id="error-modal" role="dialog" tabindex="0">
         <div class="modal-dialog">
 
             <!-- Modal content-->

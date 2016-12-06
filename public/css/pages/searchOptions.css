@@ -29,6 +29,17 @@
     font-weight: 100;
 }
 
+#advanced-options input {
+    outline: none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+    #views-min-search-input:focus,
+    #views-max-search-input:focus {
+        border: 1px solid #ccc;
+    }
+
 /**************************************
  * Typeahead style
  */
@@ -36,13 +47,13 @@
 .tt-menu {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: -5px;
     z-index: 200 !important;
     display: none;
     float: left;
     min-width: 160px;
     padding: 5px 0;
-    margin: 2px 0 0;
+    margin: 7px 0 0;
     list-style: none;
     font-size: 14px;
     background-color: #ffffff;
@@ -76,7 +87,8 @@
     font-size:     12px;
 }
 .label-info {
-    background-color: #3c8dbc;
+    background-color: #506c6f;
+    font-weight: 100;
 }
 
 .tt-input {

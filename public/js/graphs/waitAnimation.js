@@ -7,7 +7,7 @@ function waitAnimation(_options) {
     var options = $.extend({
         containerName: undefined,                                   // the dom that contains the svg element
         radius: { inner: 30, outer: 40 },                           // the inner and outer radius of the wait icon
-        color: { background: "#ddd", foreground: "#6375fc" }        // the background and foreground color of the wait icon
+        color: { background: "#ddd", foreground: "#730100" }        // the background and foreground color of the wait icon
     }, _options);
 
     // self pointer

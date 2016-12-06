@@ -10,8 +10,6 @@ var express    = require('express');
 var bodyParser = require('body-parser');
 var favicon    = require('serve-favicon');
 var path       = require('path');
-var Promise    = require('promise');
-
 // logger dependancies
 var FileStreamRotator = require('file-stream-rotator');
 var morgan            = require('morgan');
@@ -53,13 +51,17 @@ app.use(function (req, res, next) {
  */
 var qm             = require('qminer');
 var pointsCreation = require('./server_utility/pointsCreation.js');
-
+var cache          = require('./cache')();
+cache.deleteAll();
 
 var base = new qm.Base({
     mode:   'openReadOnly',
     dbPath: './data/database/lectures/'
 });
-
+process.on('SIGINT', function() {
+    base.close();
+    process.exit();
+});
 // ---------------------------------------
 // Query Function
 // ---------------------------------------
@@ -207,166 +209,81 @@ var ftrCategories = new qm.FeatureSpace(base, [
  * Get the JSON containing the landscape points info.
  */
 app.post('/api/getLandscapePoints', function (req, res) {
+    function prepareKey(obj) {
+        if (obj instanceof Array) {
+            obj.sort(function (a, b) {
+                if (b < a)      { return 1;  }
+                else if (b > a) { return -1; }
+                else            { return 0;  }
+            });
+            return obj.join("-");
+        } else {
+            return obj;
+        }
+    }
     var sentData = req.body;
-    var search = queryDatabase(sentData.data);
-    // if search query is empty
-    if (search.length === 0) {
-        res.send({ error: "No data found!" });
-        return;
+    var data = sentData.data;
+
+    var key = [];
+    if (data.categories) { key.push(prepareKey(data.categories.names)); }
+    if (data.authors)    { key.push(prepareKey(data.authors.names)); }
+    if (data.organizations) {
+        if (data.organizations.names)     { key.push(prepareKey(data.organizations.names)); }
+        if (data.organizations.cities)    { key.push(prepareKey(data.organizations.cities)); }
+        if (data.organizations.countries) { key.push(prepareKey(data.organizations.countries)); }
     }
-
-    // reset and update the feature space
-    ftrLectures.clear(); ftrLectures.updateRecords(search);
-    ftrCategories.clear(); ftrCategories.updateRecords(search);
-    // extract the features and generate the points
-    var featMat = ftrLectures.extractSparseMatrix(search);
-    // set the parameters and make the async functions roll out
-    var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
-
-    // if there is only one point
-    if (search.length == 1) {
-        var mat    = new qm.la.Matrix([[0.5, 0.5]]);
-        var points = pointsCreation.fillPointsArray(mat, search, ftrCategories);
-        res.send({ "searchwords": sentData.data, "points": points });
-        return;
+    if (data.lectures) {
+        if (data.lectures.type)     { key.push(prepareKey(data.lectures.type)); }
+        if (data.lectures.language) { key.push(prepareKey(data.lectures.language)); }
+        if (data.lectures.duration) {
+            if (data.lectures.duration.min) { key.push(prepareKey(parseInt(data.lectures.duration.min))); }
+            if (data.lectures.duration.max) { key.push(prepareKey(parseInt(data.lectures.duration.max))); }
+        }
+        if(data.lectures.views) {
+            if (data.lectures.views.min) { key.push(prepareKey(parseInt(data.lectures.views.min))); }
+            if (data.lectures.views.max) { key.push(prepareKey(parseInt(data.lectures.views.max))); }
+        }
     }
-    // TODO: Make the Promises work
+    var search;
+    key = key.join("-");
+    cache.hasKey(key, function (flag) {
+        if (flag) {
+            cache.getKeyValue(key, function (reply) {
+                var lectures = JSON.parse(reply);
+                return res.send(lectures);
+            })
+        } else {
+            search = queryDatabase(sentData.data);
+            // if search query is empty
+            if (search.length === 0) {
+                res.send({ error: "No data found!" });
+                return;
+            }
 
-    // ---------------------------------------------
-    // Part of the promise
-    // ---------------------------------------------
+            // reset and update the feature space
+            ftrLectures.clear(); ftrLectures.updateRecords(search);
+            ftrCategories.clear(); ftrCategories.updateRecords(search);
+            // extract the features and generate the points
+            var featMat = ftrLectures.extractSparseMatrix(search);
+            // set the parameters and make the async functions roll out
+            var params = { iter: 2, convexN: 3, clusterN: 200, docTresh: 200 };
 
-    // // makes the promises for the functions
-    //
-    // // the common variables
-    // let denseMat;
-    // function calculatingKMeans(mat, params) {
-    //     return new Promise(function (resolve, reject) {
-    //         console.log("Calculating KMeans");
-    //         let singVal = Math.min(mat.cols, params.clusterN);
-    //         let kmeans = new qm.analytics.KMeans({
-    //             iter:         params.iter,
-    //             k:            singVal,
-    //             distanceType: "Cos"
-    //         });
-    //         kmeans.fitAsync(mat, function (err) {
-    //             if (err) reject(err);
-    //             else resolve(kmeans);
-    //         });
-    //     });
-    // }
-    //
-    // function calculateSVD(mat, params) {
-    //     return new Promise(function (resolve, reject) {
-    //         console.log("Calculating SVD");
-    //         // small queries
-    //         if (mat.cols <= params.docTresh) {
-    //             denseMat = mat.full();
-    //             let singVal = Math.min(denseMat.rows, denseMat.cols);
-    //             console.log("Inside SVD promise")
-    //             qm.la.svdAsync(denseMat, singVal, { iter: params.iter }, function (err, svd) {
-    //                 console.log("Calculated SVD")
-    //                 if (err) reject(err);
-    //                 else resolve(svd);
-    //             });
-    //         }
-    //         // large queries
-    //         else {
-    //             calculatingKMeans(mat, params).then(function (kmeans) {
-    //                 denseMat = kmeans.getModel().C;
-    //                 // return the promise
-    //                 console.log("Inside SVD promise")
-    //                 qm.la.svdAsync(denseMat, params.clusterN, { iter: params.iter }, function (err, svd) {
-    //                     console.log("Calculated SVD")
-    //                     if (err) reject(err);
-    //                     else resolve(svd);
-    //                 });
-    //             });
-    //         }
-    //     });
-    // }
-    //
-    // function calculateMDS(svd) {
-    //     return new Promise(function (resolve, reject) {
-    //         console.log("Calculating MDS");
-    //         let singVal    = svd.s,
-    //             numSingVal = singVal.length;
-    //         let singValSum = singVal.sum();
-    //         for (let singN = 0; singN < denseMat.cols; singN++) {
-    //             // the sum of the first singN singular values
-    //             let partSum = singVal.subVec(qm.la.rangeVec(0, singN)).sum();
-    //             // the percentage of the info must be greater than 80%
-    //             if (partSum / singValSum > 0.8) {
-    //                 numSingVal = singN;
-    //                 break;
-    //             }
-    //         }
-    //         V = svd.V.getColSubmatrix(qm.la.rangeVec(0, numSingVal - 1)).transpose();
-    //         let mdsParams = { maxStep: 3000, maxSecs: 2, minDiff: 1e-4, distType: 'Euclid' };
-    //         let mds = new qm.analytics.MDS(mdsParams);
-    //         // calculate the coordinates of the lectures
-    //         console.log("Inside MDS promise")
-    //         mds.fitTransformAsync(V, function (err, mdsMat) {
-    //             console.log("Calculated MDS")
-    //             if (err) reject(err);
-    //             else resolve(mdsMat);
-    //         });
-    //     });
-    // }
-    //
-    // function calculateAndSendPoints(mds) {
-    //     console.log("Calculating Points");
-    //     let pntStorage = new qm.la.Matrix({ rows: featMat.cols, cols: 2 });
-    //     // get the original matrix and normalize it
-    //     let normMat = featMat; normMat.normalizeCols();
-    //     // for each lecture get the distance to the clusters
-    //     let distMat = denseMat.multiplyT(normMat);
-    //     let conNum  = distMat.cols < params.convexN ? distMat.cols : params.convexN;
-    //     // get coordinates for each lecture
-    //     for (let ColN = 0; ColN < normMat.cols; ColN++) {
-    //         let colVec  = distMat.getCol(ColN);
-    //         let sortVec = colVec.sortPerm(false);
-    //         let distVec = sortVec.vec.subVec(qm.la.rangeVec(0, conNum - 1));
-    //         let idxVec  = sortVec.perm;
-    //         // create the article point coordinates
-    //         let pnt = new qm.la.Vector([0, 0]);
-    //         let totalDist = distVec.sum();
-    //         for (let ClustN = 0; ClustN < conNum; ClustN++) {
-    //             let cluster = mds.getRow(idxVec.at(ClustN));
-    //             pnt = pnt.plus(cluster.multiply(distVec.at(ClustN) / totalDist));
-    //         }
-    //         pntStorage.setRow(ColN, pnt);
-    //     }
-    //
-    //     let points = pointsCreation.fillPointsArray(pntStorage, search);
-    //     console.log("Sending points");
-    //     res.send({ "searchwords": sentData.data, "points": points });
-    // }
+            // if there is only one point
+            if (search.length == 1) {
+                var mat    = new qm.la.Matrix([[0.5, 0.5]]);
+                var points = pointsCreation.fillPointsArray(mat, search, ftrCategories);
+                res.send({ "searchwords": sentData.data, "points": points });
+                return;
+            }
 
-
-
-
-
-    // ---------------------------------------------
-    // Part of the promise
-    // ---------------------------------------------
-
-    // // calculate and send the points
-    // calculateSVD(featMat, params).then(calculateMDS)
-    //                              .then(calculateAndSendPoints)
-    //                              .catch(function (reason) {
-    //         console.log(reason);
-    //         res.send({ error: "An error occur when calculating the points." });
-    //     }
-    // );
-    // // calculateAndSendPoints(featMat, params);
-
-    /**
-     * Calculates and sends the points to the client.
-     * The function sequence:
-     * SVD -> runMDS -> Coordinates
-     */
-    SendPoints(featMat, params);
+            /**
+             * Calculates and sends the points to the client.
+             * The function sequence:
+             * SVD -> runMDS -> Coordinates
+             */
+            SendPoints(featMat, params);
+        }
+    })
 
     /**
      * Calculates the svd of the feature matrix using the async function.
@@ -471,6 +388,8 @@ app.post('/api/getLandscapePoints', function (req, res) {
             }
 
             var points = pointsCreation.fillPointsArray(pntStorage, search, ftrCategories);
+            var responseString = JSON.stringify({ "searchwords": sentData.data, "points": points });
+            cache.setKeyValue(key, responseString);
             res.send({ "searchwords": sentData.data, "points": points });
         }
     }

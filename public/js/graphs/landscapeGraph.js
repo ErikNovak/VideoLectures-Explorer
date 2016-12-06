@@ -10,7 +10,7 @@ function landscapeGraph(_options) {
         landmarkClass: null,
         margin: { top: 20, left: 20, bottom: 20, right: 20 },
         color: {
-            points:     "#A289FE",
+            points:     "#CA5252",
             background: "#FFFFFF"
         }
     }, _options);
@@ -299,8 +299,7 @@ function landscapeGraph(_options) {
                              $("#landscape-tooltip").addClass("notvisible");
                          }
                      }).on("click", function (d, idx) {
-
-                         options.tooltipClass.fillLectureInformation(d);
+                        window.open("http://videolectures.net/" + d.slug);
                      });
 
         // Create the landmarks
