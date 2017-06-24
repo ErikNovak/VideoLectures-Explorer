@@ -51,15 +51,15 @@ app.get('/', function (req, res) {
 });
 
 
-var DATAPORT = process.env.npm_package_config_dataport;
+var DATAPORT = 6052;
 app.get('/api/getAutocomplete', function (req, res) {
-    request('http://'+ DATAPORT +'/api/getAutocomplete', function (err, response, body) {
+    request('http://localhost:'+ DATAPORT +'/api/getAutocomplete', function (err, response, body) {
         res.send(body);
     });
 });
 
 app.get('/api/getInitLandscapePoints', function(req, res) {
-    request('http://'+ DATAPORT +'/api/getInitLandscapePoints', function (err, response, body) {
+    request('http://localhost:'+ DATAPORT +'/api/getInitLandscapePoints', function (err, response, body) {
         res.send(body);
     });
 });
@@ -67,7 +67,7 @@ app.get('/api/getInitLandscapePoints', function(req, res) {
 app.post('/api/getLandscapePoints', function (req, res) {
     var data = req.body;
     request({
-        uri: 'http://'+ DATAPORT +'/api/getLandscapePoints',
+        uri: 'http://localhost:'+ DATAPORT +'/api/getLandscapePoints',
         method: 'POST',
         form: data
     }, function (err, response, body) {
@@ -105,7 +105,7 @@ app.use(function (req, res, next) {
     res.type('txt').send('Not found');
 });
 
-var PORT = process.env.npm_package_config_webport;
+var PORT = "5055";
 app.listen(PORT, function () {
     console.log('Videolectures Dashboard | Landscape on port ' + PORT);
 });
